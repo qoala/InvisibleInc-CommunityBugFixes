@@ -10,3 +10,5 @@ Some bug fixes can be enabled/disabled via campaign options.
 The Invisible Inc. community is active on [Discord](https://discord.gg/aQrXEse).
 
 In order to report any problem you may encounter, [make a new Issue][issues].
+
+[issues]: https://github.com/InvisibleInc-CommunityBugFixes/issues
