@@ -18,7 +18,7 @@ local function lateInit( modApi )
 
 	-- nopatrol_nopatrolchange conditionally disables IdleSituation:generatePatrolPath.
 	-- Override it in lateInit after any other mods have modified it in other ways.
-	include( scriptPath .. "/idle" )
+	include( scriptPath .. "/idle_lateinit" )
 end
 
 local function load( modApi, options, params )

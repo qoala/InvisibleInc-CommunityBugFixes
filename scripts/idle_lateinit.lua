@@ -1,3 +1,7 @@
+-- lateInit patch to sim/btree/situations/idle
+--
+-- Conditionally disables the function so should be applied after other patches.
+
 local IdleSituation = include("sim/btree/situations/idle")
 
 local oldGeneratePatrolPath = IdleSituation.generatePatrolPath
