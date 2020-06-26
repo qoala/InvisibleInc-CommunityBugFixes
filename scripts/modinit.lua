@@ -11,6 +11,7 @@ local function init( modApi )
 	modApi:addGenerationOption("nopatrol_nopatrolchange", STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_NOPATROLCHANGE, STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_NOPATROLCHANGE_TIP, {noUpdate=true})
 
 	include( scriptPath .. "/engine" )
+	include( scriptPath .. "/idle" )
 end
 
 local function lateInit( modApi )
