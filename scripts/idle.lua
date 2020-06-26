@@ -40,7 +40,7 @@ local function fixBrokenPatrolPath( situation, unit, x0, y0 )
 		-- Less clear how it can fail with beginnerPatrols enabled.
 		-- Make a stationary patrol with proper facing to avoid breaking beginnerPatrols rules.
 		situation:generateStationaryPath( unit, x0, y0 )
-	else
+	elseif sim:getParams().difficultyOptions.cbf_idle_fixfailedpatrolpath == 2 then
 		-- Try to find a valid patrol path with looser restrictions.
 		local destCell = findValidSecondPatrolCell( sim, unit, x0, y0 )
 		if destCell then
@@ -52,6 +52,9 @@ local function fixBrokenPatrolPath( situation, unit, x0, y0 )
 			-- Fallback to a stationary path with the starting point.
 			situation:generateStationaryPath( unit, x0, y0 )
 		end
+	else
+		-- User requested stationary paths as the fix.
+		situation:generateStationaryPath( unit, x0, y0 )
 	end
 end
 
@@ -60,10 +63,14 @@ function IdleSituation:generatePatrolPath( unit, x0, y0, noPatrolCheck )
 	oldGeneratePatrolPath( self, unit, x0, y0, noPatrolCheck )
 
 	-- Fix for broken stationary paths
-	local newPatrolPath = unit:getTraits().patrolPath
-	local pathChanged = not oldPatrolPath or oldPatrolPath ~= newPatrolPath
-	if pathChanged and isBrokenStationaryPath( newPatrolPath ) then
-		-- Use the starting point chosen by generatePatrolPath, in case x0,y0 were initially nil.
-		fixBrokenPatrolPath( self, unit, newPatrolPath[1].x, newPatrolPath[1].y )
+	local sim = unit:getSim()
+	local fixFailedPatrolPath = sim:getParams().difficultyOptions.cbf_idle_fixfailedpatrolpath
+	if fixFailedPatrolPath and fixFailedPatrolPath ~= 0 then
+		local newPatrolPath = unit:getTraits().patrolPath
+		local pathChanged = not oldPatrolPath or oldPatrolPath ~= newPatrolPath
+		if pathChanged and isBrokenStationaryPath( newPatrolPath ) then
+			-- Use the starting point chosen by generatePatrolPath, in case x0,y0 were initially nil.
+			fixBrokenPatrolPath( self, unit, newPatrolPath[1].x, newPatrolPath[1].y )
+		end
 	end
 end

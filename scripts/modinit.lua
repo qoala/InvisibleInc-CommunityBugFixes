@@ -9,6 +9,8 @@ local function init( modApi )
 	-- Fixes for nopatrol trait (Prefab Stationary Guards)
 	modApi:addGenerationOption("nopatrol_fixfacing", STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_FIXFACING,  STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_FIXFACING_TIP, {noUpdate=true})
 	modApi:addGenerationOption("nopatrol_nopatrolchange", STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_NOPATROLCHANGE, STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_NOPATROLCHANGE_TIP, {noUpdate=true})
+	-- Fixes for IdleSituation guard behavior bugs.
+	modApi:addGenerationOption("idle_fixfailedpatrolpath", STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH, STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_TIP, {noUpdate=true, values={0, 1, 2}, value=2, strings={STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_DISABLED, STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_STATIONARY, STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_REGENERATE}})
 
 	include( scriptPath .. "/engine" )
 	include( scriptPath .. "/idle" )
@@ -28,6 +30,9 @@ local function load( modApi, options, params )
 	end
 	if options["nopatrol_nopatrolchange"] and options["nopatrol_nopatrolchange"].enabled and params then
 		params.cbf_nopatrol_nopatrolchange = true
+	end
+	if options["idle_fixfailedpatrolpath"] and params then
+		params.cbf_idle_fixfailedpatrolpath = options["idle_fixfailedpatrolpath"].value
 	end
 end
 
