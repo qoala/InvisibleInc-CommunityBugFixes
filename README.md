@@ -3,7 +3,7 @@
 
 Bug fixes for base game content by the community. Depends on Sim Constructor by Cyberboy2000.
 
-Some bug fixes can be enabled/disabled via campaign options.
+Some bug fixes can be enabled/disabled via campaign options. See [FIXES.md](FIXES.md) for details.
 
 ## Contact
 
