@@ -26,6 +26,10 @@ mission_util.findCellsAwayFromTag = function( sim, tag, dist )
 							end
 						end
 					end
+					-- noguard implies the prefab doesn't want unrelated things randomly placed here.
+					if simquery.cellHasTag(sim, c, "noguard") then
+						badMatch = true
+					end
 
 					if not badMatch then
 						table.insert(foundCells,c)
