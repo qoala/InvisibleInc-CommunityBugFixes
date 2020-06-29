@@ -1,6 +1,13 @@
 
 local function earlyInit( modApi )
-	modApi.requirements = { "Contingency Plan", "Sim Constructor", "Function Library" }
+	modApi.requirements =
+	{
+		-- Core patches, that should generally load before anything else
+		"Contingency Plan", "Sim Constructor", "Function Library",
+		-- Escorts Fixed patches upvalues in mission_scoring.
+		-- This needs to be done before any normal wrapping of the library.
+		"Escorts Fixed",
+	}
 end
 
 local function init( modApi )
