@@ -12,12 +12,29 @@ end
 
 local function init( modApi )
 	local scriptPath = modApi:getScriptPath()
+	local constants = include( scriptPath .. "/constants" )
+	-- Store script path for cross-file includes
+	rawset(_G,"SCRIPT_PATHS",rawget(_G,"SCRIPT_PATHS") or {})
+	SCRIPT_PATHS.qoala_commbugfix = scriptPath
 
 	-- Fixes for nopatrol trait (Prefab Stationary Guards)
 	modApi:addGenerationOption("nopatrol_fixfacing", STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_FIXFACING,  STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_FIXFACING_TIP, {noUpdate=true})
 	modApi:addGenerationOption("nopatrol_nopatrolchange", STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_NOPATROLCHANGE, STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_NOPATROLCHANGE_TIP, {noUpdate=true})
 	-- Fixes for IdleSituation guard behavior bugs.
-	modApi:addGenerationOption("idle_fixfailedpatrolpath", STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH, STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_TIP, {noUpdate=true, values={0, 1, 2}, value=2, strings={STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_DISABLED, STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_STATIONARY, STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_REGENERATE}})
+	modApi:addGenerationOption("idle_fixfailedpatrolpath", STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH, STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_TIP, {
+		noUpdate=true,
+		values={
+			constants.IDLE_FIXFAILEDPATROLPATH.DISABLED,
+			constants.IDLE_FIXFAILEDPATROLPATH.STATIONARY,
+			constants.IDLE_FIXFAILEDPATROLPATH.REGENERATE
+		},
+		value=constants.IDLE_FIXFAILEDPATROLPATH.REGENERATE,
+		strings={
+			STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_DISABLED,
+			STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_STATIONARY,
+			STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_REGENERATE
+		}
+	})
 
 	include( scriptPath .. "/engine" )
 	include( scriptPath .. "/idle" )

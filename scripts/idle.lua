@@ -4,6 +4,8 @@ local simquery = include( "sim/simquery" )
 local mathutil = include( "modules/mathutil" )
 local IdleSituation = include("sim/btree/situations/idle")
 
+local constants = include( SCRIPT_PATHS.qoala_commbugfix .. "/constants" )
+
 local oldGeneratePatrolPath = IdleSituation.generatePatrolPath
 
 local function isBrokenStationaryPath( patrolPath )
@@ -40,7 +42,7 @@ local function fixBrokenPatrolPath( situation, unit, x0, y0 )
 		-- Less clear how it can fail with beginnerPatrols enabled.
 		-- Make a stationary patrol with proper facing to avoid breaking beginnerPatrols rules.
 		situation:generateStationaryPath( unit, x0, y0 )
-	elseif sim:getParams().difficultyOptions.cbf_idle_fixfailedpatrolpath == 2 then
+	elseif sim:getParams().difficultyOptions.cbf_idle_fixfailedpatrolpath == constants.IDLE_FIXFAILEDPATROLPATH.REGENERATE then
 		-- Try to find a valid patrol path with looser restrictions.
 		local destCell = findValidSecondPatrolCell( sim, unit, x0, y0 )
 		if destCell then
@@ -65,7 +67,7 @@ function IdleSituation:generatePatrolPath( unit, x0, y0, noPatrolCheck )
 	-- Fix for broken stationary paths
 	local sim = unit:getSim()
 	local fixFailedPatrolPath = sim:getParams().difficultyOptions.cbf_idle_fixfailedpatrolpath
-	if fixFailedPatrolPath and fixFailedPatrolPath ~= 0 then
+	if fixFailedPatrolPath and fixFailedPatrolPath ~= STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_DISABLED then
 		local newPatrolPath = unit:getTraits().patrolPath
 		local pathChanged = not oldPatrolPath or oldPatrolPath ~= newPatrolPath
 		if pathChanged and isBrokenStationaryPath( newPatrolPath ) then
