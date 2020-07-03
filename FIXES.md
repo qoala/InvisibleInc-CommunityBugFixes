@@ -30,7 +30,7 @@
     This may produce surprising behavior if it is triggered during a patrol change. After travelling
     to and investigating the point, the guard immediately turns to face the calculated direction.
   * **Campaign Option**: choose one of the available fixes or no fix.
-  * **Credit**: Qoalabear
+  * **Credit**: Qoalabear, Cyberboy2000
 * DLC mid-missions: Save corruption if Monst3r is the sole survivor of DLC mid2.
   * Occurs if Monst3r is the only surviving agent, and he is not officially on your team. This
     contradicts in-game tips/dialogue suggesting that "Our agents are expendable, but Monst3r must
