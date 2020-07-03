@@ -3,6 +3,8 @@
 
 Bug fixes for base game content by the community. Depends on Sim Constructor by Cyberboy2000.
 
+Steam: https://steamcommunity.com/sharedfiles/filedetails/?id=2151835746
+
 Some bug fixes can be enabled/disabled via campaign options.
 In general, if the vanilla behavior is a crash or a non-fatal invalid state (such as a stationary
 guard that's missing one of the data fields for normal stationary guard behavior), the default
