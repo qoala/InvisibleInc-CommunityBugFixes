@@ -1,5 +1,6 @@
 -- patch to client/mission_scoring
 
+local array = include( "modules/array" )
 local mission_scoring = include( "mission_scoring" )
 local serverdefs = include( "modules/serverdefs" )
 
@@ -32,6 +33,9 @@ mission_scoring.DoFinishMission = function( sim, campaign, ... )
 	if i and (survivors == false) then
 		local Monster_data = deployed[i]
 		Monster_data.agentDef.leave = nil
+		-- Remove Monst3r from the detention pool if he was a starting agent and lost, to prevent having 2 Monst3rs.
+		-- Unless another mod is preserving augments from the detention pool, they will be lost.
+		array.removeIf( agency.unitDefsPotential, function( adef ) return adef.id == constants.AGENT_IDS.MONST3R_PC end )
 	end
 
 	local flow_result = oldDoFinishMission( sim, campaign, ... )

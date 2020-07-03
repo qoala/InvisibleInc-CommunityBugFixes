@@ -40,5 +40,8 @@
   * **Credit**: Hekateras
 * DLC mid-missions: Crash if Monst3r is in the detention pool when starting DLC mid1.
   * Occurs if the agency started with Monst3r, lost him, and did not recover him before mid1.
-  * **Fix**: The version of Monst3r in the detention pool is temporarily suppressed.
+  * **Fix**: The version of Monst3r in the detention pool is temporarily suppressed. Like the final
+    mission, he will not have any augments, equipment, or upgrades from the abandoned Monst3r. In
+	the unlikely event the player triggers both this and 'Monst3r is the sole survivor of mid2', the
+	abandoned Monst3r in the detention pool is purged to prevent getting two of him.
   * **Credit**: Hekateras, Qoalabear
