@@ -3,6 +3,8 @@
 local mission_scoring = include( "mission_scoring" )
 local serverdefs = include( "modules/serverdefs" )
 
+local constants = include( SCRIPT_PATHS.qoala_commbugfix .. "/constants" )
+
 local oldDoFinishMission = mission_scoring.DoFinishMission
 
 mission_scoring.DoFinishMission = function( sim, campaign, ... )
@@ -22,7 +24,7 @@ mission_scoring.DoFinishMission = function( sim, campaign, ... )
 				-- log:write("LOG survivors true")
 			end
 		end
-		if deployData.agentDef.id == 100 then
+		if deployData.agentDef.id == constants.AGENT_IDS.MONST3R_PC then
 			i = agentID
 		end
 	end
