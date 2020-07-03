@@ -12,6 +12,9 @@
     such as the DLC extended campaign alarm level. Captains shouldn't leave their prisoners
 	unguarded.
   * **Fix**: Such guards are skipped when generating new patrols. They behave normally once alerted.
+    Inconsistent behavior from the player's perspective with Worldgen Extended. Stationary captains,
+	CFOs, etc ignore patrol change, but the same units that spawned patrolling in new prefabs will
+	not.
   * **Campaign Option**: enable/disable fix
   * **Credit**: Qoalabear
 * Broken Guard Patrols: Guard cannot reach a valid 2nd patrol point
