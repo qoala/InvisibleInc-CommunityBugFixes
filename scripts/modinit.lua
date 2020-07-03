@@ -39,6 +39,7 @@ local function init( modApi )
 	include( scriptPath .. "/engine" )
 	include( scriptPath .. "/idle" )
 	include( scriptPath .. "/mission_scoring" )
+	include( scriptPath .. "/pcplayer" )
 end
 
 local function lateInit( modApi )

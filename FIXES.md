@@ -35,3 +35,7 @@
   * **Fix**: Monst3r joins your agency if he is the only survivor of the mission, allowing you to
     continue the campaign.
   * **Credit**: Hekateras
+* DLC mid-missions: Crash if Monst3r is in the detention pool when starting DLC mid1.
+  * Occurs if the agency started with Monst3r, lost him, and did not recover him before mid1.
+  * **Fix**: The version of Monst3r in the detention pool is temporarily suppressed.
+  * **Credit**: Hekateras, Qoalabear
