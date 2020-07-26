@@ -17,6 +17,8 @@ local function init( modApi )
 	rawset(_G,"SCRIPT_PATHS",rawget(_G,"SCRIPT_PATHS") or {})
 	SCRIPT_PATHS.qoala_commbugfix = scriptPath
 
+	-- Fixes for Final Mission bugs.
+	modApi:addGenerationOption("ending_remotehacking", STRINGS.COMMBUGFIX.OPTIONS.ENDING_REMOTEHACKING,  STRINGS.COMMBUGFIX.OPTIONS.ENDING_REMOTEHACKING_TIP, {noUpdate=true})
 	-- Fixes for nopatrol trait (Prefab Stationary Guards)
 	modApi:addGenerationOption("nopatrol_fixfacing", STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_FIXFACING,  STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_FIXFACING_TIP, {noUpdate=true})
 	modApi:addGenerationOption("nopatrol_nopatrolchange", STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_NOPATROLCHANGE, STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_NOPATROLCHANGE_TIP, {noUpdate=true, enabled=false})
@@ -40,6 +42,10 @@ local function init( modApi )
 	include( scriptPath .. "/idle" )
 	include( scriptPath .. "/mission_scoring" )
 	include( scriptPath .. "/pcplayer" )
+
+	modApi:addAbilityDef( "activate_final_console", scriptPath .."/abilities/activate_final_console" )
+	modApi:addAbilityDef( "activate_locked_console", scriptPath .."/abilities/activate_locked_console" )
+	modApi:addAbilityDef( "jackin_root_console", scriptPath .."/abilities/jackin_root_console" )
 end
 
 local function lateInit( modApi )
@@ -51,6 +57,9 @@ local function lateInit( modApi )
 end
 
 local function load( modApi, options, params )
+	if options["ending_remotehacking"] and params then
+		params.cbf_ending_remotehacking = true
+	end
 	if options["nopatrol_fixfacing"] and options["nopatrol_fixfacing"].enabled and params then
 		params.cbf_nopatrol_fixfacing = true
 	end

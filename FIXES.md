@@ -1,5 +1,13 @@
 # Available Bug Fixes
 
+* Final Mission: Remote Hacking
+  * When Monst3r is near the security hub or mainframe lock, he can perform the associated hacking
+    abilities on any mainframe device adjacent to himself (drones, OMNI Protectors, etc).
+  * Also applies to Central's final objective, though any other units should've been teleported out
+    by the time she approaches it.
+  * **Fix**: The abilities only appear on their intended device.
+  * **Campaign Option**: enable/disable fix
+  * **Credit**: Qoalabear
 * Prefab stationary guards: Fix facing
   * Stationary guards placed by prefabs are stationary without a remembered facing, leaving them
     facing arbitrary directions after being distracted. For example, detention center captains
@@ -31,6 +39,8 @@
     to and investigating the point, the guard immediately turns to face the calculated direction.
   * **Campaign Option**: choose one of the available fixes or no fix.
   * **Credit**: Qoalabear, Cyberboy2000
+
+
 * DLC mid-missions: Save corruption if Monst3r is the sole survivor of DLC mid2.
   * Occurs if Monst3r is the only surviving agent, and he is not officially on your team. This
     contradicts in-game tips/dialogue suggesting that "Our agents are expendable, but Monst3r must
