@@ -50,6 +50,7 @@ local function init( modApi )
 		}
 	})
 
+	include( scriptPath .. "/include" )
 	include( scriptPath .. "/engine" )
 	include( scriptPath .. "/idle" )
 	include( scriptPath .. "/mission_scoring" )
