@@ -8,6 +8,13 @@ local AGENT_IDS =
 	MONST3R_PC = 100,
 }
 
+-- Enum values for vault mission fix of hack response.
+local MISSIONVAULT_HACKRESPONSE =
+{
+	VANILLA = 0,
+	ANYHACK = 1,
+}
+
 -- Enum values for IdleSituation fix of failed patrol paths.
 local IDLE_FIXFAILEDPATROLPATH =
 {
@@ -18,5 +25,7 @@ local IDLE_FIXFAILEDPATROLPATH =
 
 return {
 	AGENT_IDS = AGENT_IDS,
+
+	MISSIONVAULT_HACKRESPONSE = MISSIONVAULT_HACKRESPONSE,
 	IDLE_FIXFAILEDPATROLPATH = IDLE_FIXFAILEDPATROLPATH,
 }

@@ -1,5 +1,18 @@
 # Available Bug Fixes
 
+* Vault Missions: Security Response
+  * The security response (spawning an enforcer to inspect the vault) triggers when a
+    device-targetted Incognita program reduces firewalls exactly to 0 on a vault device.
+  * The following techniques bypass this response entirely:
+    1) Hack the device with a non-program (e.g. buster chip)
+    2) Hack the device with an area-targetted program (e.g. data blast)
+	3) Simultaneously break more firewalls than are currently on the device, producing a result less
+	  than 0 (e.g. Lockpick 2.0 when the target has 1 firewall)
+	4) EMP the experiment case. Doesn't work on the vault terminal to unlock deposit boxes.
+  * **Fix 1**: Trigger security whenever all firewalls are broken. Prevents the first 3 bypass
+    options.
+  * **Campaign Option**: choose one of the available fixes or vanilla behavior.
+  * **Credit**: Qoalabear
 * Final Mission: Remote Hacking
   * When Monst3r is near the security hub or mainframe lock, he can perform the associated hacking
     abilities on any mainframe device adjacent to himself (drones, OMNI Protectors, etc).

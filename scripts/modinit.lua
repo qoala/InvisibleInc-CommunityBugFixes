@@ -17,7 +17,19 @@ local function init( modApi )
 	rawset(_G,"SCRIPT_PATHS",rawget(_G,"SCRIPT_PATHS") or {})
 	SCRIPT_PATHS.qoala_commbugfix = scriptPath
 
-	-- Fixes for Final Mission bugs.
+	-- Fixes for Mission-specific bugs.
+	modApi:addGenerationOption("missionvault_hackresponse", STRINGS.COMMBUGFIX.OPTIONS.MISSIONVAULT_HACKRESPONSE,  STRINGS.COMMBUGFIX.OPTIONS.MISSIONVAULT_HACKRESPONSE_TIP, {
+		noUpdate=true,
+		values={
+			constants.MISSIONVAULT_HACKRESPONSE.VANILLA,
+			constants.MISSIONVAULT_HACKRESPONSE.ANYHACK,
+		},
+		value=constants.MISSIONVAULT_HACKRESPONSE.ANYHACK,
+		strings={
+			STRINGS.COMMBUGFIX.OPTIONS.MISSIONVAULT_HACKRESPONSE_VANILLA,
+			STRINGS.COMMBUGFIX.OPTIONS.MISSIONVAULT_HACKRESPONSE_ANYHACK,
+		}
+	})
 	modApi:addGenerationOption("ending_remotehacking", STRINGS.COMMBUGFIX.OPTIONS.ENDING_REMOTEHACKING,  STRINGS.COMMBUGFIX.OPTIONS.ENDING_REMOTEHACKING_TIP, {noUpdate=true})
 	-- Fixes for nopatrol trait (Prefab Stationary Guards)
 	modApi:addGenerationOption("nopatrol_fixfacing", STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_FIXFACING,  STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_FIXFACING_TIP, {noUpdate=true})
@@ -42,6 +54,7 @@ local function init( modApi )
 	include( scriptPath .. "/idle" )
 	include( scriptPath .. "/mission_scoring" )
 	include( scriptPath .. "/pcplayer" )
+	include( scriptPath .. "/missions/mission_vault" )
 
 	modApi:addAbilityDef( "activate_final_console", scriptPath .."/abilities/activate_final_console" )
 	modApi:addAbilityDef( "activate_locked_console", scriptPath .."/abilities/activate_locked_console" )
@@ -59,6 +72,9 @@ end
 local function load( modApi, options, params )
 	if options["ending_remotehacking"] and params then
 		params.cbf_ending_remotehacking = true
+	end
+	if options["missionvault_hackresponse"] and params then
+		params.cbf_missionvault_hackresponse = true
 	end
 	if options["nopatrol_fixfacing"] and options["nopatrol_fixfacing"].enabled and params then
 		params.cbf_nopatrol_fixfacing = true
