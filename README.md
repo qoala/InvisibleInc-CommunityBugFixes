@@ -13,6 +13,10 @@ vanilla behavior unchanged by default.
 allows saving personal preferences over which fixes to enable.
 See [FIXES.md](FIXES.md) for details on individual fixes and their configuration options.
 
+If using the debug menu (config `DEV = true`), also install [Expanded
+Cheats](https://steamcommunity.com/sharedfiles/filedetails/?id=1808555330). It rewrites part of the
+debug menu to no longer rely on live reloading.
+
 ## Credits
 
 Individual fixes are written by various members of the Invisible Inc community. See
