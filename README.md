@@ -6,10 +6,11 @@ Bug fixes for base game content by the community. Depends on Sim Constructor by 
 Steam: https://steamcommunity.com/sharedfiles/filedetails/?id=2151835746
 
 Some bug fixes can be enabled/disabled via campaign options.
-In general, if the vanilla behavior is a crash or a non-fatal invalid state (such as a stationary
-guard that's missing one of the data fields for normal stationary guard behavior), the default
-for this mod is to replace it with a valid state closest to what the calling function/script appears
-to have requested.
+The default for each option tries to fix behavior in the way most consistent with existing similar
+behaviors or presumed intent from how the code was written. In some cases, this may leave the
+vanilla behavior unchanged by default.
+[Customizable Generation Presets](https://steamcommunity.com/sharedfiles/filedetails/?id=1631664146)
+allows saving personal preferences over which fixes to enable.
 See [FIXES.md](FIXES.md) for details on individual fixes and their configuration options.
 
 ## Credits
