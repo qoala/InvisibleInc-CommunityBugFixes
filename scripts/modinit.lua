@@ -71,10 +71,10 @@ local function lateInit( modApi )
 end
 
 local function load( modApi, options, params )
-	if options["ending_remotehacking"] and params then
+	if options["ending_remotehacking"] and options["ending_remotehacking"].enabled and params then
 		params.cbf_ending_remotehacking = true
 	end
-	if options["missionvault_hackresponse"] and params then
+	if options["missionvault_hackresponse"] and options["missionvault_hackresponse"].enabled and params then
 		params.cbf_missionvault_hackresponse = true
 	end
 	if options["nopatrol_fixfacing"] and options["nopatrol_fixfacing"].enabled and params then
