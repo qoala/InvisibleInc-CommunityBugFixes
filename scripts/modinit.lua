@@ -7,6 +7,8 @@ local function earlyInit( modApi )
 		-- Escorts Fixed patches upvalues in mission_scoring.
 		-- This needs to be done before any normal wrapping of the library.
 		"Escorts Fixed",
+		-- AGP overwrites Senses:addInterest
+		"Advanced Guard Protocol",
 	}
 end
 
@@ -34,7 +36,7 @@ local function init( modApi )
 	-- Fixes for nopatrol trait (Prefab Stationary Guards)
 	modApi:addGenerationOption("nopatrol_fixfacing", STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_FIXFACING,  STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_FIXFACING_TIP, {noUpdate=true})
 	modApi:addGenerationOption("nopatrol_nopatrolchange", STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_NOPATROLCHANGE, STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_NOPATROLCHANGE_TIP, {noUpdate=true, enabled=false})
-	-- Fixes for IdleSituation guard behavior bugs.
+	-- Fixes for guard behavior bugs.
 	modApi:addGenerationOption("idle_fixfailedpatrolpath", STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH, STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_TIP, {
 		noUpdate=true,
 		values={
@@ -49,12 +51,14 @@ local function init( modApi )
 			STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_REGENERATE
 		}
 	})
+	modApi:addGenerationOption("pathing_updateobserved", STRINGS.COMMBUGFIX.OPTIONS.PATHING_UPDATEOBSERVED,  STRINGS.COMMBUGFIX.OPTIONS.PATHING_UPDATEOBSERVED_TIP, {noUpdate=true})
 
 	include( scriptPath .. "/include" )
 	include( scriptPath .. "/engine" )
 	include( scriptPath .. "/idle" )
 	include( scriptPath .. "/mission_scoring" )
 	include( scriptPath .. "/pcplayer" )
+	include( scriptPath .. "/senses" )
 	include( scriptPath .. "/missions/mission_vault" )
 
 	modApi:addAbilityDef( "activate_final_console", scriptPath .."/abilities/activate_final_console" )
@@ -85,6 +89,18 @@ local function load( modApi, options, params )
 	end
 	if options["idle_fixfailedpatrolpath"] and params then
 		params.cbf_idle_fixfailedpatrolpath = options["idle_fixfailedpatrolpath"].value
+	end
+	-- Store pathing flags in a single table, mapping a few user-visible options to potentially multiple fixes.
+	-- If a suboption needs to be manually disabled in a save, set 'LOCK=true' to prevent game load from changing them.
+	if params and (not params.cbf_pathing or not params.cbf_pathing.LOCK) then
+		params.cbf_pathing = {}
+		-- Cases where the guard path already updates when the guard's brain is fully evaluated (such as when acting during the guard turn).
+		-- The player sees these as "the observed path lies about what will happen", not "the performed path makes no sense", even though the bug affects planned paths whether or not the player has observed those paths.
+		if not options["pathing_updateobserved"] or options["pathing_updateobserved"].enabled then
+			-- Update pathing immediately when the current interest moves (instead of waiting until the guard turn's full reprocessing)
+			-- Fixes observed guard path not updating past the initial distraction when running/in peripheral vision for multiple tiles.
+			params.cbf_pathing.reset_on_interest_moved = true
+		end
 	end
 end
 

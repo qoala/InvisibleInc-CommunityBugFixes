@@ -20,6 +20,8 @@ local MOD_STRINGS =
 		IDLE_FIXFAILEDPATROLPATH_DISABLED = "DISABLED",
 		IDLE_FIXFAILEDPATROLPATH_STATIONARY = "STATIONARY",
 		IDLE_FIXFAILEDPATROLPATH_REGENERATE = "REGENERATE",
+		PATHING_UPDATEOBSERVED = "FIX GUARD PATHING: UPDATE OBSERVED",
+		PATHING_UPDATEOBSERVED_TIP = "<c:FF8411>FIX GUARD PATHING: UPDATE OBSERVED</c>\nSometimes, observed/TAGged guard paths don't visually update when the interest point moves, resulting in the observed path lying about what the guard will actually do.\nThis forces the guard's path to update immediately.",
 	},
 }
 
