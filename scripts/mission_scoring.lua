@@ -10,6 +10,10 @@ local oldDoFinishMission = mission_scoring.DoFinishMission
 
 mission_scoring.DoFinishMission = function( sim, campaign, ... )
 
+	-- -----
+	-- DLC mid2 softlock fix.
+	-- -----
+
 	local player = sim:getPC()
 	local agency = campaign.agency
 	local survivors = false
@@ -38,7 +42,34 @@ mission_scoring.DoFinishMission = function( sim, campaign, ... )
 		array.removeIf( agency.unitDefsPotential, function( adef ) return adef.id == constants.AGENT_IDS.MONST3R_PC end )
 	end
 
+	-- -----
+	-- END DLC mid2 softlock fix.
+	-- -----
+
+	local previousFoundPrisoner = campaign.foundPrisoner
+
 	local flow_result = oldDoFinishMission( sim, campaign, ... )
+
+	-- -----
+	-- Detention Centers agent chance fix
+	-- -----
+
+	local spawnAgentOption = campaign.difficultyOptions.cbf_detention_spawnagent or constants.MISSIONDETCENTER_SPAWNAGENT.VANILLA
+	if spawnAgentOption ~= constants.MISSIONDETCENTER_SPAWNAGENT.VANILLA then
+		if sim:getTags().cbfCouldHaveAgent then
+			-- No change needed
+		elseif previousFoundPrisoner == nil and spawnAgentOption == constants.MISSIONDETCENTER_SPAWNAGENT.FIRSTAGENT then
+			-- Initialize foundPrisoner for the first time.
+			campaign.foundPrisoner = true
+		else
+			-- Leave the previous prisoner-vs-agent chance after missions that couldn't have an agent in the first place
+			campaign.foundPrisoner = previousFoundPrisoner
+		end
+	end
+
+	-- -----
+	-- END Detention Centers agent chance fix
+	-- -----
 
 	return flow_result
 end

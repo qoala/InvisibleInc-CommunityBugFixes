@@ -20,6 +20,20 @@ local function init( modApi )
 	SCRIPT_PATHS.qoala_commbugfix = scriptPath
 
 	-- Fixes for Mission-specific bugs.
+	modApi:addGenerationOption("missiondetcenter_spawnagent", STRINGS.COMMBUGFIX.OPTIONS.MISSIONDETCENTER_SPAWNAGENT,  STRINGS.COMMBUGFIX.OPTIONS.MISSIONDETCENTER_SPAWNAGENT_TIP, {
+		noUpdate=true,
+		values={
+			constants.MISSIONDETCENTER_SPAWNAGENT.VANILLA,
+			constants.MISSIONDETCENTER_SPAWNAGENT.FIRSTAGENT,
+			constants.MISSIONDETCENTER_SPAWNAGENT.FIFTYFIFTY,
+		},
+		value=constants.MISSIONDETCENTER_SPAWNAGENT.FIRSTAGENT,
+		strings={
+			STRINGS.COMMBUGFIX.OPTIONS.MISSIONDETCENTER_SPAWNAGENT_VANILLA,
+			STRINGS.COMMBUGFIX.OPTIONS.MISSIONDETCENTER_SPAWNAGENT_FIRSTAGENT,
+			STRINGS.COMMBUGFIX.OPTIONS.MISSIONDETCENTER_SPAWNAGENT_FIFTYFIFTY,
+		}
+	})
 	modApi:addGenerationOption("missionvault_hackresponse", STRINGS.COMMBUGFIX.OPTIONS.MISSIONVAULT_HACKRESPONSE,  STRINGS.COMMBUGFIX.OPTIONS.MISSIONVAULT_HACKRESPONSE_TIP, {
 		noUpdate=true,
 		values={
@@ -59,7 +73,11 @@ local function init( modApi )
 	include( scriptPath .. "/mission_scoring" )
 	include( scriptPath .. "/pcplayer" )
 	include( scriptPath .. "/senses" )
+	include( scriptPath .. "/missions/mission_detention_centre" )
 	include( scriptPath .. "/missions/mission_vault" )
+
+	local escape_mission = include( scriptPath .. "/missions/escape_mission" )
+	modApi:addEscapeScripts(escape_mission)
 
 	modApi:addAbilityDef( "activate_final_console", scriptPath .."/abilities/activate_final_console" )
 	modApi:addAbilityDef( "activate_locked_console", scriptPath .."/abilities/activate_locked_console" )
@@ -77,6 +95,9 @@ end
 local function load( modApi, options, params )
 	if options["ending_remotehacking"] and options["ending_remotehacking"].enabled and params then
 		params.cbf_ending_remotehacking = true
+	end
+	if options["missiondetcenter_spawnagent"] and params then
+		params.cbf_detention_spawnagent = options["missiondetcenter_spawnagent"].value
 	end
 	if options["missionvault_hackresponse"] and options["missionvault_hackresponse"].enabled and params then
 		params.cbf_missionvault_hackresponse = true
