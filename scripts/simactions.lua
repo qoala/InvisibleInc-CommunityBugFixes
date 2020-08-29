@@ -5,7 +5,8 @@ local simdefs = include('sim/simdefs')
 local simquery = include('sim/simquery')
 
 local function unitIsHacking( unit )
-	return unit:getTraits().monster_hacking or unit:getTraits().data_hacking
+	-- mod_data_hacking: added by Manual Hacking mod
+	return unit:getTraits().monster_hacking or unit:getTraits().data_hacking or unit:getTraits().mod_data_hacking
 end
 
 -- Overwrite useDoorAction. Change at '-- CBF:' below.
