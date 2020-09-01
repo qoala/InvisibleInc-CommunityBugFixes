@@ -12,9 +12,13 @@ function Senses:addInterest( x, y, sense, reason, sourceUnit, ignoreDisguise, ..
 		local sim = self.unit:getSim()
 		local pathingOption = sim:getParams().difficultyOptions.cbf_pathing
 		if pathingOption and pathingOption.reset_on_interest_moved and sim:getCurrentPlayer():isPC() then
-			-- It's odd to call Brain:reset from here, but Brain is a base class, and the class system doesn't propagate overrides to subclasses.
-			-- Just in case, we've checked we only trigger this during the player turn.
-			self.unit:getBrain():reset()
+			if sim:cbfHasPathingQueue() then
+				sim:cbfAddToPathingQueue( self.unit )
+			else
+				-- It's odd to call Brain:reset from here, but Brain is a base class, and the class system doesn't propagate overrides to subclasses.
+				-- Just in case, we've checked we only trigger this during the player turn.
+				self.unit:getBrain():reset()
+			end
 		end
 	end
 

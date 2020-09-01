@@ -122,6 +122,9 @@ local function load( modApi, options, params )
 			-- Update pathing immediately when the current interest moves (instead of waiting until the guard turn's full reprocessing)
 			-- Fixes observed guard path not updating past the initial distraction when running/in peripheral vision for multiple tiles.
 			params.cbf_pathing.reset_on_interest_moved = true
+			-- During moveUnit on the PC turn, queue up pathing updates and only calculate the last update for each observing unit.
+			-- Prevents lag from reset_on_interest_moved when moving multiple tiles past many guards.
+			params.cbf_pathing.use_pathing_queue = true
 		end
 	end
 end
