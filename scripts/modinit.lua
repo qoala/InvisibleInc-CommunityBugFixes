@@ -7,7 +7,9 @@ local function earlyInit( modApi )
 		-- Escorts Fixed patches upvalues in mission_scoring.
 		-- This needs to be done before any normal wrapping of the library.
 		"Escorts Fixed",
-		-- AGP overwrites Senses:addInterest
+		-- Items Evacutation overwrites the "escape" ability.
+		"Items Evacuation",
+		-- AGP overwrites Senses:addInterest.
 		"Advanced Guard Protocol",
 	}
 end
@@ -76,13 +78,6 @@ local function init( modApi )
 	include( scriptPath .. "/senses" )
 	include( scriptPath .. "/missions/mission_detention_centre" )
 	include( scriptPath .. "/missions/mission_vault" )
-
-	local escape_mission = include( scriptPath .. "/missions/escape_mission" )
-	modApi:addEscapeScripts(escape_mission)
-
-	modApi:addAbilityDef( "activate_final_console", scriptPath .."/abilities/activate_final_console" )
-	modApi:addAbilityDef( "activate_locked_console", scriptPath .."/abilities/activate_locked_console" )
-	modApi:addAbilityDef( "jackin_root_console", scriptPath .."/abilities/jackin_root_console" )
 end
 
 local function lateInit( modApi )
@@ -94,6 +89,16 @@ local function lateInit( modApi )
 end
 
 local function load( modApi, options, params )
+	local scriptPath = modApi:getScriptPath()
+
+	local escape_mission = include( scriptPath .. "/missions/escape_mission" )
+	modApi:addEscapeScripts(escape_mission)
+
+	modApi:addAbilityDef( "activate_final_console", scriptPath .."/abilities/activate_final_console" )
+	modApi:addAbilityDef( "activate_locked_console", scriptPath .."/abilities/activate_locked_console" )
+	modApi:addAbilityDef( "escape", scriptPath .."/abilities/escape" )
+	modApi:addAbilityDef( "jackin_root_console", scriptPath .."/abilities/jackin_root_console" )
+
 	if options["ending_remotehacking"] and options["ending_remotehacking"].enabled and params then
 		params.cbf_ending_remotehacking = true
 	end
