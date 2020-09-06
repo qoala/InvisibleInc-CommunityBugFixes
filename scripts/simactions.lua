@@ -4,11 +4,6 @@ local simactions = include('sim/simactions')
 local simdefs = include('sim/simdefs')
 local simquery = include('sim/simquery')
 
-local function unitIsHacking( unit )
-	-- mod_data_hacking: added by Manual Hacking mod
-	return unit:getTraits().monster_hacking or unit:getTraits().data_hacking or unit:getTraits().mod_data_hacking
-end
-
 -- Overwrite useDoorAction. Change at '-- CBF:' below.
 function simactions.useDoorAction( sim, exitOp, unitID, x0, y0, facing )
 	local player = sim:getCurrentPlayer()
@@ -31,7 +26,7 @@ function simactions.useDoorAction( sim, exitOp, unitID, x0, y0, facing )
 
 	-- CBF: Skip the facing update if the unit is in a multi-turn hacking animation.
 	-- We want the agent to return to their existing facing at the end of the door anim.
-	if not unitIsHacking(unit) then
+	if not simquery.cbfAgentHasStickyFacing(unit) then
 		unit:setFacing(vizFacing)
 	end
 
