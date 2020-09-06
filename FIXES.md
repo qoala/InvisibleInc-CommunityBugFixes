@@ -1,5 +1,21 @@
 # Available Bug Fixes
 
+* Detention Center Missions: Agent/Prisoner Chance
+  * The mission is coded to give 50/50 odds of an agent or generic prisoner, unless the agency is
+    full (guaranteed prisoner) or the player recently found the prisoner (guaranteed agent). This
+    guarantees that the player needs to visit at most 2 detention centers to find an agent.
+  * Except that the game sets `foundPrisoner` after _any_ mission that didn't have a rescueable
+    agent, even if it wasn't a detention center so didn't have a prisoner. The 50/50 only applies if
+    the player visits detention centers back-to-back.
+  * **Fix 1** (default): The `foundPrisoner` flag is only updated after detention center missions.
+    There is a 50/50 chance of Agent/Prisoner if the most recent detention center had an agent, no
+    matter how many intervening missions have been visited. Additionally, force the first detention
+    center to have an agent, because the bug has led most players to expect that.
+  * **Fix 2**: The `foundPrisoner` flag is only updated after detention center missions.  There is a
+    50/50 chance of Agent/Prisoner unless the most recent detention center had a prisoner, no matter
+    how many intervening missions have been visited. The first detention center has a 50/50 chance.
+  * **Campaign Option**: choose one of the available fixes or vanilla behavior.
+  * **Credit**: Qoalabear, Mobbstar, pesnitor
 * Vault Missions: Security Response
   * The security response (spawning an enforcer to inspect the vault) triggers when a
     device-targetted Incognita program reduces firewalls exactly to 0 on a vault device.
@@ -52,6 +68,15 @@
     to and investigating the point, the guard immediately turns to face the calculated direction.
   * **Campaign Option**: choose one of the available fixes or no fix.
   * **Credit**: Qoalabear, Cyberboy2000
+* Guard Pathing: Stale observed paths
+  * When a guard's current interest point moves (such as an agent moving through peripheral vision
+    or sprinting past), the guard's observed path stays at the interest's initial position and
+    doesn't update on its own. On the guard's turn, the guard will "correctly" travel to the
+    interest point's final position; the observed path was lying.
+  * **Fix**: Guard paths are forced to update after their current interest is moved. The update is
+    deferred until the end of a multi-tile move to reduce unnecessary path calculations.
+  * **Campaign Option**: enable/disable fix
+  * **Credit**: Qoalabear
 
 
 * DLC mid-missions: Save corruption if Monst3r is the sole survivor of DLC mid2.
@@ -68,3 +93,25 @@
     the unlikely event the player triggers both this and 'Monst3r is the sole survivor of mid2', the
     abandoned Monst3r in the detention pool is purged to prevent getting two of him.
   * **Credit**: Hekateras, Qoalabear
+* DLC Extended Campaign: Can teleport out the last active agent without the Power Cell.
+  * The game tries to disable the teleport ability if it would remove all your agents and you don't
+    have the power cell (the same code also applies to the Quantum Reservoir in mid 2). This is a
+    reasonable check, because the campaign ends in a loss if you end the mission without retrieving
+    the power cell.  It does allow partial teleports, assuming the player can use the remaining
+    agents to try for the power cell.
+  * However, the check doesn't distinguish between active and downed agents being left behind. The
+    player is allowed to escape without the power cell and immediately lose because all remaining
+    agents are neutralized.
+  * **Fix**: The teleport ability is disabled if the power cell isn't escaped/escaping and all
+    remaining agents (if any) are neutralized. This uses the same "neutralized" definition as the
+    check to immediately end the mission. KOed agents are only neutralized if they're pinned by a
+    guard (allowing them to hopefully wake up undisturbed).
+  * **Credit**: Qoalabear, Hekateras
+* Databank Animation: Facing after toggling a door while hacking.
+  * If an agent is hacking a databank and toggles a door, then the agent is left hacking the open
+    air in front of the door.
+  * Most actions set an animation facing for just their animation (opening a safe, etc), but don't
+    affect the agent's persistent facing. The only other actions that automatically updated facing
+    (attacks) also cancel any in-progress hacking by that agent.
+  * **Fix**: Don't change facing when toggling a door and in the middle of hacking.
+  * **Credit**: Qoalabear
