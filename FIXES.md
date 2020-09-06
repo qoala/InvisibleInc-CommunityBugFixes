@@ -6,9 +6,9 @@
   * The following techniques bypass this response entirely:
     1) Hack the device with a non-program (e.g. buster chip)
     2) Hack the device with an area-targetted program (e.g. data blast)
-	3) Simultaneously break more firewalls than are currently on the device, producing a result less
-	  than 0 (e.g. Lockpick 2.0 when the target has 1 firewall)
-	4) EMP the experiment case. Doesn't work on the vault terminal to unlock deposit boxes.
+    3) Simultaneously break more firewalls than are currently on the device, producing a result less
+    than 0 (e.g. Lockpick 2.0 when the target has 1 firewall)
+    4) EMP the experiment case. Doesn't work on the vault terminal to unlock deposit boxes.
   * **Fix 1**: Trigger security whenever all firewalls are broken. Prevents the first 3 bypass
     options.
   * **Campaign Option**: choose one of the available fixes or vanilla behavior.
@@ -24,18 +24,18 @@
 * Prefab stationary guards: Fix facing
   * Stationary guards placed by prefabs are stationary without a remembered facing, leaving them
     facing arbitrary directions after being distracted. For example, detention center captains
-	will usually remain facing the wall after returning from a distraction.
+    will usually remain facing the wall after returning from a distraction.
   * **Fix**: Stores their initial facing, similar to randomly generated "stationary" guards.
   * **Campaign Option**: enable/disable fix
   * **Credit**: Qoalabear
 * Prefab stationary guards: Ignore patrol change
   * Stationary guards placed by prefabs are included in signals to "change up the guard patrols",
     such as the DLC extended campaign alarm level. Captains shouldn't leave their prisoners
-	unguarded.
+    unguarded.
   * **Fix**: Such guards are skipped when generating new patrols. They behave normally once alerted.
     Inconsistent behavior from the player's perspective with Worldgen Extended. Stationary captains,
-	CFOs, etc ignore patrol change, but the same units that spawned patrolling in new prefabs will
-	not.
+    CFOs, etc ignore patrol change, but the same units that spawned patrolling in new prefabs will
+    not.
   * **Campaign Option**: enable/disable fix
   * **Credit**: Qoalabear
 * Broken Guard Patrols: Guard cannot reach a valid 2nd patrol point
@@ -57,7 +57,7 @@
 * DLC mid-missions: Save corruption if Monst3r is the sole survivor of DLC mid2.
   * Occurs if Monst3r is the only surviving agent, and he is not officially on your team. This
     contradicts in-game tips/dialogue suggesting that "Our agents are expendable, but Monst3r must
-	survive".
+    survive".
   * **Fix**: Monst3r joins your agency if he is the only survivor of the mission, allowing you to
     continue the campaign.
   * **Credit**: Hekateras
@@ -65,6 +65,6 @@
   * Occurs if the agency started with Monst3r, lost him, and did not recover him before mid1.
   * **Fix**: The version of Monst3r in the detention pool is temporarily suppressed. Like the final
     mission, he will not have any augments, equipment, or upgrades from the abandoned Monst3r. In
-	the unlikely event the player triggers both this and 'Monst3r is the sole survivor of mid2', the
-	abandoned Monst3r in the detention pool is purged to prevent getting two of him.
+    the unlikely event the player triggers both this and 'Monst3r is the sole survivor of mid2', the
+    abandoned Monst3r in the detention pool is purged to prevent getting two of him.
   * **Credit**: Hekateras, Qoalabear
