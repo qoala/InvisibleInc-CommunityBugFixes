@@ -35,9 +35,8 @@ end
 -- This queue additionally dedupes inserted requests. If the same unit updates its path multiple times, only the final update is performed.
 -- (Reduces the processing load when sprinting past many guards.)
 function simengine:cbfStartPathingQueue()
-	assert( not self._cbfPathingQueue )
+	-- assert( not self._cbfPathingQueue )  -- If an error is thrown, the queue might not be closed. Vanilla queues restart with a new queue state in this case.
 	self._cbfPathingQueue = {}
-	-- self:getNPC().pather._sim = self
 end
 
 function simengine:cbfProcessPathingQueue()
