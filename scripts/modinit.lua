@@ -11,6 +11,8 @@ local function earlyInit( modApi )
 		"Items Evacuation",
 		-- AGP overwrites Senses:addInterest.
 		"Advanced Guard Protocol",
+		-- Talkative Agents adds event handlers to mission_panel:processEvent in lateInit.
+		"Talkative Agents",
 	}
 end
 
@@ -87,6 +89,9 @@ local function lateInit( modApi )
 	-- nopatrol_nopatrolchange conditionally disables IdleSituation:generatePatrolPath.
 	-- Override it in lateInit after any other mods have modified it in other ways.
 	include( scriptPath .. "/idle_lateinit" )
+
+	-- Conditionally pauses the event queue. Needs to wrap after Talkative Agents adds additional event handlers.
+	include( scriptPath .. "/mission_panel" )
 end
 
 local function load( modApi, options, params )

@@ -115,3 +115,9 @@
     (attacks) also cancel any in-progress hacking by that agent.
   * **Fix**: Don't change facing when toggling a door and in the middle of hacking.
   * **Credit**: Qoalabear
+* Modded: UI script events during a dialog
+  * It was possible for scripted UI events to try to dismiss an unrelated dialog that was being
+    displayed. Some, like the Executive Terminals "choose 1 of 4 sites" dialog, can't handle being
+    dismissed.
+  * **Fix**: Pause the offending event queue while a dialog is open.
+  * **Credit**: Qoalabear
