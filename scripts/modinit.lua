@@ -146,6 +146,8 @@ local function initStrings( modApi )
 
 	local MOD_STRINGS = include( scriptPath .. "/strings" )
 	modApi:addStrings( dataPath, "COMMBUGFIX", MOD_STRINGS)
+
+	include( scriptPath .. "/patch_strings" )
 end
 
 return {
