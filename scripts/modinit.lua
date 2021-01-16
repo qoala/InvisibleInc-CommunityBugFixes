@@ -135,7 +135,8 @@ local function load( modApi, options, params )
 			params.cbf_pathing.reset_on_interest_moved = true
 			-- During moveUnit on the PC turn, queue up pathing updates and only calculate the last update for each observing unit.
 			-- Prevents lag from reset_on_interest_moved when moving multiple tiles past many guards.
-			params.cbf_pathing.use_pathing_queue = true
+			-- DISABLED: AGP recalculates paths continuously without ill effect. Delayed update queue may be unnecessary.
+			params.cbf_pathing.use_pathing_queue = false
 		end
 	end
 end
