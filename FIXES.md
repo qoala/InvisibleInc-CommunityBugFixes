@@ -68,6 +68,18 @@
     to and investigating the point, the guard immediately turns to face the calculated direction.
   * **Campaign Option**: choose one of the available fixes or no fix.
   * **Credit**: Qoalabear, Cyberboy2000
+* Magic diagonal guard vision
+  * Guards facing diagonally always see the orthogonally adjacent tiles on the side of their main
+    vision cone, to prevent some easy exploits. However, this vision is still granted if the guard
+	couldn't normally see the tile.
+  * Pulse drones only have enough vision range to see their own tile normally, but if they just
+    moved diagonally, they can be alerted by agents passing through the magic vision tiles.
+  * Smoke blocks all normal vision, but not the magic vision tiles. If an agent moves through magic
+    vision tiles, the guard turns to face the agent and can no longer see them.
+  * **Fix**: Suppress the extra magic vision if a guard could not see those tiles regardless of
+    facing.
+  * **Campaign Option**: enable/disable fix
+  * **Credit**: Qoalabear, Cyberboy2000
 * Sleeping guards notice TAG
   * When a KOed guard wakes up, they investigate the location of their most recent attack (including
     attacks received while KOed). This includes an attack with a TAG pistol, even though TAG pistol
