@@ -34,13 +34,13 @@ function simactions.useDoorAction( sim, exitOp, unitID, x0, y0, facing )
 		sim:dispatchEvent( simdefs.EV_UNIT_USEDOOR, { unitID = unitID, facing = vizFacing, exitOp=exitOp } )
 	end
 	sim:modifyExit( cell, facing, exitOp, unit,  unit:getTraits().sneaking )
-    if unit:isValid() then
-	    if not unit:getTraits().noDoorAnim then
-		    sim:dispatchEvent( simdefs.EV_UNIT_USEDOOR_PST, { unitID = unitID, facing = vizFacing, exitOp=exitOp } )
-	    end
-	    if exitOp == simdefs.EXITOP_BREAK_DOOR and not unit:getTraits().interrupted then
-		    sim:dispatchEvent( simdefs.EV_UNIT_GUNCHECK, { unit = unit, facing = vizFacing } )
-	    end
-    end
+	if unit:isValid() then
+		if not unit:getTraits().noDoorAnim then
+			sim:dispatchEvent( simdefs.EV_UNIT_USEDOOR_PST, { unitID = unitID, facing = vizFacing, exitOp=exitOp } )
+		end
+		if exitOp == simdefs.EXITOP_BREAK_DOOR and not unit:getTraits().interrupted then
+			sim:dispatchEvent( simdefs.EV_UNIT_GUNCHECK, { unit = unit, facing = vizFacing } )
+		end
+	end
 	unit:getTraits().interrupted = nil
 end
