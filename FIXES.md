@@ -37,6 +37,13 @@
   * **Fix**: The abilities only appear on their intended device.
   * **Campaign Option**: enable/disable fix
   * **Credit**: Qoalabear
+* Final Mission: Mainframe Lock Skip
+  * After completing the security hub, Monst3r is able to directly unlock the final doors as if he
+    were carrying an appropriate keycard. The mission scripts still require Monst3r to activate the
+	mainframe lock, so this just allows wandering in the final room without being able to win.
+  * **Fix**: The security codes obtained by Monst3r no longer allow him to directly unlock doors.
+  * **Campaign Option**: enable/disable fix
+  * **Credit**: Qoalabear
 * Prefab stationary guards: Fix facing
   * Stationary guards placed by prefabs are stationary without a remembered facing, leaving them
     facing arbitrary directions after being distracted. For example, detention center captains

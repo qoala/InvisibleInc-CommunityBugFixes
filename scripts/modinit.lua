@@ -51,6 +51,7 @@ local function init( modApi )
 		}
 	})
 	modApi:addGenerationOption("ending_remotehacking", STRINGS.COMMBUGFIX.OPTIONS.ENDING_REMOTEHACKING,  STRINGS.COMMBUGFIX.OPTIONS.ENDING_REMOTEHACKING_TIP, {noUpdate=true})
+	modApi:addGenerationOption("ending_finaldoor", STRINGS.COMMBUGFIX.OPTIONS.ENDING_FINALDOOR,  STRINGS.COMMBUGFIX.OPTIONS.ENDING_FINALDOOR_TIP, {noUpdate=true})
 	-- Fixes for nopatrol trait (Prefab Stationary Guards)
 	modApi:addGenerationOption("nopatrol_fixfacing", STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_FIXFACING,  STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_FIXFACING_TIP, {noUpdate=true})
 	modApi:addGenerationOption("nopatrol_nopatrolchange", STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_NOPATROLCHANGE, STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_NOPATROLCHANGE_TIP, {noUpdate=true, enabled=false})
@@ -118,6 +119,13 @@ local function load( modApi, options, params )
 	if options["ending_remotehacking"] and options["ending_remotehacking"].enabled and params then
 		params.cbf_ending_remotehacking = true
 	end
+	if options["ending_finaldoor"] and options["ending_finaldoor"].enabled then
+		if params then
+			params.cbf_ending_finaldoor = true
+		end
+		local patch_itemdefs = include( scriptPath .. "/patch_itemdefs" )
+		patch_itemdefs.updateEndingFinalDoor()
+	end
 	if options["missiondetcenter_spawnagent"] and params then
 		params.cbf_detention_spawnagent = options["missiondetcenter_spawnagent"].value
 	end
@@ -165,6 +173,13 @@ local function initStrings( modApi )
 	modApi:addStrings( dataPath, "COMMBUGFIX", MOD_STRINGS)
 
 	include( scriptPath .. "/patch_strings" )
+end
+
+local function lateUnload( modApi )
+	local scriptPath = modApi:getScriptPath()
+
+	local patch_itemdefs = include( scriptPath .. "/patch_itemdefs" )
+	patch_itemdefs.resetEndingFinalDoor()
 end
 
 return {
