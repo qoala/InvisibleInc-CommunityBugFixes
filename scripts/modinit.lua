@@ -9,7 +9,7 @@ local function earlyInit( modApi )
 		"Escorts Fixed",
 		-- Items Evacutation overwrites the "escape" ability.
 		"Items Evacuation",
-		-- AGP overwrites Senses:addInterest.
+		-- AGP overwrites Senses:addInterest, line_of_sight:calculateUnitLOS.
 		"Advanced Guard Protocol",
 		-- Talkative Agents adds event handlers to mission_panel:processEvent in lateInit.
 		"Talkative Agents",
@@ -77,7 +77,6 @@ local function init( modApi )
 	include( scriptPath .. "/include" )
 	include( scriptPath .. "/engine" )
 	include( scriptPath .. "/idle" )
-	include( scriptPath .. "/line_of_sight" )
 	include( scriptPath .. "/mission_scoring" )
 	include( scriptPath .. "/pcplayer" )
 	include( scriptPath .. "/simactions" )
@@ -94,6 +93,9 @@ local function lateInit( modApi )
 	-- nopatrol_nopatrolchange conditionally disables IdleSituation:generatePatrolPath.
 	-- Override it in lateInit after any other mods have modified it in other ways.
 	include( scriptPath .. "/idle_lateinit" )
+
+	-- AGP overrides line_of_sight:calculateUnitLOS during lateInit.
+	include( scriptPath .. "/line_of_sight" )
 
 	-- Conditionally pauses the event queue. Needs to wrap after Talkative Agents adds additional event handlers.
 	include( scriptPath .. "/mission_panel" )
