@@ -69,12 +69,14 @@ local function init( modApi )
 			STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_REGENERATE
 		}
 	})
+	modApi:addGenerationOption("fixmagicsight", STRINGS.COMMBUGFIX.OPTIONS.FIXMAGICSIGHT,  STRINGS.COMMBUGFIX.OPTIONS.FIXMAGICSIGHT_TIP, {noUpdate=true})
 	modApi:addGenerationOption("ignoresleepingtag", STRINGS.COMMBUGFIX.OPTIONS.IGNORESLEEPINGTAG,  STRINGS.COMMBUGFIX.OPTIONS.IGNORESLEEPINGTAG_TIP, {noUpdate=true})
 	modApi:addGenerationOption("pathing_updateobserved", STRINGS.COMMBUGFIX.OPTIONS.PATHING_UPDATEOBSERVED,  STRINGS.COMMBUGFIX.OPTIONS.PATHING_UPDATEOBSERVED_TIP, {noUpdate=true})
 
 	include( scriptPath .. "/include" )
 	include( scriptPath .. "/engine" )
 	include( scriptPath .. "/idle" )
+	include( scriptPath .. "/line_of_sight" )
 	include( scriptPath .. "/mission_scoring" )
 	include( scriptPath .. "/pcplayer" )
 	include( scriptPath .. "/simactions" )
@@ -133,6 +135,9 @@ local function load( modApi, options, params )
 	end
 	if options["ignoresleepingtag"] and params then
 		params.cbf_ignoresleepingtag = true
+	end
+	if options["fixmagicsight"] and params then
+		params.cbf_fixmagicsight = true
 	end
 	-- Store pathing flags in a single table, mapping a few user-visible options to potentially multiple fixes.
 	-- If a suboption needs to be manually disabled in a save, set 'LOCK=true' to prevent game load from changing them.
