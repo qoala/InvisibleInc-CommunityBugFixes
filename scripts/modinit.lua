@@ -133,10 +133,10 @@ local function load( modApi, options, params )
 	if options["idle_fixfailedpatrolpath"] and params then
 		params.cbf_idle_fixfailedpatrolpath = options["idle_fixfailedpatrolpath"].value
 	end
-	if options["ignoresleepingtag"] and params then
+	if options["ignoresleepingtag"] and options["ignoresleepingtag"] and params then
 		params.cbf_ignoresleepingtag = true
 	end
-	if options["fixmagicsight"] and params then
+	if options["fixmagicsight"] and options["fixmagicsight"].enabled and params then
 		params.cbf_fixmagicsight = true
 	end
 	-- Store pathing flags in a single table, mapping a few user-visible options to potentially multiple fixes.
@@ -145,7 +145,7 @@ local function load( modApi, options, params )
 		params.cbf_pathing = {}
 		-- Cases where the guard path already updates when the guard's brain is fully evaluated (such as when acting during the guard turn).
 		-- The player sees these as "the observed path lies about what will happen", not "the performed path makes no sense", even though the bug affects planned paths whether or not the player has observed those paths.
-		if not options["pathing_updateobserved"] or options["pathing_updateobserved"].enabled then
+		if options["pathing_updateobserved"] and options["pathing_updateobserved"].enabled then
 			-- Update pathing immediately when the current interest moves (instead of waiting until the guard turn's full reprocessing)
 			-- Fixes observed guard path not updating past the initial distraction when running/in peripheral vision for multiple tiles.
 			params.cbf_pathing.reset_on_interest_moved = true
