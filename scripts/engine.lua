@@ -27,6 +27,37 @@ end
 -- -----
 
 -- -----
+-- Sleeping guards ignore TAG hits
+-- -----
+
+local oldHitUnit = simengine.hitUnit
+
+function simengine:hitUnit( sourceUnit, targetUnit, dmgt, ... )
+	local prevLastAttack
+	local prevLastHit
+	if dmgt.noTargetAlert then
+		if sourceUnit then
+			prevLastAttack = sourceUnit:getTraits().lastAttack
+		end
+		prevLastHit = targetUnit:getTraits().lastHit
+	end
+
+	oldHitUnit( self, sourceUnit, targetUnit, dmgt, ... )
+
+	if dmgt.noTargetAlert and self:getParams().difficultyOptions.cbf_ignoresleepingtag then
+		-- TAG Pistol and similar weapons shouldn't register as attacks.
+		if sourceUnit then
+			sourceUnit:getTraits().lastAttack = prevLastAttack
+		end
+		targetUnit:getTraits().lastHit = prevLastHit
+	end
+end
+
+-- -----
+-- END Sleeping guards ignore TAG hits
+-- -----
+
+-- -----
 -- Pathing: moving interest fix
 -- -----
 

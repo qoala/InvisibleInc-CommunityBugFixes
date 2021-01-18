@@ -25,6 +25,8 @@ local MOD_STRINGS =
 		IDLE_FIXFAILEDPATROLPATH_DISABLED = "DISABLED",
 		IDLE_FIXFAILEDPATROLPATH_STATIONARY = "STATIONARY",
 		IDLE_FIXFAILEDPATROLPATH_REGENERATE = "REGENERATE",
+		IGNORESLEEPINGTAG = "FIX SLEEPING GUARDS NOTICE TAG",
+		IGNORESLEEPINGTAG_TIP = "<c:FF8411>FIX SLEEPING GUARDS NOTICE TAG</c>\nKOed guards register TAG pistol hits as attacks, even though the weapon is ignored by awake guards.\nThis fix causes them to ignore non-alerting attacks for their wake-up interest point.",
 		PATHING_UPDATEOBSERVED = "FIX GUARD PATHING: STALE OBSERVED PATHS",
 		PATHING_UPDATEOBSERVED_TIP = "<c:FF8411>FIX GUARD PATHING: STALE OBSERVED PATHS</c>\nSometimes, observed/TAGged guard paths don't visually update when the interest point moves, resulting in the observed path lying about what the guard will actually do.\nThis forces the guard's path to update immediately.",
 	},

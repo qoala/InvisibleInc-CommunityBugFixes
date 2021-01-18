@@ -69,6 +69,7 @@ local function init( modApi )
 			STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_REGENERATE
 		}
 	})
+	modApi:addGenerationOption("ignoresleepingtag", STRINGS.COMMBUGFIX.OPTIONS.IGNORESLEEPINGTAG,  STRINGS.COMMBUGFIX.OPTIONS.IGNORESLEEPINGTAG_TIP, {noUpdate=true})
 	modApi:addGenerationOption("pathing_updateobserved", STRINGS.COMMBUGFIX.OPTIONS.PATHING_UPDATEOBSERVED,  STRINGS.COMMBUGFIX.OPTIONS.PATHING_UPDATEOBSERVED_TIP, {noUpdate=true})
 
 	include( scriptPath .. "/include" )
@@ -129,6 +130,9 @@ local function load( modApi, options, params )
 	end
 	if options["idle_fixfailedpatrolpath"] and params then
 		params.cbf_idle_fixfailedpatrolpath = options["idle_fixfailedpatrolpath"].value
+	end
+	if options["ignoresleepingtag"] and params then
+		params.cbf_ignoresleepingtag = true
 	end
 	-- Store pathing flags in a single table, mapping a few user-visible options to potentially multiple fixes.
 	-- If a suboption needs to be manually disabled in a save, set 'LOCK=true' to prevent game load from changing them.

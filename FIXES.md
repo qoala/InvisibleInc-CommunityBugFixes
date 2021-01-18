@@ -68,6 +68,14 @@
     to and investigating the point, the guard immediately turns to face the calculated direction.
   * **Campaign Option**: choose one of the available fixes or no fix.
   * **Credit**: Qoalabear, Cyberboy2000
+* Sleeping guards notice TAG
+  * When a KOed guard wakes up, they investigate the location of their most recent attack (including
+    attacks received while KOed). This includes an attack with a TAG pistol, even though TAG pistol
+	hits are not otherwise noticed by awake guards.
+  * **Fix**: Non-alerting attacks do not update the "last hit" property, so are ignored by KOed
+    guards when selecting their wake-up investigation point.
+  * **Campaign Option**: enable/disable fix
+  * **Credit**: Qoalabear
 * Guard Pathing: Stale observed paths
   * When a guard's current interest point moves (such as an agent moving through peripheral vision
     or sprinting past), the guard's observed path stays at the interest's initial position and
