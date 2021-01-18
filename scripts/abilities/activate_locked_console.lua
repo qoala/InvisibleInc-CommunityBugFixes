@@ -8,14 +8,14 @@ local oldIsTarget = oldActivateLockedConsole.isTarget
 
 local activate_locked_console = util.extend(oldActivateLockedConsole)
 {
-  isTarget = function( self, abilityOwner, unit, targetUnit )
-    local sim = abilityOwner:getSim()
-    if sim:getParams().difficultyOptions.cbf_ending_remotehacking then
-      if targetUnit ~= abilityOwner then
-        return false
-      end
-    end
-    return oldIsTarget( self, abilityOwner, unit, targetUnit )
-  end
+	isTarget = function( self, abilityOwner, unit, targetUnit )
+		local sim = abilityOwner:getSim()
+		if sim:getParams().difficultyOptions.cbf_ending_remotehacking then
+			if targetUnit ~= abilityOwner then
+				return false
+			end
+		end
+		return oldIsTarget( self, abilityOwner, unit, targetUnit )
+	end
 }
 return activate_locked_console
