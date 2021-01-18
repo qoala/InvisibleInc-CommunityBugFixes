@@ -78,6 +78,7 @@ local function init( modApi )
 	include( scriptPath .. "/pcplayer" )
 	include( scriptPath .. "/simactions" )
 	include( scriptPath .. "/simquery" )
+	include( scriptPath .. "/simunit" )
 	include( scriptPath .. "/senses" )
 	include( scriptPath .. "/missions/mission_detention_centre" )
 	include( scriptPath .. "/missions/mission_vault" )
@@ -102,8 +103,14 @@ local function load( modApi, options, params )
 
 	modApi:addAbilityDef( "activate_final_console", scriptPath .."/abilities/activate_final_console" )
 	modApi:addAbilityDef( "activate_locked_console", scriptPath .."/abilities/activate_locked_console" )
+	modApi:addAbilityDef( "carryable", scriptPath .."/abilities/carryable" )
 	modApi:addAbilityDef( "escape", scriptPath .."/abilities/escape" )
 	modApi:addAbilityDef( "jackin_root_console", scriptPath .."/abilities/jackin_root_console" )
+
+	if params then
+		-- Fixes that should never need to be disabled, but respect if the mod is disabled. Just in case.
+		params.cbf_inventory_recheckoverwatchondrop = true
+	end
 
 	if options["ending_remotehacking"] and options["ending_remotehacking"].enabled and params then
 		params.cbf_ending_remotehacking = true

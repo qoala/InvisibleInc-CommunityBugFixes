@@ -79,6 +79,15 @@
   * **Credit**: Qoalabear
 
 
+* Inventory: Ambush/overwatch are cancelled by dropping any item.
+  * After dropping an item on the ground, picking up an item, or looting an item from a guard or
+    safe, the agent's ambush and overwatch are cancelled. This applies even if the active weapon
+	wasn't affected. Compare with toggling a door, which also has an animation, but doesn't reset
+	ambush/overwatch.
+  * **Fix**: Item interactions that previously reset ambush/overwatch instead trigger a check that
+    any ambush/overwatch is still valid. If the ability is no longer available, then it is
+	cancelled.
+  * **Credit**: Qoalabear
 * DLC mid-missions: Save corruption if Monst3r is the sole survivor of DLC mid2.
   * Occurs if Monst3r is the only surviving agent, and he is not officially on your team. This
     contradicts in-game tips/dialogue suggesting that "Our agents are expendable, but Monst3r must
