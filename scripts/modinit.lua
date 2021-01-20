@@ -127,6 +127,9 @@ local function load( modApi, options, params )
 		end
 		local patch_itemdefs = include( scriptPath .. "/patch_itemdefs" )
 		patch_itemdefs.updateEndingFinalDoor()
+	else
+		local patch_itemdefs = include( scriptPath .. "/patch_itemdefs" )
+		patch_itemdefs.resetEndingFinalDoor()
 	end
 	if options["missiondetcenter_spawnagent"] and params then
 		params.cbf_detention_spawnagent = options["missiondetcenter_spawnagent"].value
