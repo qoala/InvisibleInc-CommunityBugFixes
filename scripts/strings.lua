@@ -5,7 +5,8 @@ local MOD_STRINGS =
 	{
 		-- options with categories, sorted by english category name
 		MISSIONDETCENTER_SPAWNAGENT = "DETENTION CENTER MISSIONS - AGENT/PRISONER CHANCE",
-		MISSIONDETCENTER_SPAWNAGENT_TIP = "<c:FF8411>DETENTION CENTER MISSIONS - AGENT/PRISONER CHANCE</c>\nThe mission specifies 50-50 odds of an agent unless the player recently \"found a prisoner\". However, it sets this flag after any mission that didn't have a rescuable agent, even if it wasn't a detention center.\nIn all of the below options, if a detention center has a generic prisoner, the next detention center is guaranteed to have an agent\nVANILLA: If the previous mission wasn't a detention center, an agent is guaranteed to appear.\nGUARANTEED FIRST AGENT: Guarantees an agent in the first detention center of the campaign, as most players expect. Afterwards, like 50-50.\n50-50: Even odds of Agent/Prisoner, unless the most recent detention center had a generic prisoner.",
+		MISSIONDETCENTER_SPAWNAGENT_TIP = "<c:FF8411>DETENTION CENTER MISSIONS - AGENT/PRISONER CHANCE</c>\nThe mission specifies 50-50 odds of an agent unless the player recently \"found a prisoner\". However, it sets this flag after any mission that didn't have a rescuable agent, even if it wasn't a detention center.\nIn all of the below options, if a detention center has a generic prisoner, the next detention center is guaranteed to have an agent\nIn order from most to least appearance of agents.\nALWAYS: An agent always appears, until the agency is full.\nVANILLA: If the previous mission wasn't a detention center, an agent is guaranteed to appear.\nGUARANTEED FIRST AGENT: Guarantees an agent in the first detention center of the campaign, as most players expect. Afterwards, like 50-50.\n50-50: Even odds of Agent/Prisoner, unless the most recent detention center had a generic prisoner.",
+		MISSIONDETCENTER_SPAWNAGENT_ALWAYS = "ALWAYS",
 		MISSIONDETCENTER_SPAWNAGENT_VANILLA = "VANILLA",
 		MISSIONDETCENTER_SPAWNAGENT_FIRSTAGENT = "GUARANTEED FIRST AGENT",
 		MISSIONDETCENTER_SPAWNAGENT_FIFTYFIFTY = "50-50",
@@ -24,7 +25,7 @@ local MOD_STRINGS =
 		-- options without categories
 		IDLE_FIXFAILEDPATROLPATH = "FIX BROKEN GUARD PATROLS",
 		IDLE_FIXFAILEDPATROLPATH_TIP = "<c:FF8411>FIX BROKEN GUARD PATROLS</c>\nIf a guard fails to generate a patrol path, they can end up stationary without a remembered facing.\n\nDISABLED: Leave unchanged.\nSTATIONARY: Convert to a non-broken stationary patrol.\nREGENERATE: Generate a new patrol path with looser requirements.",
-		IDLE_FIXFAILEDPATROLPATH_DISABLED = "DISABLED",
+		IDLE_FIXFAILEDPATROLPATH_DISABLED = "DISABLED (VANILLA)",
 		IDLE_FIXFAILEDPATROLPATH_STATIONARY = "STATIONARY",
 		IDLE_FIXFAILEDPATROLPATH_REGENERATE = "REGENERATE",
 		FIXMAGICSIGHT = "LIMIT MAGIC DIAGONAL GUARD VISION",

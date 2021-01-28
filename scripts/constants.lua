@@ -14,6 +14,7 @@ local MISSIONDETCENTER_SPAWNAGENT =
 	VANILLA = 0,
 	FIRSTAGENT = 1,
 	FIFTYFIFTY = 2,
+	ALWAYS = 3,
 }
 
 -- Enum values for vault mission fix of hack response.

@@ -56,7 +56,9 @@ mission_scoring.DoFinishMission = function( sim, campaign, ... )
 
 	local spawnAgentOption = campaign.difficultyOptions.cbf_detention_spawnagent or constants.MISSIONDETCENTER_SPAWNAGENT.VANILLA
 	if spawnAgentOption ~= constants.MISSIONDETCENTER_SPAWNAGENT.VANILLA then
-		if sim:getTags().cbfCouldHaveAgent then
+		if spawnAgentOption == constants.MISSIONDETCENTER_SPAWNAGENT.ALWAYS then
+			campaign.foundPrisoner = true
+		elseif sim:getTags().cbfCouldHaveAgent then
 			-- No change needed
 		elseif previousFoundPrisoner == nil and spawnAgentOption == constants.MISSIONDETCENTER_SPAWNAGENT.FIRSTAGENT then
 			-- Initialize foundPrisoner for the first time.
