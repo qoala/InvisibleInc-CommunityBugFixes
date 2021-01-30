@@ -16,13 +16,9 @@ local doorMechanism = util.extend(oldDoorMechanism)
 		local fromCell = sim:getCell( x0, y0 )
 		assert( fromCell and dir )
 
-		-- CBF: custom recheckAllAiming only resets ambush/overwatch if it's no longer available.
-		if userUnit.recheckAllAiming then
-			userUnit:recheckAllAiming()
-		else
-			-- This shouldn't happen
-			simlog("CBF: unit did not define recheckAllAiming. Falling back to resetAllAiming. %s [%d]", userUnit:getName(), userUnit:getID())
-			userUnit:resetAllAiming()
+		-- CBF: Don't reset aiming for this action.
+		if not sim:getParams().difficultyOptions.cbf_inventory_recheckoverwatchondrop then
+			self:resetAllAiming()
 		end
 
 		sim:dispatchEvent( simdefs.EV_UNIT_USEDOOR, { unitID = userUnit:getID(), facing = dir } )

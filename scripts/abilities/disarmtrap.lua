@@ -13,13 +13,9 @@ local disarmtrap = util.extend(oldDisarmTrap)
 	executeAbility = function( self, sim, abilityOwner, unit, targetUnitID )
 		local oldFacing = abilityOwner:getFacing()
 
-		-- CBF: custom recheckAllAiming only resets ambush/overwatch if it's no longer available.
-		if userUnit.recheckAllAiming then
-			userUnit:recheckAllAiming()
-		else
-			-- This shouldn't happen
-			simlog("CBF: unit did not define recheckAllAiming. Falling back to resetAllAiming. %s [%d]", userUnit:getName(), userUnit:getID())
-			userUnit:resetAllAiming()
+		-- CBF: Don't reset aiming for this action.
+		if not sim:getParams().difficultyOptions.cbf_inventory_recheckoverwatchondrop then
+			self:resetAllAiming()
 		end
 
 		local cell = sim:getCell( abilityOwner:getLocation() )
