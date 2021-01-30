@@ -112,8 +112,11 @@ local function load( modApi, options, params )
 	modApi:addAbilityDef( "activate_final_console", scriptPath .."/abilities/activate_final_console" )
 	modApi:addAbilityDef( "activate_locked_console", scriptPath .."/abilities/activate_locked_console" )
 	modApi:addAbilityDef( "carryable", scriptPath .."/abilities/carryable" )
+	modApi:addAbilityDef( "disarmtrap", scriptPath .."/abilities/disarmtrap" )
+	modApi:addAbilityDef( "doorMechanism", scriptPath .."/abilities/doorMechanism" )
 	modApi:addAbilityDef( "escape", scriptPath .."/abilities/escape" )
 	modApi:addAbilityDef( "jackin_root_console", scriptPath .."/abilities/jackin_root_console" )
+	modApi:addAbilityDef( "prime_emp", scriptPath .."/abilities/prime_emp" )
 
 	if params then
 		-- Fixes that should never need to be disabled, but respect if the mod is disabled. Just in case.
