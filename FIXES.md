@@ -44,6 +44,19 @@
   * **Fix**: The security codes obtained by Monst3r no longer allow him to directly unlock doors.
   * **Campaign Option**: enable/disable fix
   * **Credit**: Qoalabear
+* Final Mission: Dropping Incognita
+  * Central is supposed to start with Incognita's drive and be unable to drop it. However, it can
+    be dropped by transferring it to the ground while picking up another dropped item. It can also
+	be transferred to a guard, safe, or KOed agent from the "looting" menu.
+  * If Central was already part of the agency and tries to start the mission with a full inventory,
+    then Incognita is spawned on the ground at her feet.
+  * Incognita's presence isn't actually checked in order to win.
+  * **Fix**:
+    * Block all item transfers except with Central as the recipient.
+	* (TODO) The last item in Central's inventory is dropped instead of Incognita
+	* (TODO) Incognita is required for Central's final task, instead of assumed to be present.
+  * **Campaign Option**: enable/disable fix
+  * **Credit**: Qoalabear
 * Prefab stationary guards: Fix facing
   * Stationary guards placed by prefabs are stationary without a remembered facing, leaving them
     facing arbitrary directions after being distracted. For example, detention center captains

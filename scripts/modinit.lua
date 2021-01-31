@@ -54,6 +54,7 @@ local function init( modApi )
 	})
 	modApi:addGenerationOption("ending_remotehacking", STRINGS.COMMBUGFIX.OPTIONS.ENDING_REMOTEHACKING,  STRINGS.COMMBUGFIX.OPTIONS.ENDING_REMOTEHACKING_TIP, {noUpdate=true})
 	modApi:addGenerationOption("ending_finaldoor", STRINGS.COMMBUGFIX.OPTIONS.ENDING_FINALDOOR,  STRINGS.COMMBUGFIX.OPTIONS.ENDING_FINALDOOR_TIP, {noUpdate=true})
+	modApi:addGenerationOption("ending_incognitadrop", STRINGS.COMMBUGFIX.OPTIONS.ENDING_INCOGNITADROP,  STRINGS.COMMBUGFIX.OPTIONS.ENDING_INCOGNITADROP_TIP, {noUpdate=true})
 	-- Fixes for nopatrol trait (Prefab Stationary Guards)
 	modApi:addGenerationOption("nopatrol_fixfacing", STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_FIXFACING,  STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_FIXFACING_TIP, {noUpdate=true})
 	modApi:addGenerationOption("nopatrol_nopatrolchange", STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_NOPATROLCHANGE, STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_NOPATROLCHANGE_TIP, {noUpdate=true, enabled=false})
@@ -79,6 +80,7 @@ local function init( modApi )
 	include( scriptPath .. "/include" )
 	include( scriptPath .. "/engine" )
 	include( scriptPath .. "/idle" )
+	include( scriptPath .. "/items_panel" )
 	include( scriptPath .. "/mission_scoring" )
 	include( scriptPath .. "/pcplayer" )
 	include( scriptPath .. "/simactions" )
@@ -135,6 +137,9 @@ local function load( modApi, options, params )
 	else
 		local patch_itemdefs = include( scriptPath .. "/patch_itemdefs" )
 		patch_itemdefs.resetEndingFinalDoor()
+	end
+	if options["ending_incognitadrop"] and options["ending_incognitadrop"].enabled and params then
+		params.cbf_ending_incognitadrop = true
 	end
 	if options["missiondetcenter_spawnagent"] and params then
 		params.cbf_detention_spawnagent = options["missiondetcenter_spawnagent"].value
