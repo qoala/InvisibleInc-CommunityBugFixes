@@ -50,11 +50,14 @@
 	be transferred to a guard, safe, or KOed agent from the "looting" menu.
   * If Central was already part of the agency and tries to start the mission with a full inventory,
     then Incognita is spawned on the ground at her feet.
-  * Incognita's presence isn't actually checked in order to win.
+  * Incognita's presence isn't actually checked in order to win. (Not fixed, as this would require
+    blocking an empty-handed Central from the final hallway to avoid softlocking her inside.)
+  * **Note**: With Sim Constructor, if Central enters with a full inventory, then Incognita is added
+    as a 9th item without any UI indication other than the extra encumbrance.
   * **Fix**:
     * Block all item transfers except with Central as the recipient.
-	* (TODO) The last item in Central's inventory is dropped instead of Incognita
-	* (TODO) Incognita is required for Central's final task, instead of assumed to be present.
+	* The last item in Central's inventory is visibly dropped at the start of the mission instead of
+	  Incognita's drive.
   * **Campaign Option**: enable/disable fix
   * **Credit**: Qoalabear
 * Prefab stationary guards: Fix facing
