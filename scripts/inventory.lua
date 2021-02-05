@@ -25,5 +25,5 @@ function inventory.giftUnit( sim, unit, itemTemplate, showModal, ... )
 		sim:dispatchEvent(simdefs.EV_UNIT_PICKUP, { unitID = unit:getID() })
 	end
 
-	oldGiftUnit( sim, unit, itemTemplate, showModal, ... )
+	return oldGiftUnit( sim, unit, itemTemplate, showModal, ... )
 end
