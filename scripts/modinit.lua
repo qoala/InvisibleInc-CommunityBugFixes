@@ -64,13 +64,27 @@ local function init( modApi )
 		values={
 			constants.IDLE_FIXFAILEDPATROLPATH.DISABLED,
 			constants.IDLE_FIXFAILEDPATROLPATH.STATIONARY,
-			constants.IDLE_FIXFAILEDPATROLPATH.REGENERATE
+			constants.IDLE_FIXFAILEDPATROLPATH.REGENERATE,
 		},
 		value=constants.IDLE_FIXFAILEDPATROLPATH.REGENERATE,
 		strings={
 			STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_DISABLED,
 			STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_STATIONARY,
-			STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_REGENERATE
+			STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_REGENERATE,
+		}
+	})
+	modApi:addGenerationOption("holowallsounds", STRINGS.COMMBUGFIX.OPTIONS.HOLOWALLSOUNDS, STRINGS.COMMBUGFIX.OPTIONS.HOLOWALLSOUNDS_TIP, {
+		noUpdate=true,
+		values={
+			constants.HOLOWALLSOUNDS.VANILLA,
+			constants.HOLOWALLSOUNDS.NOTICE,
+			constants.HOLOWALLSOUNDS.IGNORE,
+		},
+		value=constants.HOLOWALLSOUNDS.NOTICE,
+		strings={
+			STRINGS.COMMBUGFIX.OPTIONS.HOLOWALLSOUNDS_VANILLA,
+			STRINGS.COMMBUGFIX.OPTIONS.HOLOWALLSOUNDS_NOTICE,
+			STRINGS.COMMBUGFIX.OPTIONS.HOLOWALLSOUNDS_IGNORE,
 		}
 	})
 	modApi:addGenerationOption("fixmagicsight", STRINGS.COMMBUGFIX.OPTIONS.FIXMAGICSIGHT,  STRINGS.COMMBUGFIX.OPTIONS.FIXMAGICSIGHT_TIP, {noUpdate=true})
@@ -157,8 +171,11 @@ local function load( modApi, options, params )
 	if options["idle_fixfailedpatrolpath"] and params then
 		params.cbf_idle_fixfailedpatrolpath = options["idle_fixfailedpatrolpath"].value
 	end
-	if options["ignoresleepingtag"] and options["ignoresleepingtag"] and params then
+	if options["ignoresleepingtag"] and options["ignoresleepingtag"].enabled and params then
 		params.cbf_ignoresleepingtag = true
+	end
+	if options["holowallsounds"] and params then
+	    params.cbf_holowallsounds = options["holowallsounds"].value
 	end
 	if options["fixmagicsight"] and options["fixmagicsight"].enabled and params then
 		params.cbf_fixmagicsight = true

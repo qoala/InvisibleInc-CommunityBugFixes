@@ -103,6 +103,22 @@
     facing.
   * **Campaign Option**: enable/disable fix
   * **Credit**: Qoalabear, Cyberboy2000
+* Holoprojector sound through walls
+  * Most sounds do not alert guards (notable exception: K&O turrets firing). However, the sound
+    "continuously" emitted by a deployed holoprojector in a 1 tile radius does alert guards.
+    In universe, this might be explained as the guard takes a closer look at the mobile pallet and
+    realizes that it's a hologram. This doesn't make as much sense if a guard hears the projector
+    from the other side of a wall. 
+  * Separately, the sound is not checked when the projector is initially deployed (though any guard
+    that can see the projector being deployed is alerted by sight). This is left unfixed, otherwise
+    the holoprojector could be thrown and picked up in a single turn as a targetted sound
+    distraction.
+  * **Fix**: If the guard could not see the projector after turning to face it, the
+  * **Campaign Option**: Choose guards hearing a projector through a wall to:
+    * be alerted and investigate it (vanilla)
+    * investigate it (default)
+    * ignore it
+  * **Credit**: Qoalabear
 * Sleeping guards notice TAG
   * When a KOed guard wakes up, they investigate the location of their most recent attack (including
     attacks received while KOed). This includes an attack with a TAG pistol, even though TAG pistol
