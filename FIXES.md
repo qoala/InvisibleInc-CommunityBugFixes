@@ -91,6 +91,14 @@
     to and investigating the point, the guard immediately turns to face the calculated direction.
   * **Campaign Option**: choose one of the available fixes or no fix.
   * **Credit**: Qoalabear, Cyberboy2000
+* Laser beam ally checks
+  * Corp-controlled lasers turn off when guards walk through, and likewise for agency-controlled
+    lasers and agents. Corp-controlled lasers also turn off when an agent drags a guard through.
+    However agency-controlled trip against a guard being dragged by an agent. Also,
+    agency-controlled lasers do not re-enable themselves after all allies have passed through.
+  * **Fix** Lasers self-disable if either the dragging unit or the dragged unit is an ally. And
+    lasers re-enable after all allies have left, regardless of owner.
+  * **Credit**: Qoalabear
 * Magic diagonal guard vision
   * Guards facing diagonally always see the orthogonally adjacent tiles on the side of their main
     vision cone, to prevent some easy exploits. However, this vision is still granted if the guard
