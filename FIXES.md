@@ -102,7 +102,7 @@
 * Magic diagonal guard vision
   * Guards facing diagonally always see the orthogonally adjacent tiles on the side of their main
     vision cone, to prevent some easy exploits. However, this vision is still granted if the guard
-	couldn't normally see the tile.
+    couldn't normally see the tile.
   * Pulse drones only have enough vision range to see their own tile normally, but if they just
     moved diagonally, they can be alerted by agents passing through the magic vision tiles.
   * Smoke blocks all normal vision, but not the magic vision tiles. If an agent moves through magic
@@ -116,7 +116,7 @@
     "continuously" emitted by a deployed holoprojector in a 1 tile radius does alert guards.
     In universe, this might be explained as the guard takes a closer look at the mobile pallet and
     realizes that it's a hologram. This doesn't make as much sense if a guard hears the projector
-    from the other side of a wall. 
+    from the other side of a wall.
   * Separately, the sound is not checked when the projector is initially deployed (though any guard
     that can see the projector being deployed is alerted by sight). This is left unfixed, otherwise
     the holoprojector could be thrown and picked up in a single turn as a targetted sound
@@ -130,7 +130,7 @@
 * Sleeping guards notice TAG
   * When a KOed guard wakes up, they investigate the location of their most recent attack (including
     attacks received while KOed). This includes an attack with a TAG pistol, even though TAG pistol
-	hits are not otherwise noticed by awake guards.
+    hits are not otherwise noticed by awake guards.
   * **Fix**: Non-alerting attacks do not update the "last hit" property, so are ignored by KOed
     guards when selecting their wake-up investigation point.
   * **Campaign Option**: enable/disable fix
@@ -149,11 +149,11 @@
 * Inventory: Ambush/overwatch are cancelled by dropping any item.
   * After dropping an item on the ground, picking up an item, or looting an item from a guard or
     safe, the agent's ambush and overwatch are cancelled. This applies even if the active weapon
-	wasn't affected. Compare with toggling a door, which also has an animation, but doesn't reset
-	ambush/overwatch.
+    wasn't affected. Compare with toggling a door, which also has an animation, but doesn't reset
+    ambush/overwatch.
   * **Fix**: Picking up/dropping items checks that any ambush/overwatch is still valid. If the
     ability is no longer available, then it is cancelled. Other item interactions (priming EMP, etc)
-	no longer affect ambush/overwatch.
+    no longer affect ambush/overwatch.
   * **Credit**: Qoalabear
 * DLC mid-missions: Save corruption if Monst3r is the sole survivor of DLC mid2.
   * Occurs if Monst3r is the only surviving agent, and he is not officially on your team. This
