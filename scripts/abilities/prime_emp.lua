@@ -34,7 +34,7 @@ local prime_emp = util.extend(oldPrimeEmp)
 
 		-- CBF: Don't reset aiming for this action.
 		if not sim:getParams().difficultyOptions.cbf_inventory_recheckoverwatchondrop then
-			self:resetAllAiming()
+			userUnit:resetAllAiming()
 		end
 
 		inventory.useItem( sim, userUnit, unit )

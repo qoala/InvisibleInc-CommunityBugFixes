@@ -15,7 +15,7 @@ local disarmtrap = util.extend(oldDisarmTrap)
 
 		-- CBF: Don't reset aiming for this action.
 		if not sim:getParams().difficultyOptions.cbf_inventory_recheckoverwatchondrop then
-			self:resetAllAiming()
+			unit:resetAllAiming()
 		end
 
 		local cell = sim:getCell( abilityOwner:getLocation() )

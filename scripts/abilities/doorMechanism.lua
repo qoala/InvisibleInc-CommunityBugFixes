@@ -18,7 +18,7 @@ local doorMechanism = util.extend(oldDoorMechanism)
 
 		-- CBF: Don't reset aiming for this action.
 		if not sim:getParams().difficultyOptions.cbf_inventory_recheckoverwatchondrop then
-			self:resetAllAiming()
+			userUnit:resetAllAiming()
 		end
 
 		sim:dispatchEvent( simdefs.EV_UNIT_USEDOOR, { unitID = userUnit:getID(), facing = dir } )
