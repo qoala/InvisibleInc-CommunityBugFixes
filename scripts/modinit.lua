@@ -122,6 +122,17 @@ local function lateInit( modApi )
 	include( scriptPath .. "/mission_panel" )
 end
 
+local function earlyUnload( modApi )
+	local scriptPath = modApi:getScriptPath()
+
+	local patch_skilldefs = include( scriptPath .. "/patch_skilldefs" )
+	patch_skilldefs.resetSkills()
+end
+
+local function earlyLoad( modApi, options, params )
+	earlyUnload( modApi )
+end
+
 local function load( modApi, options, params )
 	local scriptPath = modApi:getScriptPath()
 
@@ -140,6 +151,7 @@ local function load( modApi, options, params )
 	if params then
 		-- Fixes that should never need to be disabled, but respect if the mod is disabled. Just in case.
 		params.cbf_inventory_recheckoverwatchondrop = true
+		params.cbf_agents_inmissiontraits = true
 	end
 
 	if options["ending_remotehacking"] and options["ending_remotehacking"].enabled and params then
@@ -213,6 +225,15 @@ local function initStrings( modApi )
 	include( scriptPath .. "/patch_strings" )
 end
 
+local function lateLoad( modApi, options, params )
+	local scriptPath = modApi:getScriptPath()
+
+	if true then
+		local patch_skilldefs = include( scriptPath .. "/patch_skilldefs" )
+		patch_skilldefs.updateSkills()
+	end
+end
+
 local function lateUnload( modApi )
 	local scriptPath = modApi:getScriptPath()
 
@@ -224,6 +245,10 @@ return {
     earlyInit = earlyInit,
     init = init,
 	lateInit = lateInit,
+	earlyLoad = earlyLoad,
+	earlyUnload = earlyUnload,
     load = load,
+	lateLoad = lateLoad,
+	lateUnload = lateUnload,
     initStrings = initStrings,
 }

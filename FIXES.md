@@ -145,7 +145,23 @@
   * **Campaign Option**: enable/disable fix
   * **Credit**: Qoalabear
 
-
+* In-Mission Agent Stat Consistency
+  * A few bugs can incorrectly update an agent's numeric traits (such as AP, sprint bonus, KO
+    damage) when they're applied. These traits are recalculated from your current skills and
+	augments at the start of each mission, so the bug only affects the mission in which it occurs.
+  * (1) Using an augment drill on certain augments (Skeletal Suspension, Titanium Rods, Subdermal
+    Tools, Modular Cybernetic Frame X2, various modded augments) doubles the numeric effect of the
+	augment instead of reversing it. Removing Titanium Rods grants +2KO damage. Removing archive
+	Sharp's frame doubles the penalty to -2AP (while removing the armor penetration).
+  * (2) Gaining max speed uses the current hacking bonus, instead of the current sprint bonus, to
+    calculate the new sprint bonus. Speed is applied before hacking when these are gained normally,
+	so it correctly produces a bonus of +1 (for +4AP when sprinting). But if Draco has max hacking
+	and then gains max speed during a mission, he can get a sprint bonus of +6 (for +9AP when
+	sprinting) for the mission.
+  * **Fix**: Removing an installed augment correctly reverses traits modified via `modTrait`.
+  * **Fix**: Gaining speed 5 during a mission calculates the new `sprintBonus` using the current
+    `sprintBonus`.
+  * **Credit**: Qoalabear
 * Inventory: Ambush/overwatch are cancelled by dropping any item.
   * After dropping an item on the ground, picking up an item, or looting an item from a guard or
     safe, the agent's ambush and overwatch are cancelled. This applies even if the active weapon

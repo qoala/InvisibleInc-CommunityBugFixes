@@ -27,3 +27,18 @@ function inventory.giftUnit( sim, unit, itemTemplate, showModal, ... )
 
 	return oldGiftUnit( sim, unit, itemTemplate, showModal, ... )
 end
+
+local oldTrashItem = inventory.trashItem
+
+function inventory.trashItem( sim, unit, item, ... )
+
+	if sim:getParams().difficultyOptions.cbf_agents_inmissiontraits and item:getTraits().installed and item:getTraits().modTrait then
+		for i,trait in ipairs(item:getTraits().modTrait)do
+			-- Reverse both the value applied by installing the mod
+			-- and the value from the broken vanilla trashItem.
+			unit:getTraits()[trait[1]] = unit:getTraits()[trait[1]] - trait[2] - trait[2]
+		end
+	end
+
+	return oldTrashItem( sim, unit, item, ...)
+end
