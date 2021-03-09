@@ -162,6 +162,14 @@
   * **Fix**: Gaining speed 5 during a mission calculates the new `sprintBonus` using the current
     `sprintBonus`.
   * **Credit**: Qoalabear
+* Programs: Cycle clears PWR after some item-based "generate PWR at start of turn" effects
+  * Cycle's stated effect is to clear all PWR then gain 3 PWR at the start of every turn. There's
+    steps taken so that this clears PWR before any other program generates PWR, avoiding any other
+	generator programs becoming completely useless.
+  * However, the Distributed Processing augment and Portable Laptop items generate their PWR before
+    that step.
+  * **Fix**: Cycle's "clear PWR" step is moved to fire before any other start of turn effect.
+  * **Credit**: Qoalabear
 * Inventory: Ambush/overwatch are cancelled by dropping any item.
   * After dropping an item on the ground, picking up an item, or looting an item from a guard or
     safe, the agent's ambush and overwatch are cancelled. This applies even if the active weapon

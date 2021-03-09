@@ -94,12 +94,15 @@ local function init( modApi )
 
 	include( scriptPath .. "/include" )
 	include( scriptPath .. "/engine" )
+
+	include( scriptPath .. "/simplayer" )
+	include( scriptPath .. "/pcplayer" )
+
 	include( scriptPath .. "/idle" )
 	include( scriptPath .. "/inventory" )
 	include( scriptPath .. "/items_panel" )
 	include( scriptPath .. "/laser" )
 	include( scriptPath .. "/mission_scoring" )
-	include( scriptPath .. "/pcplayer" )
 	include( scriptPath .. "/simactions" )
 	include( scriptPath .. "/simquery" )
 	include( scriptPath .. "/simunit" )
@@ -152,6 +155,7 @@ local function load( modApi, options, params )
 		-- Fixes that should never need to be disabled, but respect if the mod is disabled. Just in case.
 		params.cbf_inventory_recheckoverwatchondrop = true
 		params.cbf_agents_inmissiontraits = true
+		params.cbf_cycletiming = true
 	end
 
 	if options["ending_remotehacking"] and options["ending_remotehacking"].enabled and params then
