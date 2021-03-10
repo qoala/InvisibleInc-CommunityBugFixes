@@ -1,4 +1,6 @@
 
+local MOD_VERSION = "1.4.2-dev"
+
 local function earlyInit( modApi )
 	modApi.requirements =
 	{
@@ -125,6 +127,15 @@ local function load( modApi, options, params )
 	-- This helps ensure params and associated conditional patches are kept in sync across mod updates.
 	if params then
 		options.cbf_params = {}
+
+		params.cbf_version = MOD_VERSION
+		options.cbf_params.cbf_version = MOD_VERSION
+
+		log:write("CBF loading for new save: v%s", MOD_VERSION)
+	elseif options.cbf_params then
+		log:write("CBF loading for existing save: running=v%s original=v%s", MOD_VERSION, options.cbf_params.cbf_version)
+	elseif legacyMode then
+		log:write("CBF loading for existing save: running=v%s original=[legacy]", MOD_VERSION)
 	end
 
 	if generalFixesEnabled and params then
