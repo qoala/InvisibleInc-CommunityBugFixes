@@ -108,23 +108,16 @@ local function load( modApi, options, params )
 	local scriptPath = modApi:getScriptPath()
 	local constants = include( scriptPath .. "/constants" )
 
-	local escape_mission = include( scriptPath .. "/missions/escape_mission" )
-	modApi:addEscapeScripts(escape_mission)
-
-	modApi:addAbilityDef( "activate_final_console", scriptPath .."/abilities/activate_final_console" )
-	modApi:addAbilityDef( "activate_locked_console", scriptPath .."/abilities/activate_locked_console" )
-	modApi:addAbilityDef( "carryable", scriptPath .."/abilities/carryable" )
-	modApi:addAbilityDef( "disarmtrap", scriptPath .."/abilities/disarmtrap" )
-	modApi:addAbilityDef( "doorMechanism", scriptPath .."/abilities/doorMechanism" )
-	modApi:addAbilityDef( "escape", scriptPath .."/abilities/escape" )
-	modApi:addAbilityDef( "jackin_root_console", scriptPath .."/abilities/jackin_root_console" )
-	modApi:addAbilityDef( "prime_emp", scriptPath .."/abilities/prime_emp" )
+	-- -----
+	-- Options Handling
+	-- -----
 
 	if params then
 		-- Fixes that should never need to be disabled, but respect if the mod is disabled. Just in case.
 		params.cbf_inventory_recheckoverwatchondrop = true
 	end
 
+	local legacyMode = not options["generalfixes"]  -- Loading a save that predates cbf_params.
 	local generalFixesEnabled = options["generalfixes"] and options["generalfixes"].enabled
 
 	-- Write a table into this mod's campaign options.
@@ -176,10 +169,28 @@ local function load( modApi, options, params )
 	    params.cbf_holowallsounds = options["holowallsounds"].value
 	end
 
-	-- Conditional patching/loading
+	-- -----
+	-- Patching/Loading
+	-- -----
+
+	if options.cbf_params or legacyMode then
+		-- Always-enabled fixes / fixes that can check params at runtime
+
+		local escape_mission = include( scriptPath .. "/missions/escape_mission" )
+		modApi:addEscapeScripts(escape_mission)
+
+		modApi:addAbilityDef( "activate_final_console", scriptPath .."/abilities/activate_final_console" )
+		modApi:addAbilityDef( "activate_locked_console", scriptPath .."/abilities/activate_locked_console" )
+		modApi:addAbilityDef( "carryable", scriptPath .."/abilities/carryable" )
+		modApi:addAbilityDef( "disarmtrap", scriptPath .."/abilities/disarmtrap" )
+		modApi:addAbilityDef( "doorMechanism", scriptPath .."/abilities/doorMechanism" )
+		modApi:addAbilityDef( "escape", scriptPath .."/abilities/escape" )
+		modApi:addAbilityDef( "jackin_root_console", scriptPath .."/abilities/jackin_root_console" )
+		modApi:addAbilityDef( "prime_emp", scriptPath .."/abilities/prime_emp" )
+	end
 
 	-- Check for legacy option, in case of a save predating cbf_params
-	if (options.cbf_params and options.cbf_params.cbf_ending_finaldoor) or (options["ending_finaldoor"] and options["ending_finaldoor"].enabled) then
+	if (options.cbf_params and options.cbf_params.cbf_ending_finaldoor) or (legacyMode and options["ending_finaldoor"] and options["ending_finaldoor"].enabled) then
 		local patch_itemdefs = include( scriptPath .. "/patch_itemdefs" )
 		patch_itemdefs.updateEndingFinalDoor()
 	else
