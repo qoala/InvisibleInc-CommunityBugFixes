@@ -32,7 +32,7 @@ local oldTrashItem = inventory.trashItem
 
 function inventory.trashItem( sim, unit, item, ... )
 
-	if sim:getParams().difficultyOptions.cbf_agents_inmissiontraits and item:getTraits().installed and item:getTraits().modTrait then
+	if sim:getParams().difficultyOptions.cbf_agent_drillmodtrait and item:getTraits().installed and item:getTraits().modTrait then
 		for i,trait in ipairs(item:getTraits().modTrait)do
 			-- Reverse both the value applied by installing the mod
 			-- and the value from the broken vanilla trashItem.

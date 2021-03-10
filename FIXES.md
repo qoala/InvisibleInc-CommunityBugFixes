@@ -1,8 +1,12 @@
-# Available Bug Fixes
+
+## Configurable Fixes
+
+The following fixes have their own options in the campaign settings at the start of a run, usually
+because there's reasonable arguments over how to correctly fix the bug.
 
 * Detention Center Missions: Agent/Prisoner Chance
   * The mission is coded to give 50/50 odds of an agent or generic prisoner, unless the agency is
-    full (guaranteed prisoner) or the player recently found the prisoner (guaranteed agent). This
+    full (guaranteed prisoner) or the player recently found a prisoner (guaranteed agent). This
     guarantees that the player needs to visit at most 2 detention centers to find an agent.
   * Except that the game sets `foundPrisoner` after _any_ mission that didn't have a rescueable
     agent, even if it wasn't a detention center so didn't have a prisoner. The 50/50 only applies if
@@ -16,101 +20,6 @@
     how many intervening missions have been visited. The first detention center has a 50/50 chance.
   * **Campaign Option**: choose one of the available fixes or vanilla behavior.
   * **Credit**: Qoalabear, Mobbstar, pesnitor
-* Vault Missions: Security Response
-  * The security response (spawning an enforcer to inspect the vault) triggers when a
-    device-targetted Incognita program reduces firewalls exactly to 0 on a vault device.
-  * The following techniques bypass this response entirely:
-    1) Hack the device with a non-program (e.g. buster chip)
-    2) Hack the device with an area-targetted program (e.g. data blast)
-    3) Simultaneously break more firewalls than are currently on the device, producing a result less
-    than 0 (e.g. Lockpick 2.0 when the target has 1 firewall)
-    4) EMP the experiment case. Doesn't work on the vault terminal to unlock deposit boxes.
-  * **Fix 1**: Trigger security whenever all firewalls are broken. Prevents the first 3 bypass
-    options.
-  * **Campaign Option**: choose one of the available fixes or vanilla behavior.
-  * **Credit**: Qoalabear
-* Final Mission: Remote Hacking
-  * When Monst3r is near the security hub or mainframe lock, he can perform the associated hacking
-    abilities on any mainframe device adjacent to himself (drones, OMNI Protectors, etc).
-  * Also applies to Central's final objective, though any other units should've been teleported out
-    by the time she approaches it.
-  * **Fix**: The abilities only appear on their intended device.
-  * **Campaign Option**: enable/disable fix
-  * **Credit**: Qoalabear
-* Final Mission: Mainframe Lock Skip
-  * After completing the security hub, Monst3r is able to directly unlock the final doors as if he
-    were carrying an appropriate keycard. The mission scripts still require Monst3r to activate the
-	mainframe lock, so this just allows wandering in the final room without being able to win.
-  * **Fix**: The security codes obtained by Monst3r no longer allow him to directly unlock doors.
-  * **Campaign Option**: enable/disable fix
-  * **Credit**: Qoalabear
-* Final Mission: Dropping Incognita
-  * Central is supposed to start with Incognita's drive and be unable to drop it. However, it can
-    be dropped by transferring it to the ground while picking up another dropped item. It can also
-	be transferred to a guard, safe, or KOed agent from the "looting" menu.
-  * If Central was already part of the agency and tries to start the mission with a full inventory,
-    then Incognita is spawned on the ground at her feet.
-  * Incognita's presence isn't actually checked in order to win. (Not fixed, as this would require
-    blocking an empty-handed Central from the final hallway to avoid softlocking her inside.)
-  * **Note**: With Sim Constructor, if Central enters with a full inventory, then Incognita is added
-    as a 9th item without any UI indication other than the extra encumbrance.
-  * **Fix**:
-    * Block all item transfers except with Central as the recipient.
-	* The last item in Central's inventory is visibly dropped at the start of the mission instead of
-	  Incognita's drive.
-  * **Campaign Option**: enable/disable fix
-  * **Credit**: Qoalabear
-* Prefab stationary guards: Fix facing
-  * Stationary guards placed by prefabs are stationary without a remembered facing, leaving them
-    facing arbitrary directions after being distracted. For example, detention center captains
-    will usually remain facing the wall after returning from a distraction.
-  * **Fix**: Stores their initial facing, similar to randomly generated "stationary" guards.
-  * **Campaign Option**: enable/disable fix
-  * **Credit**: Qoalabear
-* Prefab stationary guards: Ignore patrol change
-  * Stationary guards placed by prefabs are included in signals to "change up the guard patrols",
-    such as the DLC extended campaign alarm level. Captains shouldn't leave their prisoners
-    unguarded.
-  * **Fix**: Such guards are skipped when generating new patrols. They behave normally once alerted.
-    Inconsistent behavior from the player's perspective with Worldgen Extended. Stationary captains,
-    CFOs, etc ignore patrol change, but the same units that spawned patrolling in new prefabs will
-    not.
-  * **Campaign Option**: enable/disable fix
-  * **Credit**: Qoalabear
-* Broken Guard Patrols: Guard cannot reach a valid 2nd patrol point
-  * Without the beginner patrols setting, guards are required to find a patrol path using all of
-    their AP and crossing into a separate worldgen "room". (A single contiguous space may be
-    composed of multiple conjoined "rooms" during worldgen, so this doesn't necessarily match what a
-    player would call a room) If this fails, the guard is left with a single patrol point and no
-    facing in its path, reported as "stationary" but broken in a similar way to prefab stationary
-    guards.
-  * **Fix 1**: Generate a new patrol path, ignoring the restriction on patrolling into a different
-    room. (Default)
-  * **Fix 2**: Generate a stationary patrol, using normal logic for 'optimal stationary facing'.
-    This may produce surprising behavior if it is triggered during a patrol change. After travelling
-    to and investigating the point, the guard immediately turns to face the calculated direction.
-  * **Campaign Option**: choose one of the available fixes or no fix.
-  * **Credit**: Qoalabear, Cyberboy2000
-* Laser beam ally checks
-  * Corp-controlled lasers turn off when guards walk through, and likewise for agency-controlled
-    lasers and agents. Corp-controlled lasers also turn off when an agent drags a guard through.
-    However agency-controlled trip against a guard being dragged by an agent. Also,
-    agency-controlled lasers do not re-enable themselves after all allies have passed through.
-  * **Fix** Lasers self-disable if either the dragging unit or the dragged unit is an ally. And
-    lasers re-enable after all allies have left, regardless of owner.
-  * **Credit**: Qoalabear
-* Magic diagonal guard vision
-  * Guards facing diagonally always see the orthogonally adjacent tiles on the side of their main
-    vision cone, to prevent some easy exploits. However, this vision is still granted if the guard
-    couldn't normally see the tile.
-  * Pulse drones only have enough vision range to see their own tile normally, but if they just
-    moved diagonally, they can be alerted by agents passing through the magic vision tiles.
-  * Smoke blocks all normal vision, but not the magic vision tiles. If an agent moves through magic
-    vision tiles, the guard turns to face the agent and can no longer see them.
-  * **Fix**: Suppress the extra magic vision if a guard could not see those tiles regardless of
-    facing.
-  * **Campaign Option**: enable/disable fix
-  * **Credit**: Qoalabear, Cyberboy2000
 * Holoprojector sound through walls
   * Most sounds do not alert guards (notable exception: K&O turrets firing). However, the sound
     "continuously" emitted by a deployed holoprojector in a 1 tile radius does alert guards.
@@ -127,49 +36,149 @@
     * investigate it (default)
     * ignore it
   * **Credit**: Qoalabear
+
+## General Fixes
+
+The following fixes are applied when the "General Bug Fixes" toggle is enabled in the campaign
+settings (enabled by default).
+
+#### Mission-specific Fixes
+
+* Final Mission: Mainframe Lock Skip
+  * After completing the security hub, Monst3r is able to directly unlock the final doors as if he
+    were carrying an appropriate keycard. The mission scripts still require Monst3r to activate the
+    mainframe lock, so this just allows wandering in the final room without being able to win.
+  * **Fix**: The security codes obtained by Monst3r no longer allow him to directly unlock doors.
+  * **Credit**: Qoalabear
+* Final Mission: Dropping Incognita
+  * Central is supposed to start with Incognita's drive and be unable to drop it. However, it can
+    be dropped by transferring it to the ground while picking up another dropped item. It can also
+    be transferred to a guard, safe, or KOed agent from the "looting" menu.
+  * If Central was already part of the agency and tries to start the mission with a full inventory,
+    then Incognita is spawned on the ground at her feet.
+  * Incognita's presence isn't actually checked in order to win. (Not fixed, as this would require
+    blocking an empty-handed Central from the final hallway to avoid softlocking her inside.)
+  * **Note**: With Sim Constructor, if Central enters with a full inventory, then Incognita is added
+    as a 9th item without any UI indication other than the extra encumbrance.
+  * **Fix**:
+    * Block all item transfers except with Central as the recipient.
+    * The last item in Central's inventory is visibly dropped at the start of the mission instead of
+      Incognita's drive.
+  * **Credit**: Qoalabear
+* Final Mission: Remote Hacking
+  * When Monst3r is near the security hub or mainframe lock, he can perform the associated hacking
+    abilities on any mainframe device adjacent to himself (drones, OMNI Protectors, etc).
+  * Also applies to Central's final objective, though any other units should've been teleported out
+    by the time she approaches it.
+  * **Fix**: The abilities only appear on their intended device.
+  * **Credit**: Qoalabear
+* Vault Missions: Security Response
+  * The security response (spawning an enforcer to inspect the vault) triggers when a
+    device-targetted Incognita program reduces firewalls exactly to 0 on a vault device.
+  * The following techniques bypass this response entirely:
+    1) Hack the device with a non-program (e.g. buster chip)
+    2) Hack the device with an area-targetted program (e.g. data blast)
+    3) Simultaneously break more firewalls than are currently on the device, producing a result less
+    than 0 (e.g. Lockpick 2.0 when the target has 1 firewall)
+    4) EMP the experiment case. Doesn't work on the vault terminal to unlock deposit boxes.
+  * **Fix**: Trigger security whenever all firewalls are broken. Prevents the first 3 bypass
+    options.
+  * **Credit**: Qoalabear
+
+#### Guard (Non-Pathing) Fixes
+* Prefab stationary guards: Fix facing
+  * Stationary guards placed by prefabs are stationary without a remembered facing, leaving them
+    facing arbitrary directions after being distracted. For example, detention center captains
+    will usually remain facing the wall after returning from a distraction.
+  * **Fix**: Stores their initial facing, similar to randomly generated "stationary" guards.
+  * **Credit**: Qoalabear
+* Broken Guard Patrols: Guard cannot reach a valid 2nd patrol point
+  * Without the beginner patrols setting, guards are required to find a patrol path using all of
+    their AP and crossing into a separate worldgen "room". (A single contiguous space may be
+    composed of multiple conjoined "rooms" during worldgen, so this doesn't necessarily match what a
+    player would call a room) If this fails, the guard is left with a single patrol point and no
+    facing in its path, reported as "stationary" but broken in a similar way to prefab stationary
+    guards.
+  * **Fix**: Generate a new patrol path, ignoring the restriction on patrolling into a different
+    room.
+  * **Credit**: Qoalabear, Cyberboy2000
+* Magic diagonal guard vision
+  * Guards facing diagonally always see the orthogonally adjacent tiles on the side of their main
+    vision cone, to prevent some easy exploits. However, this vision is still granted if the guard
+    couldn't normally see the tile.
+  * Pulse drones only have enough vision range to see their own tile normally, but if they just
+    moved diagonally, they can be alerted by agents passing through the magic vision tiles.
+  * Smoke blocks all normal vision, but not the magic vision tiles. If an agent moves through magic
+    vision tiles, the guard turns to face the agent and can no longer see them.
+  * **Fix**: Suppress the extra magic vision if a guard could not see those tiles regardless of
+    facing.
+  * **Credit**: Qoalabear, Cyberboy2000
 * Sleeping guards notice TAG
   * When a KOed guard wakes up, they investigate the location of their most recent attack (including
     attacks received while KOed). This includes an attack with a TAG pistol, even though TAG pistol
     hits are not otherwise noticed by awake guards.
   * **Fix**: Non-alerting attacks do not update the "last hit" property, so are ignored by KOed
     guards when selecting their wake-up investigation point.
-  * **Campaign Option**: enable/disable fix
   * **Credit**: Qoalabear
-* Guard Pathing: Stale observed paths
+
+#### Guard Pathing Fixes
+
+* Stale observed paths
   * When a guard's current interest point moves (such as an agent moving through peripheral vision
     or sprinting past), the guard's observed path stays at the interest's initial position and
     doesn't update on its own. On the guard's turn, the guard will "correctly" travel to the
     interest point's final position; the observed path was lying.
   * **Fix**: Guard paths are forced to update after their current interest is moved. The update is
     deferred until the end of a multi-tile move to reduce unnecessary path calculations.
-  * **Campaign Option**: enable/disable fix
   * **Credit**: Qoalabear
+
+#### Agent-Related Fixes
 
 * In-Mission Agent Stat Consistency
   * A few bugs can incorrectly update an agent's numeric traits (such as AP, sprint bonus, KO
     damage) when they're applied. These traits are recalculated from your current skills and
-	augments at the start of each mission, so the bug only affects the mission in which it occurs.
+    augments at the start of each mission, so the bug only affects the mission in which it occurs.
   * (1) Using an augment drill on certain augments (Skeletal Suspension, Titanium Rods, Subdermal
     Tools, Modular Cybernetic Frame X2, various modded augments) doubles the numeric effect of the
-	augment instead of reversing it. Removing Titanium Rods grants +2KO damage. Removing archive
-	Sharp's frame doubles the penalty to -2AP (while removing the armor penetration).
+    augment instead of reversing it. Removing Titanium Rods grants +2KO damage. Removing archive
+    Sharp's frame doubles the penalty to -2AP (while removing the armor penetration).
   * (2) Gaining max speed uses the current hacking bonus, instead of the current sprint bonus, to
     calculate the new sprint bonus. Speed is applied before hacking when these are gained normally,
-	so it correctly produces a bonus of +1 (for +4AP when sprinting). But if Draco has max hacking
-	and then gains max speed during a mission, he can get a sprint bonus of +6 (for +9AP when
-	sprinting) for the mission.
+    so it correctly produces a bonus of +1 (for +4AP when sprinting). But if Draco has max hacking
+    and then gains max speed during a mission, he can get a sprint bonus of +6 (for +9AP when
+    sprinting) for the mission.
   * **Fix**: Removing an installed augment correctly reverses traits modified via `modTrait`.
   * **Fix**: Gaining speed 5 during a mission calculates the new `sprintBonus` using the current
     `sprintBonus`.
   * **Credit**: Qoalabear
+
+#### Program-Related Fixes
+
 * Programs: Cycle clears PWR after some item-based "generate PWR at start of turn" effects
   * Cycle's stated effect is to clear all PWR then gain 3 PWR at the start of every turn. There's
     steps taken so that this clears PWR before any other program generates PWR, avoiding any other
-	generator programs becoming completely useless.
+    generator programs becoming completely useless.
   * However, the Distributed Processing augment and Portable Laptop items generate their PWR before
     that step.
   * **Fix**: Cycle's "clear PWR" step is moved to fire before any other start of turn effect.
   * **Credit**: Qoalabear
+
+#### Miscellaneous Fixes
+
+* Laser beam ally checks
+  * Corp-controlled lasers turn off when guards walk through, and likewise for agency-controlled
+    lasers and agents. Corp-controlled lasers also turn off when an agent drags a guard through.
+    However agency-controlled trip against a guard being dragged by an agent. Also,
+    agency-controlled lasers do not re-enable themselves after all allies have passed through.
+  * **Fix** Lasers self-disable if either the dragging unit or the dragged unit is an ally. And
+    lasers re-enable after all allies have left, regardless of owner.
+  * **Credit**: Qoalabear
+
+## Always-Enabled Fixes
+
+These are either fixes for bugs that crash/softlock the game or UI fixes that don't allow the player
+to do things they couldn't otherwise.
+
 * Inventory: Ambush/overwatch are cancelled by dropping any item.
   * After dropping an item on the ground, picking up an item, or looting an item from a guard or
     safe, the agent's ambush and overwatch are cancelled. This applies even if the active weapon

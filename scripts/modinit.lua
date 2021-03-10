@@ -23,7 +23,9 @@ local function init( modApi )
 	rawset(_G,"SCRIPT_PATHS",rawget(_G,"SCRIPT_PATHS") or {})
 	SCRIPT_PATHS.qoala_commbugfix = scriptPath
 
-	-- Fixes for Mission-specific bugs.
+	-- General Fixes
+	modApi:addGenerationOption("generalfixes", STRINGS.COMMBUGFIX.OPTIONS.GENERALFIXES,  STRINGS.COMMBUGFIX.OPTIONS.GENERALFIXES_TIP, {noUpdate=true})
+	-- Configurable Fixes
 	modApi:addGenerationOption("missiondetcenter_spawnagent", STRINGS.COMMBUGFIX.OPTIONS.MISSIONDETCENTER_SPAWNAGENT,  STRINGS.COMMBUGFIX.OPTIONS.MISSIONDETCENTER_SPAWNAGENT_TIP, {
 		noUpdate=true,
 		values={
@@ -40,39 +42,6 @@ local function init( modApi )
 			STRINGS.COMMBUGFIX.OPTIONS.MISSIONDETCENTER_SPAWNAGENT_FIFTYFIFTY,
 		}
 	})
-	modApi:addGenerationOption("missionvault_hackresponse", STRINGS.COMMBUGFIX.OPTIONS.MISSIONVAULT_HACKRESPONSE,  STRINGS.COMMBUGFIX.OPTIONS.MISSIONVAULT_HACKRESPONSE_TIP, {
-		noUpdate=true,
-		values={
-			constants.MISSIONVAULT_HACKRESPONSE.VANILLA,
-			constants.MISSIONVAULT_HACKRESPONSE.ANYHACK,
-		},
-		value=constants.MISSIONVAULT_HACKRESPONSE.ANYHACK,
-		strings={
-			STRINGS.COMMBUGFIX.OPTIONS.MISSIONVAULT_HACKRESPONSE_VANILLA,
-			STRINGS.COMMBUGFIX.OPTIONS.MISSIONVAULT_HACKRESPONSE_ANYHACK,
-		}
-	})
-	modApi:addGenerationOption("ending_remotehacking", STRINGS.COMMBUGFIX.OPTIONS.ENDING_REMOTEHACKING,  STRINGS.COMMBUGFIX.OPTIONS.ENDING_REMOTEHACKING_TIP, {noUpdate=true})
-	modApi:addGenerationOption("ending_finaldoor", STRINGS.COMMBUGFIX.OPTIONS.ENDING_FINALDOOR,  STRINGS.COMMBUGFIX.OPTIONS.ENDING_FINALDOOR_TIP, {noUpdate=true})
-	modApi:addGenerationOption("ending_incognitadrop", STRINGS.COMMBUGFIX.OPTIONS.ENDING_INCOGNITADROP,  STRINGS.COMMBUGFIX.OPTIONS.ENDING_INCOGNITADROP_TIP, {noUpdate=true})
-	-- Fixes for nopatrol trait (Prefab Stationary Guards)
-	modApi:addGenerationOption("nopatrol_fixfacing", STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_FIXFACING,  STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_FIXFACING_TIP, {noUpdate=true})
-	modApi:addGenerationOption("nopatrol_nopatrolchange", STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_NOPATROLCHANGE, STRINGS.COMMBUGFIX.OPTIONS.NOPATROL_NOPATROLCHANGE_TIP, {noUpdate=true, enabled=false})
-	-- Fixes for guard behavior bugs.
-	modApi:addGenerationOption("idle_fixfailedpatrolpath", STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH, STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_TIP, {
-		noUpdate=true,
-		values={
-			constants.IDLE_FIXFAILEDPATROLPATH.DISABLED,
-			constants.IDLE_FIXFAILEDPATROLPATH.STATIONARY,
-			constants.IDLE_FIXFAILEDPATROLPATH.REGENERATE,
-		},
-		value=constants.IDLE_FIXFAILEDPATROLPATH.REGENERATE,
-		strings={
-			STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_DISABLED,
-			STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_STATIONARY,
-			STRINGS.COMMBUGFIX.OPTIONS.IDLE_FIXFAILEDPATROLPATH_REGENERATE,
-		}
-	})
 	modApi:addGenerationOption("holowallsounds", STRINGS.COMMBUGFIX.OPTIONS.HOLOWALLSOUNDS, STRINGS.COMMBUGFIX.OPTIONS.HOLOWALLSOUNDS_TIP, {
 		noUpdate=true,
 		values={
@@ -87,10 +56,6 @@ local function init( modApi )
 			STRINGS.COMMBUGFIX.OPTIONS.HOLOWALLSOUNDS_IGNORE,
 		}
 	})
-	modApi:addGenerationOption("laserdragsymmetry", STRINGS.COMMBUGFIX.OPTIONS.LASERDRAGSYMMETRY,  STRINGS.COMMBUGFIX.OPTIONS.LASERDRAGSYMMETRY_TIP, {noUpdate=true})
-	modApi:addGenerationOption("fixmagicsight", STRINGS.COMMBUGFIX.OPTIONS.FIXMAGICSIGHT,  STRINGS.COMMBUGFIX.OPTIONS.FIXMAGICSIGHT_TIP, {noUpdate=true})
-	modApi:addGenerationOption("ignoresleepingtag", STRINGS.COMMBUGFIX.OPTIONS.IGNORESLEEPINGTAG,  STRINGS.COMMBUGFIX.OPTIONS.IGNORESLEEPINGTAG_TIP, {noUpdate=true})
-	modApi:addGenerationOption("pathing_updateobserved", STRINGS.COMMBUGFIX.OPTIONS.PATHING_UPDATEOBSERVED,  STRINGS.COMMBUGFIX.OPTIONS.PATHING_UPDATEOBSERVED_TIP, {noUpdate=true})
 
 	include( scriptPath .. "/include" )
 	include( scriptPath .. "/engine" )
@@ -128,6 +93,9 @@ end
 local function earlyUnload( modApi )
 	local scriptPath = modApi:getScriptPath()
 
+	local patch_itemdefs = include( scriptPath .. "/patch_itemdefs" )
+	patch_itemdefs.resetEndingFinalDoor()
+
 	local patch_skilldefs = include( scriptPath .. "/patch_skilldefs" )
 	patch_skilldefs.resetSkills()
 end
@@ -138,6 +106,7 @@ end
 
 local function load( modApi, options, params )
 	local scriptPath = modApi:getScriptPath()
+	local constants = include( scriptPath .. "/constants" )
 
 	local escape_mission = include( scriptPath .. "/missions/escape_mission" )
 	modApi:addEscapeScripts(escape_mission)
@@ -154,68 +123,68 @@ local function load( modApi, options, params )
 	if params then
 		-- Fixes that should never need to be disabled, but respect if the mod is disabled. Just in case.
 		params.cbf_inventory_recheckoverwatchondrop = true
-		params.cbf_agents_inmissiontraits = true
-		params.cbf_cycletiming = true
 	end
 
-	if options["ending_remotehacking"] and options["ending_remotehacking"].enabled and params then
-		params.cbf_ending_remotehacking = true
+	local generalFixesEnabled = options["generalfixes"] and options["generalfixes"].enabled
+
+	-- Write a table into this mod's campaign options.
+	-- params are accessible in-game, but not during earlyLoad/load/lateLoad when loading an existing save.
+	-- This helps ensure params and associated conditional patches are kept in sync across mod updates.
+	if params then
+		options.cbf_params = {}
 	end
-	if options["ending_finaldoor"] and options["ending_finaldoor"].enabled then
-		if params then
-			params.cbf_ending_finaldoor = true
-		end
+
+	if generalFixesEnabled and params then
+		-- Mission Bugs
+        params.cbf_ending_finaldoor = true
+	    options.cbf_params.cbf_ending_finaldoor = true
+		params.cbf_ending_incognitadrop = true
+		params.cbf_ending_remotehacking = true
+		params.cbf_missionvault_hackresponse = true
+
+		-- Guard Bugs
+		params.cbf_nopatrol_fixfacing = true
+		params.cbf_idle_fixfailedpatrolpath = constants.IDLE_FIXFAILEDPATROLPATH.REGENERATE
+		params.cbf_ignoresleepingtag = true
+		params.cbf_fixmagicsight = true
+
+		-- Pathing Bugs
+		params.cbf_pathing = {}
+		-- Update pathing immediately when the current interest moves (instead of waiting until the guard turn's full reprocessing)
+		-- Fixes observed guard path not updating past the initial distraction when running/in peripheral vision for multiple tiles.
+		params.cbf_pathing.reset_on_interest_moved = true
+		-- During moveUnit on the PC turn, queue up pathing updates and only calculate the last update for each observing unit.
+		-- Prevents lag from reset_on_interest_moved when moving multiple tiles past many guards.
+		-- DISABLED: AGP recalculates paths continuously without ill effect. Delayed update queue may be unnecessary.
+		params.cbf_pathing.use_pathing_queue = false
+
+		-- Agent-related Bugs
+		params.cbf_agent_drillmodtrait = true
+		options.cbf_params.cbf_agent_speed5 = true
+
+		-- Program-related Bugs
+		params.cbf_cycletiming = true
+
+		-- Misc Bugs
+		params.cbf_laserdragsymmetry = true
+	end
+
+	if options["missiondetcenter_spawnagent"] and params then
+		params.cbf_detention_spawnagent = options["missiondetcenter_spawnagent"].value
+	end
+	if options["holowallsounds"] and params then
+	    params.cbf_holowallsounds = options["holowallsounds"].value
+	end
+
+	-- Conditional patching/loading
+
+	-- Check for legacy option, in case of a save predating cbf_params
+	if (options.cbf_params and options.cbf_params.cbf_ending_finaldoor) or (options["ending_finaldoor"] and options["ending_finaldoor"].enabled) then
 		local patch_itemdefs = include( scriptPath .. "/patch_itemdefs" )
 		patch_itemdefs.updateEndingFinalDoor()
 	else
 		local patch_itemdefs = include( scriptPath .. "/patch_itemdefs" )
 		patch_itemdefs.resetEndingFinalDoor()
-	end
-	if options["ending_incognitadrop"] and options["ending_incognitadrop"].enabled and params then
-		params.cbf_ending_incognitadrop = true
-	end
-	if options["missiondetcenter_spawnagent"] and params then
-		params.cbf_detention_spawnagent = options["missiondetcenter_spawnagent"].value
-	end
-	if options["missionvault_hackresponse"] and options["missionvault_hackresponse"].enabled and params then
-		params.cbf_missionvault_hackresponse = true
-	end
-	if options["nopatrol_fixfacing"] and options["nopatrol_fixfacing"].enabled and params then
-		params.cbf_nopatrol_fixfacing = true
-	end
-	if options["nopatrol_nopatrolchange"] and options["nopatrol_nopatrolchange"].enabled and params then
-		params.cbf_nopatrol_nopatrolchange = true
-	end
-	if options["idle_fixfailedpatrolpath"] and params then
-		params.cbf_idle_fixfailedpatrolpath = options["idle_fixfailedpatrolpath"].value
-	end
-	if options["ignoresleepingtag"] and options["ignoresleepingtag"].enabled and params then
-		params.cbf_ignoresleepingtag = true
-	end
-	if options["holowallsounds"] and params then
-	    params.cbf_holowallsounds = options["holowallsounds"].value
-	end
-	if options["laserdragsymmetry"] and options["laserdragsymmetry"].enabled and params then
-		params.cbf_laserdragsymmetry = true
-	end
-	if options["fixmagicsight"] and options["fixmagicsight"].enabled and params then
-		params.cbf_fixmagicsight = true
-	end
-	-- Store pathing flags in a single table, mapping a few user-visible options to potentially multiple fixes.
-	-- If a suboption needs to be manually disabled in a save, set 'LOCK=true' to prevent game load from changing them.
-	if params and (not params.cbf_pathing or not params.cbf_pathing.LOCK) then
-		params.cbf_pathing = {}
-		-- Cases where the guard path already updates when the guard's brain is fully evaluated (such as when acting during the guard turn).
-		-- The player sees these as "the observed path lies about what will happen", not "the performed path makes no sense", even though the bug affects planned paths whether or not the player has observed those paths.
-		if options["pathing_updateobserved"] and options["pathing_updateobserved"].enabled then
-			-- Update pathing immediately when the current interest moves (instead of waiting until the guard turn's full reprocessing)
-			-- Fixes observed guard path not updating past the initial distraction when running/in peripheral vision for multiple tiles.
-			params.cbf_pathing.reset_on_interest_moved = true
-			-- During moveUnit on the PC turn, queue up pathing updates and only calculate the last update for each observing unit.
-			-- Prevents lag from reset_on_interest_moved when moving multiple tiles past many guards.
-			-- DISABLED: AGP recalculates paths continuously without ill effect. Delayed update queue may be unnecessary.
-			params.cbf_pathing.use_pathing_queue = false
-		end
 	end
 end
 
@@ -232,17 +201,10 @@ end
 local function lateLoad( modApi, options, params )
 	local scriptPath = modApi:getScriptPath()
 
-	if true then
+	if options.cbf_params and options.cbf_params.cbf_agent_speed5 then
 		local patch_skilldefs = include( scriptPath .. "/patch_skilldefs" )
 		patch_skilldefs.updateSkills()
 	end
-end
-
-local function lateUnload( modApi )
-	local scriptPath = modApi:getScriptPath()
-
-	local patch_itemdefs = include( scriptPath .. "/patch_itemdefs" )
-	patch_itemdefs.resetEndingFinalDoor()
 end
 
 return {
@@ -253,6 +215,5 @@ return {
 	earlyUnload = earlyUnload,
     load = load,
 	lateLoad = lateLoad,
-	lateUnload = lateUnload,
     initStrings = initStrings,
 }
