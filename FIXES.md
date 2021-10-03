@@ -224,6 +224,11 @@ to do things they couldn't otherwise.
     (attacks) also cancel any in-progress hacking by that agent.
   * **Fix**: Don't change facing when toggling a door and in the middle of hacking.
   * **Credit**: Qoalabear
+* Modded: CFO Disguise can drag
+  * If an agent is disguised as the CFO, or a similar "business man", attempting to drag a body
+    fails. The business man animation defs don't include the default dragging animation.
+  * **Fix**: Include the default dragging animation on the business man template.
+  * **Credit**: Hekateras
 * Modded: UI script events during a dialog
   * It was possible for scripted UI events to try to dismiss an unrelated dialog that was being
     displayed. Some, like the Executive Terminals "choose 1 of 4 sites" dialog, can't handle being

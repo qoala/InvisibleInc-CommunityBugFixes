@@ -96,6 +96,9 @@ end
 local function earlyUnload( modApi )
 	local scriptPath = modApi:getScriptPath()
 
+	local patch_animdefs = include( scriptPath .. "/patch_animdefs" )
+	patch_animdefs.resetAnimdefs()
+
 	local patch_itemdefs = include( scriptPath .. "/patch_itemdefs" )
 	patch_itemdefs.resetEndingFinalDoor()
 
@@ -201,6 +204,10 @@ local function load( modApi, options, params )
 		modApi:addAbilityDef( "escape", scriptPath .."/abilities/escape" )
 		modApi:addAbilityDef( "jackin_root_console", scriptPath .."/abilities/jackin_root_console" )
 		modApi:addAbilityDef( "prime_emp", scriptPath .."/abilities/prime_emp" )
+
+
+		local patch_animdefs = include( scriptPath .. "/patch_animdefs" )
+		patch_animdefs.updateAnimdefs()
 	end
 
 	-- Check for legacy option, in case of a save predating cbf_params
