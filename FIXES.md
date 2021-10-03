@@ -30,7 +30,8 @@ because there's reasonable arguments over how to correctly fix the bug.
     that can see the projector being deployed is alerted by sight). This is left unfixed, otherwise
     the holoprojector could be thrown and picked up in a single turn as a targetted sound
     distraction.
-  * **Fix**: If the guard could not see the projector after turning to face it, the
+  * **Fix**: If there is a wall between the guard and the projector (couldn't view it at range-1
+    after turning), then instead of being alerted, the chosen behavior occurs.
   * **Campaign Option**: Choose guards hearing a projector through a wall to:
     * be alerted and investigate it (vanilla)
     * investigate it (default)
