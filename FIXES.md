@@ -132,6 +132,11 @@ settings (enabled by default).
   * **Fix**: Guard paths are forced to update after their current interest is moved. The update is
     deferred until the end of a multi-tile move to reduce unnecessary path calculations.
   * **Credit**: Qoalabear
+* Pulse scan reactions
+  * When an agent is scanned by a pulse drone, the notified guard is immediately updated, but
+    doesn't react until his own turn. This can confuse the player as to what happened.
+  * **Fix**: Guards process updated reactions following a pulse scan.
+  * **Credit**: Qoalabear
 
 #### Agent-Related Fixes
 

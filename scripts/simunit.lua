@@ -8,6 +8,18 @@ local simunit = include('sim/simunit')
 local cbf_util = include( SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util" )
 local constants = include( SCRIPT_PATHS.qoala_commbugfix .. "/constants" )
 
+local oldOnStartTurn = simunit.onStartTurn
+
+function simunit:onStartTurn(sim)
+
+	oldOnStartTurn(self, sim)
+
+	if cbf_util.simCheckFlag(sim, "cbf_pulsereact") and self:getTraits().pulseScan and not self:isKO() and self:getPlayerOwner():isNPC() then
+		-- Immediately show guard reactions, if any.
+		sim:processReactions()
+	end
+end
+
 -- Overwrite simunit:onWarp. Changes at "CBF:"
 function simunit:onWarp(sim, oldcell, cell)
 	if self:getPlayerOwner() and self:getPlayerOwner():isNPC() and self:getTraits().isGuard then

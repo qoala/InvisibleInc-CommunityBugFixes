@@ -157,6 +157,7 @@ local function load( modApi, options, params )
 		params.cbf_params.cbf_idle_fixfailedpatrolpath = constants.IDLE_FIXFAILEDPATROLPATH.REGENERATE
 		params.cbf_params.cbf_ignoresleepingtag = true
 		params.cbf_params.cbf_fixmagicsight = true
+		params.cbf_params.cbf_pulsereact = true
 
 		-- Pathing Bugs
 		params.cbf_params.cbf_pathing = {}
