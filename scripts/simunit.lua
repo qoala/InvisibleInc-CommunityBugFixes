@@ -5,6 +5,7 @@ local simdefs = include( "sim/simdefs" )
 local simquery = include( "sim/simquery" )
 local simunit = include('sim/simunit')
 
+local cbf_util = include( SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util" )
 local constants = include( SCRIPT_PATHS.qoala_commbugfix .. "/constants" )
 
 -- Overwrite simunit:onWarp. Changes at "CBF:"
@@ -25,7 +26,7 @@ function simunit:onWarp(sim, oldcell, cell)
 						-- CBF: Check if walls are blocking us from immediately observing the hologram.
 						-- Vanilla uses REASON_FOUNDOBJECT as an alerting interest.
 						local reason = simdefs.REASON_FOUNDOBJECT
-						local option = sim:getParams().difficultyOptions.cbf_holowallsounds
+						local option = cbf_util.simCheckFlag(sim, "cbf_holowallsounds", constants.HOLOWALLSOUNDS.VANILLA)
 
 						if (x0 ~= x1 or y0 ~= y1) and option ~= constants.HOLOWALLSOUNDS.VANILLA then
 							local open = false
@@ -66,7 +67,7 @@ end
 -- Instead of simunit:resetAllAiming, checks that any aiming is still valid.
 -- rawset to add new method, simunit:recheckAllAiming, to the readonly prototype.
 rawset(simunit, "recheckAllAiming", function( self )
-	if not self:getSim():getParams().difficultyOptions.cbf_inventory_recheckoverwatchondrop then
+	if not cbf_util.simCheckFlag(self:getSim(), "cbf_inventory_recheckoverwatchondrop") then
 		self:resetAllAiming()
 		return
 	end

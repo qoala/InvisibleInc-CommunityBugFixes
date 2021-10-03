@@ -6,6 +6,8 @@ local inventory = include( "sim/inventory" )
 local simdefs = include( "sim/simdefs" )
 local simquery = include( "sim/simquery" )
 
+local cbf_util = include( SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util" )
+
 local oldDoorMechanism = abilitydefs.lookupAbility("doorMechanism")
 
 local doorMechanism = util.extend(oldDoorMechanism)
@@ -17,7 +19,7 @@ local doorMechanism = util.extend(oldDoorMechanism)
 		assert( fromCell and dir )
 
 		-- CBF: Don't reset aiming for this action.
-		if not sim:getParams().difficultyOptions.cbf_inventory_recheckoverwatchondrop then
+		if not cbf_util.simCheckFlag(sim, "cbf_inventory_recheckoverwatchondrop") then
 			userUnit:resetAllAiming()
 		end
 

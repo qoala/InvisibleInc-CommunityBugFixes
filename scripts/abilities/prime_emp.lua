@@ -7,6 +7,8 @@ local simdefs = include( "sim/simdefs" )
 local simfactory = include( "sim/simfactory" )
 local unitdefs = include( "sim/unitdefs" )
 
+local cbf_util = include( SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util" )
+
 local oldPrimeEmp = abilitydefs.lookupAbility("prime_emp")
 
 local prime_emp = util.extend(oldPrimeEmp)
@@ -33,7 +35,7 @@ local prime_emp = util.extend(oldPrimeEmp)
 		end
 
 		-- CBF: Don't reset aiming for this action.
-		if not sim:getParams().difficultyOptions.cbf_inventory_recheckoverwatchondrop then
+		if not cbf_util.simCheckFlag(sim, "cbf_inventory_recheckoverwatchondrop") then
 			userUnit:resetAllAiming()
 		end
 

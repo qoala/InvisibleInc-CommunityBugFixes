@@ -13,6 +13,7 @@ local itemdefs = include( "sim/unitdefs/itemdefs" )
 local mission_vault = include( "sim/missions/mission_vault" )
 local SCRIPTS = include('client/story_scripts')
 
+local cbf_util = include( SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util" )
 local constants = include( SCRIPT_PATHS.qoala_commbugfix .. "/constants" )
 
 local oldInit = mission_vault.init
@@ -66,8 +67,8 @@ end
 function mission_vault:init( scriptMgr, sim )
 	oldInit( self, scriptMgr, sim )
 
-	local hackResponseOption = sim:getParams().difficultyOptions.cbf_missionvault_hackresponse
-	if hackResponseOption and hackResponseOption ~= constants.MISSIONVAULT_HACKRESPONSE.VANILLA then
+	local hackResponseOption = cbf_util.simCheckFlag(sim, "cbf_missionvault_hackresponse", constants.MISSIONVAULT_HACKRESPONSE.VANILLA)
+	if hackResponseOption ~= constants.MISSIONVAULT_HACKRESPONSE.VANILLA then
 		removeHookByName( scriptMgr, "VAULT-LOOT" )
 		scriptMgr:addHook( "VAULT-HACK-FIXED", hackvault, nil, self )
 	end

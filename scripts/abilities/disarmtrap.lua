@@ -5,6 +5,8 @@ local abilitydefs = include( "sim/abilitydefs" )
 local inventory = include( "sim/inventory" )
 local simdefs = include( "sim/simdefs" )
 
+local cbf_util = include( SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util" )
+
 local oldDisarmTrap = abilitydefs.lookupAbility("disarmtrap")
 
 local disarmtrap = util.extend(oldDisarmTrap)
@@ -14,7 +16,7 @@ local disarmtrap = util.extend(oldDisarmTrap)
 		local oldFacing = abilityOwner:getFacing()
 
 		-- CBF: Don't reset aiming for this action.
-		if not sim:getParams().difficultyOptions.cbf_inventory_recheckoverwatchondrop then
+		if not cbf_util.simCheckFlag(sim, "cbf_inventory_recheckoverwatchondrop") then
 			unit:resetAllAiming()
 		end
 

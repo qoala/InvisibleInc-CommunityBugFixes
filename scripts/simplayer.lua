@@ -5,11 +5,13 @@ local simplayer = include( "sim/simplayer" )
 local aiplayer = include( "sim/simplayer" )
 local pcplayer = include( "sim/pcplayer" )
 
+local cbf_util = include( SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util" )
+
 local oldOnStartTurn = simplayer.onStartTurn
 
 -- Overwrite simplayer:onStartTurn. Changes at "CBF:"
 function simplayer:onStartTurn( sim, ... )
-	local fixCycleTiming = sim:getParams().difficultyOptions.cbf_cycletiming
+	local fixCycleTiming = cbf_util.simCheckFlag(sim, "cbf_cycletiming")
 	if fixCycleTiming then
 		-- CBF: Move this clause before all unit:onStartTurn calls, instead of after.
 		--   Laptops, Distributed Processing, etc generate start of turn power during this call instead of as a TRG_START_TURN handler.

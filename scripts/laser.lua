@@ -4,6 +4,8 @@ local simdefs = include( "sim/simdefs" )
 local simquery = include( "sim/simquery" )
 local laser = include( "sim/units/laser" )
 
+local cbf_util = include( SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util" )
+
 local function extractUpvalue( fn, name )
 	local i = 1
 	while true do
@@ -62,7 +64,7 @@ function laser.laser_emitter:canControl( unit, inRecursion )
 		end
 		if not inRecursion and unit:getTraits().movingBody and self:canControl( unit:getTraits().movingBody, true ) then
 			return true
-		elseif not inRecursion and self:getSim():getParams().difficultyOptions.cbf_laserdragsymmetry then
+		elseif not inRecursion and cbf_util.simCheckFlag(self:getSim(), "cbf_laserdragsymmetry") then
 			-- CBF: dragged units also gain canControl if the dragging unit has that authority. Symmetric with the previous conditional.
 			local _, draggedBy = simquery.isUnitDragged( self:getSim(), unit )
 			if draggedBy and self:canControl( draggedBy, true ) then
@@ -81,7 +83,7 @@ function laser.laser_emitter:onTrigger( sim, evType, evData, ... )
 	-- The vanilla reactivate check only runs when player owner is nil. Repeat that check for player owner is not nil.
 	if (evType == simdefs.TRG_UNIT_WARP and evData.from_cell ~= evData.to_cell
 			and self:getTraits().mainframe_status == "inactive" and self:getPlayerOwner() ~= nil
-			and self:getSim():getParams().difficultyOptions.cbf_laserdragsymmetry
+			and cbf_util.simCheckFlag(self:getSim(), "cbf_laserdragsymmetry")
 			and self:canControl( evData.unit )) then
 		-- If it's a friendly warping out of the laser range, may have to re-activate ourselves.
 		local found = false

@@ -4,6 +4,8 @@ local array = include("modules/array")
 local simdefs = include("sim/simdefs")
 local simengine = include("sim/engine")
 
+local cbf_util = include( SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util" )
+
 -- -----
 -- Prefab stationary guard facing fix
 -- -----
@@ -13,7 +15,7 @@ local oldInit = simengine.init
 function simengine:init( ... )
 	oldInit( self, ... )
 
-	if self:getParams().difficultyOptions.cbf_nopatrol_fixfacing then
+	if cbf_util.simCheckFlag(self, "cbf_nopatrol_fixfacing") then
 		for i,unit in pairs( self:getAllUnits() ) do
 			if unit:getTraits().nopatrol then
 				unit:getTraits().patrolPath[1].facing = unit:getFacing()
@@ -44,7 +46,7 @@ function simengine:hitUnit( sourceUnit, targetUnit, dmgt, ... )
 
 	oldHitUnit( self, sourceUnit, targetUnit, dmgt, ... )
 
-	if dmgt.noTargetAlert and self:getParams().difficultyOptions.cbf_ignoresleepingtag then
+	if dmgt.noTargetAlert and cbf_util.simCheckFlag(self, "cbf_ignoresleepingtag") then
 		-- TAG Pistol and similar weapons shouldn't register as attacks.
 		if sourceUnit then
 			sourceUnit:getTraits().lastAttack = prevLastAttack
@@ -120,7 +122,7 @@ end
 local oldMoveUnit = simengine.moveUnit
 
 function simengine:moveUnit( unit, moveTable, ... )
-	local pathingOption = self:getParams().difficultyOptions.cbf_pathing
+	local pathingOption = cbf_util.simCheckFlag(self, "cbf_pathing")
 	local usePathingQueue = pathingOption and pathingOption.use_pathing_queue and self:getCurrentPlayer():isPC()
 	if usePathingQueue then
 		self:cbfStartPathingQueue()

@@ -4,6 +4,7 @@ local array = include( "modules/array" )
 local mission_scoring = include( "mission_scoring" )
 local serverdefs = include( "modules/serverdefs" )
 
+local cbf_util = include( SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util" )
 local constants = include( SCRIPT_PATHS.qoala_commbugfix .. "/constants" )
 
 local oldDoFinishMission = mission_scoring.DoFinishMission
@@ -54,7 +55,7 @@ mission_scoring.DoFinishMission = function( sim, campaign, ... )
 	-- Detention Centers agent chance fix
 	-- -----
 
-	local spawnAgentOption = campaign.difficultyOptions.cbf_detention_spawnagent or constants.MISSIONDETCENTER_SPAWNAGENT.VANILLA
+	local spawnAgentOption = cbf_util.optionsCheckFlag(campaign.difficultyOptions, "cbf_detention_spawnagent", constants.MISSIONDETCENTER_SPAWNAGENT.VANILLA)
 	if spawnAgentOption ~= constants.MISSIONDETCENTER_SPAWNAGENT.VANILLA then
 		if spawnAgentOption == constants.MISSIONDETCENTER_SPAWNAGENT.ALWAYS then
 			campaign.foundPrisoner = true

@@ -4,11 +4,13 @@ local util = include( "modules/util" )
 local abilitydefs = include( "sim/abilitydefs" )
 local abilityutil = include( "sim/abilities/abilityutil" )
 
+local cbf_util = include( SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util" )
+
 local oldActivateLockedConsole = abilitydefs.lookupAbility("activate_locked_console")
 local oldIsTarget = oldActivateLockedConsole.isTarget
 
 function hasSecurityChip( sim, abilityOwner, unit )
-	if sim:getParams().difficultyOptions.cbf_ending_finaldoor then
+	if cbf_util.simCheckFlag(sim, "cbf_ending_finaldoor") then
 		for i,item in ipairs( unit:getChildren() ) do
 			if item:getTraits().finalAugmentKey then
 				simlog("DEBUG-CBF: found final key keybits=%s", tostring(item:getTraits().keybits))
@@ -31,7 +33,7 @@ local activate_locked_console = util.extend(oldActivateLockedConsole)
 {
 	isTarget = function( self, abilityOwner, unit, targetUnit )
 		local sim = abilityOwner:getSim()
-		if sim:getParams().difficultyOptions.cbf_ending_remotehacking then
+		if cbf_util.simCheckFlag(sim, "cbf_ending_remotehacking") then
 			if targetUnit ~= abilityOwner then
 				return false
 			end

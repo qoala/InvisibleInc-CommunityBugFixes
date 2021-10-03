@@ -4,12 +4,14 @@ local line_of_sight = include("sim/line_of_sight")
 local simdefs = include("sim/simdefs")
 local simquery = include("sim/simquery")
 
+local cbf_util = include( SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util" )
+
 local oldCalculateUnitLos = line_of_sight.calculateUnitLOS
 
 function line_of_sight:calculateUnitLOS( start_cell, unit, ... )
 	local cells = oldCalculateUnitLos( self, start_cell, unit, ... )
 
-	local fixmagicsight = self.sim:getParams().difficultyOptions.cbf_fixmagicsight
+	local fixmagicsight = cbf_util.simCheckFlag(self.sim, "cbf_fixmagicsight")
 	local facing = unit:getFacing()
 	-- If unit has AGP's ignoreWalls trait, assume vision was handled correctly.
 	if fixmagicsight and unit:getTraits().LOSrads == nil and facing % 2 == 1 and not unit:getTraits().ignoreWalls then

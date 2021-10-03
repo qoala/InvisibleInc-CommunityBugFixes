@@ -3,6 +3,8 @@
 local util = include( "modules/util" )
 local abilitydefs = include( "sim/abilitydefs" )
 
+local cbf_util = include( SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util" )
+
 local oldActivateFinalConsole = abilitydefs.lookupAbility("activate_final_console")
 local oldIsTarget = oldActivateFinalConsole.isTarget
 local oldAcquireTargets = oldActivateFinalConsole.acquireTargets
@@ -19,7 +21,7 @@ local activate_final_console = util.extend(oldActivateFinalConsole)
 {
 	isTarget = function( self, abilityOwner, unit, targetUnit )
 		local sim = abilityOwner:getSim()
-		if sim:getParams().difficultyOptions.cbf_ending_remotehacking then
+		if cbf_util.simCheckFlag(sim, "cbf_ending_remotehacking") then
 			if targetUnit ~= abilityOwner then
 				return false
 			end
@@ -28,7 +30,7 @@ local activate_final_console = util.extend(oldActivateFinalConsole)
 	end,
 
 	acquireTargets = function( self, targets, game, sim, abilityOwner, unit )                                                                                                       local units = {}
-		if not sim:getParams().difficultyOptions.cbf_ending_remotehacking then
+		if not cbf_util.simCheckFlag(sim, "cbf_ending_remotehacking") then
             return oldAcquireTargets( self, targets, game, sim, abilityOwner, unit )
 		end
 

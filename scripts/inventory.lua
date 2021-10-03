@@ -3,6 +3,8 @@
 local simdefs = include("sim/simdefs")
 local inventory = include("sim/inventory")
 
+local cbf_util = include( SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util" )
+
 local oldGiftUnit = inventory.giftUnit
 
 function getLastInventoryItem( unit )
@@ -32,7 +34,7 @@ local oldTrashItem = inventory.trashItem
 
 function inventory.trashItem( sim, unit, item, ... )
 
-	if sim:getParams().difficultyOptions.cbf_agent_drillmodtrait and item:getTraits().installed and item:getTraits().modTrait then
+	if cbf_util.simCheckFlag(sim, "cbf_agent_drillmodtrait") and item:getTraits().installed and item:getTraits().modTrait then
 		for i,trait in ipairs(item:getTraits().modTrait)do
 			-- Reverse both the value applied by installing the mod
 			-- and the value from the broken vanilla trashItem.

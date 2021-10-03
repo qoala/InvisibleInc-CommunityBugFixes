@@ -60,6 +60,7 @@ local function init( modApi )
 	})
 
 	include( scriptPath .. "/include" )
+	include( scriptPath .. "/cbf_util" )
 	include( scriptPath .. "/engine" )
 
 	include( scriptPath .. "/simplayer" )
@@ -115,8 +116,10 @@ local function load( modApi, options, params )
 	-- -----
 
 	if params then
+		params.cbf_params = {}
+
 		-- Fixes that should never need to be disabled, but respect if the mod is disabled. Just in case.
-		params.cbf_inventory_recheckoverwatchondrop = true
+		params.cbf_params.cbf_inventory_recheckoverwatchondrop = true
 	end
 
 	local legacyMode = not options["generalfixes"]  -- Loading a save that predates cbf_params.
@@ -128,7 +131,7 @@ local function load( modApi, options, params )
 	if params then
 		options.cbf_params = {}
 
-		params.cbf_version = MOD_VERSION
+		params.cbf_params.cbf_version = MOD_VERSION
 		options.cbf_params.cbf_version = MOD_VERSION
 
 		log:write("CBF loading for new save: v%s", MOD_VERSION)
@@ -140,44 +143,44 @@ local function load( modApi, options, params )
 
 	if generalFixesEnabled and params then
 		-- Mission Bugs
-        params.cbf_ending_finaldoor = true
+        params.cbf_params.cbf_ending_finaldoor = true
 	    options.cbf_params.cbf_ending_finaldoor = true
-		params.cbf_ending_incognitadrop = true
-		params.cbf_ending_remotehacking = true
-		params.cbf_missionvault_hackresponse = true
+		params.cbf_params.cbf_ending_incognitadrop = true
+		params.cbf_params.cbf_ending_remotehacking = true
+		params.cbf_params.cbf_missionvault_hackresponse = true
 
 		-- Guard Bugs
-		params.cbf_nopatrol_fixfacing = true
-		params.cbf_idle_fixfailedpatrolpath = constants.IDLE_FIXFAILEDPATROLPATH.REGENERATE
-		params.cbf_ignoresleepingtag = true
-		params.cbf_fixmagicsight = true
+		params.cbf_params.cbf_nopatrol_fixfacing = true
+		params.cbf_params.cbf_idle_fixfailedpatrolpath = constants.IDLE_FIXFAILEDPATROLPATH.REGENERATE
+		params.cbf_params.cbf_ignoresleepingtag = true
+		params.cbf_params.cbf_fixmagicsight = true
 
 		-- Pathing Bugs
-		params.cbf_pathing = {}
+		params.cbf_params.cbf_pathing = {}
 		-- Update pathing immediately when the current interest moves (instead of waiting until the guard turn's full reprocessing)
 		-- Fixes observed guard path not updating past the initial distraction when running/in peripheral vision for multiple tiles.
-		params.cbf_pathing.reset_on_interest_moved = true
+		params.cbf_params.cbf_pathing.reset_on_interest_moved = true
 		-- During moveUnit on the PC turn, queue up pathing updates and only calculate the last update for each observing unit.
 		-- Prevents lag from reset_on_interest_moved when moving multiple tiles past many guards.
 		-- DISABLED: AGP recalculates paths continuously without ill effect. Delayed update queue may be unnecessary.
-		params.cbf_pathing.use_pathing_queue = false
+		params.cbf_params.cbf_pathing.use_pathing_queue = false
 
 		-- Agent-related Bugs
-		params.cbf_agent_drillmodtrait = true
+		params.cbf_params.cbf_agent_drillmodtrait = true
 		options.cbf_params.cbf_agent_speed5 = true
 
 		-- Program-related Bugs
-		params.cbf_cycletiming = true
+		params.cbf_params.cbf_cycletiming = true
 
 		-- Misc Bugs
-		params.cbf_laserdragsymmetry = true
+		params.cbf_params.cbf_laserdragsymmetry = true
 	end
 
 	if options["missiondetcenter_spawnagent"] and params then
-		params.cbf_detention_spawnagent = options["missiondetcenter_spawnagent"].value
+		params.cbf_params.cbf_detention_spawnagent = options["missiondetcenter_spawnagent"].value
 	end
 	if options["holowallsounds"] and params then
-	    params.cbf_holowallsounds = options["holowallsounds"].value
+	    params.cbf_params.cbf_holowallsounds = options["holowallsounds"].value
 	end
 
 	-- -----
