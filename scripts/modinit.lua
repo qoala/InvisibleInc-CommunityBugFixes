@@ -202,10 +202,13 @@ local function load( modApi, options, params )
 		modApi:addAbilityDef( "activate_final_console", scriptPath .."/abilities/activate_final_console" )
 		modApi:addAbilityDef( "activate_locked_console", scriptPath .."/abilities/activate_locked_console" )
 		modApi:addAbilityDef( "carryable", scriptPath .."/abilities/carryable" )
+		modApi:addAbilityDef( "databank_hack", scriptPath .."/abilities/databank_hack" )
 		modApi:addAbilityDef( "disarmtrap", scriptPath .."/abilities/disarmtrap" )
 		modApi:addAbilityDef( "doorMechanism", scriptPath .."/abilities/doorMechanism" )
 		modApi:addAbilityDef( "escape", scriptPath .."/abilities/escape" )
 		modApi:addAbilityDef( "jackin_root_console", scriptPath .."/abilities/jackin_root_console" )
+		modApi:addAbilityDef( "open_detention_cells", scriptPath .."/abilities/open_detention_cells" )
+		modApi:addAbilityDef( "open_security_boxes", scriptPath .."/abilities/open_security_boxes" )
 		modApi:addAbilityDef( "prime_emp", scriptPath .."/abilities/prime_emp" )
 
 

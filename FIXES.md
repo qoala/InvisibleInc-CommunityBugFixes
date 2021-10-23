@@ -245,6 +245,11 @@ player to do things they couldn't otherwise.
   * **Fix**: Disguise no longer breaks on re-captured cameras/turrets.
   * **Fix**: More consistent behavior when multiple guards are in detection range.
   * **Credit**: wodzu\_93
+* Rubiks on Mission Devicces
+  * If data banks or mission-consoles in the final mission have Rubiks, they gain a firewall from the Daemon while still
+    being agency controlled. This prevents them from being used.
+  * **Fix**: Affected abilities check for device ownership instead of 0 firewalls.
+  * **Credit**: wodzu\_93
 * Modded: CFO Disguise can drag
   * If an agent is disguised as the CFO, or a similar "business man", attempting to drag a body
     fails. The business man animation defs don't include the default dragging animation.
