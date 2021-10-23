@@ -77,6 +77,7 @@ local function init( modApi )
 	include( scriptPath .. "/senses" )
 	include( scriptPath .. "/missions/mission_detention_centre" )
 	include( scriptPath .. "/missions/mission_vault" )
+	include( scriptPath .. "/units/simdisguiseitem" )
 end
 
 local function lateInit( modApi )
@@ -158,6 +159,7 @@ local function load( modApi, options, params )
 		params.cbf_params.cbf_ignoresleepingtag = true
 		params.cbf_params.cbf_fixmagicsight = true
 		params.cbf_params.cbf_pulsereact = true
+		params.cbf_params.cbf_disguisefix_pathing = true
 
 		-- Pathing Bugs
 		params.cbf_params.cbf_pathing = {}

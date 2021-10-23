@@ -121,6 +121,11 @@ settings (enabled by default).
   * **Fix**: Non-alerting attacks do not update the "last hit" property, so are ignored by KOed
     guards when selecting their wake-up investigation point.
   * **Credit**: Qoalabear
+* Pulse scan reactions
+  * When an agent is scanned by a pulse drone, the notified guard is immediately updated, but
+    doesn't react until his own turn. This can confuse the player as to what happened.
+  * **Fix**: Guards process updated reactions following a pulse scan.
+  * **Credit**: Qoalabear
 
 #### Guard Pathing Fixes
 
@@ -132,11 +137,13 @@ settings (enabled by default).
   * **Fix**: Guard paths are forced to update after their current interest is moved. The update is
     deferred until the end of a multi-tile move to reduce unnecessary path calculations.
   * **Credit**: Qoalabear
-* Pulse scan reactions
-  * When an agent is scanned by a pulse drone, the notified guard is immediately updated, but
-    doesn't react until his own turn. This can confuse the player as to what happened.
-  * **Fix**: Guards process updated reactions following a pulse scan.
-  * **Credit**: Qoalabear
+* Blocked diagonal steps (Function Library/Disguise Fix)
+  * **Fix**: Guards path through enemies unless _starting_ next to and facing them  (including recalculation after being blocked)
+    * Guards still step orthogonally around obstacles if an agent is blocking a diagonal move.
+    * Guards don't step orthogonally if an agent would've blocked a diagonal move, but has since moved out of the way.
+    * Guards don't get stuck when blocked by disguised agents.
+    * Small units (camera drones, etc) don't incorrectly behave as if an agent could block them.
+  * **Credit**: wodzu\_93
 
 #### Agent-Related Fixes
 
@@ -182,8 +189,8 @@ settings (enabled by default).
 
 ## Always-Enabled Fixes
 
-These are either fixes for bugs that crash/softlock the game or UI fixes that don't allow the player
-to do things they couldn't otherwise.
+These are mostly either fixes for bugs that crash/softlock the game or UI fixes that don't allow the
+player to do things they couldn't otherwise.
 
 * Inventory: Ambush/overwatch are cancelled by dropping any item.
   * After dropping an item on the ground, picking up an item, or looting an item from a guard or
@@ -230,6 +237,14 @@ to do things they couldn't otherwise.
     (attacks) also cancel any in-progress hacking by that agent.
   * **Fix**: Don't change facing when toggling a door and in the middle of hacking.
   * **Credit**: Qoalabear
+* Disguise Fixes
+  * Crash if the disguise is on the ground.
+  * Re-captured cameras/turrets have different metadata compared to their original state. This difference allows them to
+    break disguises if walking too close.
+  * **Fix**: Don't crash if the disguise is on the ground.
+  * **Fix**: Disguise no longer breaks on re-captured cameras/turrets.
+  * **Fix**: More consistent behavior when multiple guards are in detection range.
+  * **Credit**: wodzu\_93
 * Modded: CFO Disguise can drag
   * If an agent is disguised as the CFO, or a similar "business man", attempting to drag a body
     fails. The business man animation defs don't include the default dragging animation.
