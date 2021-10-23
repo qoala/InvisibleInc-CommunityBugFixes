@@ -1,5 +1,5 @@
 
-local MOD_VERSION = "1.4.2-dev"
+local MOD_VERSION = "1.6.0"
 
 local function earlyInit( modApi )
 	modApi.requirements =
