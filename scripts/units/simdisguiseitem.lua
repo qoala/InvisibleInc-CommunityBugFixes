@@ -55,11 +55,19 @@ function item_disguise:onTrigger( sim, evType, evData )
 		local player = owner:getPlayerOwner()
 		if player and sim:getCurrentPlayer() == player and owner and owner:getTraits().disguiseOn then
 			local x,y owner:getLocation()
-			if player:getCpus() >= self:getTraits().CPUperTurn then
+			if self:getTraits().CPUperTurn and (player:getCpus() >= self:getTraits().CPUperTurn)then
 				player:addCPUs( -self:getTraits().CPUperTurn, sim, x,y )
-				sim:dispatchEvent( simdefs.EV_SHOW_WARNING, {txt=util.sformat( self:getTraits().warning ,self:getTraits().CPUperTurn), color=cdefs.COLOR_PLAYER_WARNING, sound = "SpySociety/Actions/mainframe_gainCPU",icon=nil } )
+				if self:getTraits().warning then
+					sim:dispatchEvent( simdefs.EV_SHOW_WARNING, {txt=util.sformat( self:getTraits().warning ,self:getTraits().CPUperTurn), color=cdefs.COLOR_PLAYER_WARNING, sound = "SpySociety/Actions/mainframe_gainCPU",icon=nil } )
+				end
 			else
 				owner:setDisguise(false)
+			end
+			if self:getTraits().disguise_duration and owner:getTraits().disguise_turns_active then
+				owner:getTraits().disguise_turns_active = owner:getTraits().disguise_turns_active + 1
+				if owner:getTraits().disguise_turns_active >= self:getTraits().disguise_duration then
+					owner:setDisguise(false)
+				end
 			end
 		end
 	end

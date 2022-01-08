@@ -105,3 +105,14 @@ rawset(simunit, "recheckAllAiming", function( self )
 	    self:getSim():dispatchEvent( simdefs.EV_UNIT_REFRESH, { unit = self })
 	end
 end)
+
+local oldSetDisguise = simunit.setDisguise
+
+simunit.setDisguise = function( self, state, kanim, noReaction, ... )
+    oldSetDisguise( self, state, kanim, noReaction, ... )
+    if state == true then
+        self:getTraits().disguise_turns_active = 0 --refreshes duration timer
+    else
+        self:getTraits().disguise_turns_active = nil
+    end
+end
