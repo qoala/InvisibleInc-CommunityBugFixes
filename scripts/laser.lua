@@ -6,22 +6,10 @@ local laser = include( "sim/units/laser" )
 
 local cbf_util = include( SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util" )
 
-local function extractUpvalue( fn, name )
-	local i = 1
-	while true do
-		local n, v = debug.getupvalue(fn, i)
-		assert(n, string.format( "Could not find upvalue: %s", name ) )
-		if n == name then
-			return v
-		end
-		i = i + 1
-	end
-end
-
 -- sim/units/laser doesn't export the class, unlike most unit class files, and the exported function was registered as a local, so can't be appended.
 -- Use debug.getupvalue to extract the class table
 if not laser.laser_emitter then
-	laser.laser_emitter = extractUpvalue( laser.createLaserEmitter, "laser_emitter" )
+	laser.laser_emitter = cbf_util.extractUpvalue( laser.createLaserEmitter, "laser_emitter" )
 end
 
 -- ===

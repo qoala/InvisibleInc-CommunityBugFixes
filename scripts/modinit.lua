@@ -66,6 +66,7 @@ local function init( modApi )
 	include( scriptPath .. "/simplayer" )
 	include( scriptPath .. "/pcplayer" )
 
+	include( scriptPath .. "/hud" )
 	include( scriptPath .. "/idle" )
 	include( scriptPath .. "/inventory" )
 	include( scriptPath .. "/items_panel" )
