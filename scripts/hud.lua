@@ -4,36 +4,17 @@ local hud = include( "hud/hud" )
 local alarm_states = include( "sim/alarm_states" )
 local simdefs = include( "sim/simdefs" )
 
--- Extract a local variable from the given function's upvalues
-function extractUpvalue( fn, name )
-	local i = 1
-	while true do
-		local n, v = debug.getupvalue(fn, i)
-		assert(n, string.format( "Could not find upvalue: %s", name ) )
-		if n == name then
-			return v, i
-		end
-		i = i + 1
-	end
-end
-
 local oldCreateHud = hud.createHud
 function hud.createHud( ... )
 	local hudObject = oldCreateHud( ... )
-
-	local oldRefreshTrackerAdvance, i = extractUpvalue( hudObject.refreshHud, "refreshTrackerAdvance" )
-	local callRefreshTrackerAdvance = function ( self, number, ... ) return self:refreshTrackerAdvance( number, ... ) end
-	debug.setupvalue( hudObject.refreshHud, i, callRefreshTrackerAdvance)
 
 	-- Parameterize the number of steps per alarm stage in the tooltip
 	local ALARM_TOOLTIP = string.gsub(STRINGS.UI.ALARM_TOOLTIP, "5", "{1}")
 	local ADVANCED_ALARM_TOOLTIP = string.gsub(STRINGS.UI.ADVANCED_ALARM_TOOLTIP, "5", "{1}")
 
-	function hudObject:refreshTrackerAdvance( trackerNumber, ... )
-		oldRefreshTrackerAdvance( self, trackerNumber, ... )
-
+	local function refreshAlarmTooltip( self, trackerNumber, ... )
 		-- ====
-		-- Modified copy of vanilla calculation for the tooltip. Changes at CBF.
+		-- Modified copy of vanilla calculation from refreshTrackerAdvance. Changes at CBF.
 		-- ====
 		local stage = self._game.simCore:getTrackerStage( math.min( simdefs.TRACKER_MAXCOUNT, trackerNumber ))
 		local params = self._game.params
@@ -55,6 +36,32 @@ function hud.createHud( ... )
 		end
 
 		self._screen.binder.alarm:setTooltip(tip)
+	end
+
+	local oldRefreshHud = hudObject.refreshHud
+	function hudObject:refreshHud( ... )
+		oldRefreshHud( self, ... )
+		refreshAlarmTooltip( self, self._game.simCore:getTracker() )
+	end
+
+	local function noOp()
+	end
+
+	local oldOnSimEvent = hudObject.onSimEvent
+	function hudObject:onSimEvent( ev, ... )
+		local oldSetTooltip = self._screen.binder.alarm.setTooltip
+		if ev.eventType == simdefs.EV_ADVANCE_TRACKER and not ev.eventData.alarmOnly then
+			self._screen.binder.alarm.setTooltip = noOp
+		end
+
+		local result = oldOnSimEvent( self, ev, ... )
+
+		if ev.eventType == simdefs.EV_ADVANCE_TRACKER and not ev.eventData.alarmOnly then
+			self._screen.binder.alarm.setTooltip = oldSetTooltip
+			refreshAlarmTooltip( self, ev.eventData.tracker + ev.eventData.delta )
+		end
+
+		return result
 	end
 
 	return hudObject
