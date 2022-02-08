@@ -1,3 +1,4 @@
 name = Community Bug Fixes
 author = qoalabear
 version = 1.7.0-dev
+workshop = 2151835746
