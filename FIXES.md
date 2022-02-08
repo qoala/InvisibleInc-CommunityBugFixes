@@ -192,6 +192,11 @@ settings (enabled by default).
 These are mostly either fixes for bugs that crash/softlock the game or UI fixes that don't allow the
 player to do things they couldn't otherwise.
 
+* Alarm Wheel: Tooltip incorrectly used the "advanced alarms" text
+  * The text intended for the latter portion of an extended campaign is accidentally used at all times.
+  * **Fix**: Use the normal alarms text when advanced alarms aren't present.
+  * **Fix**: Parameterize the number of alarm stages using the existing simdefs value. (For mods)
+  * **Credit**: Qoalabear, Cyberboy2000
 * Inventory: Ambush/overwatch are cancelled by dropping any item.
   * After dropping an item on the ground, picking up an item, or looting an item from a guard or
     safe, the agent's ambush and overwatch are cancelled. This applies even if the active weapon
