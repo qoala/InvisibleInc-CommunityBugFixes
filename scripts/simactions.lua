@@ -5,7 +5,7 @@ local inventory = include( "sim/inventory" )
 local simdefs = include('sim/simdefs')
 local simquery = include('sim/simquery')
 
--- Overwrite lootItem. Change at '-- CBF:' below.
+-- Overwrite lootItem. Change at '-- CBF:'/'-- FuncLib:' below.
 function simactions.lootItem( sim, unitID, itemID )
 	local unit = sim:getUnit( unitID )
 	local item = sim:getUnit( itemID )
@@ -70,6 +70,8 @@ function simactions.lootItem( sim, unitID, itemID )
 	unit:checkOverload( sim )
 
 	sim:dispatchEvent( simdefs.EV_ITEMS_PANEL ) -- Triggers refresh.
+	-- FuncLib: modded trigger
+	sim:triggerEvent( "FUNCLIB-ITEM-STOLEN", {unit=unit, targetUnit=item} )
 end
 
 -- Overwrite useDoorAction. Change at '-- CBF:' below.
