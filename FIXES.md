@@ -119,7 +119,10 @@ settings (enabled by default).
     tiles, unless blocked by walls. This allows agents in smoke to see adjacent units.
   * Modded units with 360-degree vision also receive this, unexpectedly allowing them to shoot
     through smoke.
+  * Also, agents that are facing diagonally only get the diagonal magic vision, which is
+    inconsistent with when facing orthogonally. Agent facing should not matter for vision.
   * **Fix**: Suppress the extra magic vision for non-player units if LOS reports blocked vision.
+  * **Fix**: Enable full magic vision for agents that are facing diagonally.
   * **Credit**: Qoalabear
 * Sleeping guards notice TAG
   * When a KOed guard wakes up, they investigate the location of their most recent attack (including
