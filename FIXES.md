@@ -114,6 +114,13 @@ settings (enabled by default).
   * **Fix**: Suppress the extra magic vision if a guard could not see those tiles regardless of
     facing.
   * **Credit**: Qoalabear, Cyberboy2000
+* Magic 360 vision
+  * Units with 360-degree vision (in vanilla, only agents) always see all 4 orthogonally adjacent
+    tiles, unless blocked by walls. This allows agents in smoke to see adjacent units.
+  * Modded units with 360-degree vision also receive this, unexpectedly allowing them to shoot
+    through smoke.
+  * **Fix**: Suppress the extra magic vision for non-player units if LOS reports blocked vision.
+  * **Credit**: Qoalabear
 * Sleeping guards notice TAG
   * When a KOed guard wakes up, they investigate the location of their most recent attack (including
     attacks received while KOed). This includes an attack with a TAG pistol, even though TAG pistol
