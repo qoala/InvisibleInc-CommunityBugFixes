@@ -106,6 +106,17 @@ rawset(simunit, "recheckAllAiming", function( self )
 	end
 end)
 
+local oldAddTag = simunit.addTag
+function simunit:addTag( tag, ... )
+	if self:getUnitData().id == "data_card" and tag == "access_card_obj" then
+		-- Don't allow DLC1's escape mission to pointlessly add this tag to the data banks reward card.
+		-- If this side mission appears on a CFO mission, the CFO mission can crash when it tries to operate on the wrong access_card_ob.
+		return
+	else
+		return oldAddTag( self, tag, ... )
+	end
+end
+
 -- ===
 -- Disguise Fix
 -- ===

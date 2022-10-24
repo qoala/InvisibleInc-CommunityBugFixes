@@ -51,6 +51,11 @@ settings (enabled by default).
 
 #### Mission-specific Fixes
 
+* Chief Financial Suite & Data Banks:
+  * If Data Banks spawn in a CFO mission and are completed before the interrogation, then the
+    mission can crash, because the reward cards have the same tag.
+  * **Fix**: Remove the unnecessary tag from the Data Banks side mission.
+  * **Credit**: Qoalabear
 * Detention Centers:
   * Rescued agents are displayed as "active" instead of "rescued" in the after-mission summary.
   * **Fix**: Correctly display "rescued" for newly added agents.
