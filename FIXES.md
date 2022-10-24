@@ -225,6 +225,11 @@ settings (enabled by default).
   * **Fix** Lasers self-disable if either the dragging unit or the dragged unit is an ally. And
     lasers re-enable after all allies have left, regardless of owner.
   * **Credit**: Qoalabear
+* IR Laser beam daemon lists
+  * Daemon-spawning lasers spawn from the full list of standard daemons, including removed daemons
+    (old Felix) and level-inappropriate daemons (Authority in OMNI, where there are no safes).
+  * **Fix** Daemon-spawning lasers use the same spawn list as Fractal and the initial device spawns.
+  * **Credit**: Qoalabear
 
 ## Always-Enabled Fixes
 

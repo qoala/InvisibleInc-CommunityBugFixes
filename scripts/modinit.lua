@@ -208,6 +208,7 @@ local function load( modApi, options, params, mod_options )
 
 		-- Misc Bugs
 		params.cbf_params.cbf_laserdragsymmetry = true
+		params.cbf_params.cbf_laserdaemons = true
 
 		-- Escorts Fixed
 		local externalEscortsFixed = false
