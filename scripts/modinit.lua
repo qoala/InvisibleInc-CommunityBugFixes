@@ -30,11 +30,6 @@ local function earlyInit( modApi )
 		-- Talkative Agents adds event handlers to mission_panel:processEvent in lateInit.
 		"Talkative Agents",
 	}
-
-	local scriptPath = modApi:getScriptPath()
-
-	-- Extract upvalue before any other mods append the target function.
-	include( scriptPath .. "/mission_scoring_earlyinit" )
 end
 
 local function init( modApi )
@@ -89,6 +84,9 @@ local function init( modApi )
 	include( scriptPath .. "/cbf_util" )
 	include( scriptPath .. "/engine" )
 
+	-- Extract upvalue after Function Library potentially replaces the target function entirely.
+	include( scriptPath .. "/mission_scoring_upvalues" )
+
 	include( scriptPath .. "/simplayer" )
 	include( scriptPath .. "/pcplayer" )
 
@@ -119,6 +117,9 @@ local function lateInit( modApi )
 
 	-- Conditionally pauses the event queue. Needs to wrap after Talkative Agents adds additional event handlers.
 	include( scriptPath .. "/mission_panel" )
+
+	-- More Archived Agents has a copy of the same "Rescued agent status" fix, but doesn't guard against being applied a second time.
+	include( scriptPath .. "/mission_scoring_lateinit" )
 end
 
 local function earlyUnload( modApi )
@@ -214,7 +215,7 @@ local function load( modApi, options, params, mod_options )
 			local ef = findModByName( "Escorts Fixed" )
 			if ef and mod_options[ef.id] then
 				local efOptions = mod_options[ef.id]
-				if efOptions.enabled and efOptions["escort_fix"] and efOptions["escort_fix"].enabled then
+				if efOptions.enabled and efOptions.options["escort_fix"] and efOptions.options["escort_fix"].enabled then
 					-- Disable CBF Escorts Fixed, to avoid interference with the original Escorts Fixed mod.
 					externalEscortsFixed = true
 				end
@@ -223,7 +224,7 @@ local function load( modApi, options, params, mod_options )
 		if not externalEscortsFixed then
 			params.cbf_params.cbf_escorts_fixed = true
 			options.cbf_params.cbf_escorts_fixed = true
-			params.cbf_params.cbf_escorts_remove_owned_items = options["escorts_remove_owned_items"] and options["escorts_remove_owned_items"].value
+			params.cbf_params.cbf_escorts_remove_owned_items = options["escorts_remove_owned_items"] and options["escorts_remove_owned_items"].enabled
 			options.cbf_params.cbf_escorts_remove_owned_items = params.cbf_params.cbf_escorts_remove_owned_items
 		end
 	end

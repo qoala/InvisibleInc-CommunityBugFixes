@@ -82,8 +82,9 @@ mission_scoring.DoFinishMission = function( sim, campaign, ... )
 	local rescued_agents = {}
 	-- Find rescued agents first
 	for i, agent in ipairs( sim._resultTable.agents ) do
-		if agent.status == "RESCUED" then
+		if agent.status == "RESCUED" and type(agent.name) ~= "string" then
 			agent.name = agent.name.template
+			agent._cbf_name = agent.name -- Fix for MAA applying this transform a second time
 			table.insert(rescued_agents, agent.name)
 		end
 	end
@@ -120,10 +121,8 @@ function mission_scoring._updateAgencyFromSim( campaign, sim, situations, ... )
 	end
 
 	oldUpdateAgencyFromSim( campaign, sim, situations, ... )
-	simlog("CBFDEBUG: running updateAgencyFromSim")
 
 	if not cbf_util.optionsCheckFlag(campaign.difficultyOptions, "cbf_escorts_fixed") then
-		simlog("CBFDEBUG: escorts fixed disabled %s", tostring(campaign.difficultyOptions and campaign.difficultyOptions.cbf_params))
 		if campaign.difficultyOptions.cbf_params then util.tlog(campaign.difficultyOptions.cbf_params) end
 		return
 	end
