@@ -1,6 +1,20 @@
 
 local MOD_VERSION = "1.6.0"
 
+-- ===
+
+local function findModByName( name )
+	for i, modData in ipairs(mod_manager.mods) do
+		if name and modData.name == name then
+			return modData
+		end
+	end
+end
+
+
+-- ===
+
+
 local function earlyInit( modApi )
 	modApi.requirements =
 	{
@@ -16,6 +30,11 @@ local function earlyInit( modApi )
 		-- Talkative Agents adds event handlers to mission_panel:processEvent in lateInit.
 		"Talkative Agents",
 	}
+
+	local scriptPath = modApi:getScriptPath()
+
+	-- Extract upvalue before any other mods append the target function.
+	include( scriptPath .. "/mission_scoring_earlyinit" )
 end
 
 local function init( modApi )
@@ -26,8 +45,15 @@ local function init( modApi )
 	SCRIPT_PATHS.qoala_commbugfix = scriptPath
 
 	-- General Fixes
-	modApi:addGenerationOption("generalfixes", STRINGS.COMMBUGFIX.OPTIONS.GENERALFIXES,  STRINGS.COMMBUGFIX.OPTIONS.GENERALFIXES_TIP, {noUpdate=true})
+	modApi:addGenerationOption("generalfixes", STRINGS.COMMBUGFIX.OPTIONS.GENERALFIXES,  STRINGS.COMMBUGFIX.OPTIONS.GENERALFIXES_TIP, {
+		noUpdate=true,
+		masks = {{mask = "mask_cbf_generalfixes", requirement = true}},
+	})
 	-- Configurable Fixes
+	modApi:addGenerationOption("escorts_remove_owned_items", STRINGS.COMMBUGFIX.OPTIONS.ESCORTS_ITEMS, STRINGS.COMMBUGFIX.OPTIONS.ESCORTS_ITEMS_TIP, {
+		noUpdate=true,
+		requirements = {{mask = "mask_cbf_generalfixes", requirement = true}},
+	})
 	modApi:addGenerationOption("missiondetcenter_spawnagent", STRINGS.COMMBUGFIX.OPTIONS.MISSIONDETCENTER_SPAWNAGENT,  STRINGS.COMMBUGFIX.OPTIONS.MISSIONDETCENTER_SPAWNAGENT_TIP, {
 		noUpdate=true,
 		values={
@@ -112,7 +138,7 @@ local function earlyLoad( modApi, options, params )
 	earlyUnload( modApi )
 end
 
-local function load( modApi, options, params )
+local function load( modApi, options, params, mod_options )
 	local scriptPath = modApi:getScriptPath()
 	local constants = include( scriptPath .. "/constants" )
 
@@ -181,6 +207,25 @@ local function load( modApi, options, params )
 
 		-- Misc Bugs
 		params.cbf_params.cbf_laserdragsymmetry = true
+
+		-- Escorts Fixed
+		local externalEscortsFixed = false
+		do
+			local ef = findModByName( "Escorts Fixed" )
+			if ef and mod_options[ef.id] then
+				local efOptions = mod_options[ef.id]
+				if efOptions.enabled and efOptions["escort_fix"] and efOptions["escort_fix"].enabled then
+					-- Disable CBF Escorts Fixed, to avoid interference with the original Escorts Fixed mod.
+					externalEscortsFixed = true
+				end
+			end
+		end
+		if not externalEscortsFixed then
+			params.cbf_params.cbf_escorts_fixed = true
+			options.cbf_params.cbf_escorts_fixed = true
+			params.cbf_params.cbf_escorts_remove_owned_items = options["escorts_remove_owned_items"] and options["escorts_remove_owned_items"].value
+			options.cbf_params.cbf_escorts_remove_owned_items = params.cbf_params.cbf_escorts_remove_owned_items
+		end
 	end
 
 	if options["missiondetcenter_spawnagent"] and params then
@@ -215,6 +260,18 @@ local function load( modApi, options, params )
 
 		local patch_animdefs = include( scriptPath .. "/patch_animdefs" )
 		patch_animdefs.updateAnimdefs()
+	end
+
+	if options.cbf_params and options.cbf_params.cbf_escorts_fixed then
+		local patch_upgradedefs = include( scriptPath .. "/patch_upgradedefs" )
+		patch_upgradedefs.addEscortsFixed()
+
+		-- Other mods look for these to see that Escorts Fixed is enabled
+		modApi:addGuardDef( "ef_dummy", {name="Dummy",traits={}} )
+		modApi:addGuardDef( "ef_memory", {name="Dummy",traits={}} )
+		if options.cbf_params.cbf_escorts_remove_owned_items then
+			modApi:addGuardDef( "ef_pilfer", {name="Dummy",traits={}} )
+		end
 	end
 
 	-- Check for legacy option, in case of a save predating cbf_params

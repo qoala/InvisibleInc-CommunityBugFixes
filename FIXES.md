@@ -4,6 +4,12 @@
 The following fixes have their own options in the campaign settings at the start of a run, usually
 because there's reasonable arguments over how to correctly fix the bug.
 
+* Escorts Fixed: Return Escort-Owned Items
+  * With the DLC extended campaign, it is possible to steal Monst3r's unique gun at the end of the
+    mission by having a different agent carry it.
+  * **Fix**: If any of Monst3r's starting items are on another agent when he leaves, the item is
+    returned to Monst3r.
+  * **Credit**: Cyberboy2000
 * Detention Center Missions: Agent/Prisoner Chance
   * The mission is coded to give 50/50 odds of an agent or generic prisoner, unless the agency is
     full (guaranteed prisoner) or the player recently found a prisoner (guaranteed agent). This
@@ -45,6 +51,10 @@ settings (enabled by default).
 
 #### Mission-specific Fixes
 
+* Detention Centers:
+  * Rescued agents are displayed as "active" instead of "rescued" in the after-mission summary.
+  * **Fix**: Correctly display "rescued" for newly added agents.
+  * **Credit**: RaXaH
 * Final Mission: Mainframe Lock Skip
   * After completing the security hub, Monst3r is able to directly unlock the final doors as if he
     were carrying an appropriate keycard. The mission scripts still require Monst3r to activate the
@@ -85,6 +95,20 @@ settings (enabled by default).
   * **Fix**: Trigger security whenever all firewalls are broken. Prevents the first 3 bypass
     options.
   * **Credit**: Qoalabear
+* Escorts Fixed: Loot Bonuses on NPCs
+  * Items carried out by non-agents or agents that automatically leave at the end of the mission
+    (Monst3r during DLC mid2) are automatically transferred to the jet's Storage.
+    However, items that grant immediate bonuses when extracted (valuable tech, site lists, etc)
+    aren't recognized when carried out by one of these units.
+  * **Fix**: Track items carried by non-agents and leaving agents, running the immediate bonus
+    checks for each.
+  * **Credit**: Cyberboy2000
+* Escorts Fixed: Giving Monst3r Augments
+  * After installing an augment in Monst3r during the DLC mid missions, he mysteriously loses it
+    between then and the final mission.
+  * **Fix**: Track items installed or owned by Monst3r when he leaves after mid2. Restore them when
+    he is spawned for the final mission.
+  * **Credit**: Cyberboy2000
 
 #### Guard (Non-Pathing) Fixes
 * Prefab stationary guards: Fix facing

@@ -7,6 +7,17 @@ local pcplayer = include( "sim/pcplayer" )
 
 local cbf_util = include( SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util" )
 
+-- Update known subclasses of simplayer (subclasses that don't use the class factory don't see changes in their base class)
+local function replicateToSubclasses(subclasses, name, fn, oldFn)
+	for _,subclass in ipairs( subclasses ) do
+		if subclass[name] == oldFn then
+			subclass[name] = fn
+		end
+	end
+end
+
+-- ===
+
 local oldOnStartTurn = simplayer.onStartTurn
 
 -- Overwrite simplayer:onStartTurn. Changes at "CBF:"
@@ -30,12 +41,21 @@ function simplayer:onStartTurn( sim, ... )
 	end
 end
 
--- Update known subclasses of simplayer (subclasses that don't use the class factory don't see changes in their base class)
-if aiplayer.onStartTurn == oldOnStartTurn then
-	log:write("CBF DEBUG: replicating onStartTurn patch to aiplayer")
-	aiplayer.onStartTurn = simplayer.onStartTurn
+replicateToSubclasses({pcplayer}, 'onStartTurn', simplayer.onStartTurn, oldOnStartTurn)
+
+-- ===
+
+local oldDeployUnit = simplayer.deployUnit
+
+function simplayer:deployUnit( sim, agentID, ... )
+	if agentID == 99 and cbf_util.simCheckFlag(sim, "cbf_escorts_fixed") then -- monst3r
+		if sim:getParams().agency._keptItems and sim:getParams().agency._keptItems[100] then
+			local agentDef = self._deployed[ agentID ].agentDef
+			agentDef.upgrades = sim:getParams().agency._keptItems[100]
+		end
+	end
+
+	return oldDeployUnit( self, sim, agentID, ... )
 end
-if pcplayer.onStartTurn == oldOnStartTurn then
-	log:write("CBF DEBUG: replicating onStartTurn patch to pcplayer")
-	pcplayer.onStartTurn = simplayer.onStartTurn
-end
+
+replicateToSubclasses({pcplayer}, 'deployUnit', simplayer.deployUnit, oldDeployUnit)

@@ -106,6 +106,10 @@ rawset(simunit, "recheckAllAiming", function( self )
 	end
 end)
 
+-- ===
+-- Disguise Fix
+-- ===
+
 local oldSetDisguise = simunit.setDisguise
 
 simunit.setDisguise = function( self, state, kanim, noReaction, ... )
@@ -115,4 +119,29 @@ simunit.setDisguise = function( self, state, kanim, noReaction, ... )
     else
         self:getTraits().disguise_turns_active = nil
     end
+end
+
+-- ===
+-- Escorts Fixed
+-- ===
+
+local oldReturnItemsToStash = simunit.returnItemsToStash
+
+function simunit:returnItemsToStash(sim)
+	if cbf_util.simCheckFlag(sim, "cbf_escorts_fixed") then
+		if not sim._returnedItems then
+			sim._returnedItems = {}
+			sim._leavingAgents = {}
+		end
+
+		table.insert(sim._leavingAgents,self)
+
+		for i,item in ipairs(self:getChildren())do
+			if not item:getTraits().installed then
+				table.insert( sim._returnedItems, item )
+			end
+		end
+	else
+		oldReturnItemsToStash(self,sim)
+	end
 end

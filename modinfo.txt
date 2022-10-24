@@ -1,4 +1,4 @@
 name = Community Bug Fixes
-author = qoalabear
+author = qoalabear,Cyberboy2000,Hekateras,Mobbstar,pesnitor
 version = 1.9.0
 workshop = 2151835746
