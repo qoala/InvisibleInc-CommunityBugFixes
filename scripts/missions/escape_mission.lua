@@ -6,7 +6,7 @@ local constants = include( SCRIPT_PATHS.qoala_commbugfix .. "/constants" )
 function initFoundPrisoner( sim )
 	if sim:getParams().foundPrisoner == nil then
 		local spawnAgentOption = cbf_util.simCheckFlag(sim, "cbf_detention_spawnagent")
-		if spawnAgentOption == constants.MISSIONDETCENTER_SPAWNAGENT.FIRSTAGENT then
+		if spawnAgentOption == constants.MISSIONDETCENTER_SPAWNAGENT.FIRSTAGENT or spawnAgentOption == constants.MISSIONDETCENTER_SPAWNAGENT.ALWAYS then
 			-- First detention center should always have an agent.
 			sim:getParams().foundPrisoner = true
 		elseif spawnAgentOption == constants.MISSIONDETCENTER_SPAWNAGENT.FIFTYFIFTY then
