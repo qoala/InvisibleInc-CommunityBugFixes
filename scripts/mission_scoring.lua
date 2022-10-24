@@ -76,6 +76,27 @@ mission_scoring.DoFinishMission = function( sim, campaign, ... )
 	-- END Detention Centers agent chance fix
 	-- -----
 
+	-- -----
+	-- Rescued agent status fix
+	-- -----
+	local rescued_agents = {}
+	-- Find rescued agents first
+	for i, agent in ipairs( sim._resultTable.agents ) do
+		if agent.status == "RESCUED" then
+			agent.name = agent.name.template
+			table.insert(rescued_agents, agent.name)
+		end
+	end
+	-- Delete the duplicates
+	for i=#sim._resultTable.agents, 1, -1 do
+		if array.find( rescued_agents, sim._resultTable.agents[i].name ) and sim._resultTable.agents[i].status ~= "RESCUED" then
+			table.remove( sim._resultTable.agents, i )
+		end
+	end
+	-- -----
+	-- END Detention Centers agent chance fix
+	-- -----
+
 	return flow_result
 end
 
