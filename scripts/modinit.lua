@@ -1,5 +1,5 @@
 
-local MOD_VERSION = "1.10.0"
+local MOD_VERSION = "1.10.1"
 
 -- ===
 
