@@ -82,7 +82,7 @@ mission_scoring.DoFinishMission = function( sim, campaign, ... )
 	local rescued_agents = {}
 	-- Find rescued agents first
 	for i, agent in ipairs( sim._resultTable.agents ) do
-		if agent.status == "RESCUED" and type(agent.name) ~= "string" then
+		if agent.status == "RESCUED" and not agent._cbf_name and type(agent.name) == "table" then
 			agent.name = agent.name.template
 			agent._cbf_name = agent.name -- Fix for MAA applying this transform a second time
 			table.insert(rescued_agents, agent.name)
