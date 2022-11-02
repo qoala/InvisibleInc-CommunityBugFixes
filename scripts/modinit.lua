@@ -202,6 +202,7 @@ local function load( modApi, options, params, mod_options )
 		-- Agent-related Bugs
 		params.cbf_params.cbf_agent_drillmodtrait = true
 		options.cbf_params.cbf_agent_speed5 = true
+		params.cbf_params.cbf_flurry_reset = true
 
 		-- Program-related Bugs
 		params.cbf_params.cbf_cycletiming = true

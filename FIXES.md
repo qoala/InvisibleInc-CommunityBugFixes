@@ -203,6 +203,12 @@ settings (enabled by default).
   * **Fix**: Gaining speed 5 during a mission calculates the new `sprintBonus` using the current
     `sprintBonus`.
   * **Credit**: Qoalabear
+* Flurry Guns only transition to inactive while carried.
+  * Flurry Guns say that they can only be used for one turn each mission, transitioning from Idle to Active on use, and
+    then to Used at the start of the next turn. However, like cooldowns, this only applies if an agent is carrying it.
+    By dropping the Flurry Gun between turns, it can be kept Active indefinitely.
+  * **Fix**: Check for Flurry Gun deactivation directly, instead of relying on checking agent inventories.
+  * **Credit**: Qoalabear
 
 #### Program-Related Fixes
 
