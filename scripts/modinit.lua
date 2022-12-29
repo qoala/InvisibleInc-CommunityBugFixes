@@ -80,6 +80,9 @@ local function init( modApi )
 		}
 	})
 
+	local dataPath = modApi:getDataPath()
+	KLEIResourceMgr.MountPackage( dataPath .. "/gui.kwad", "data" )
+
 	include( scriptPath .. "/include" )
 	include( scriptPath .. "/cbf_util" )
 	include( scriptPath .. "/engine" )
