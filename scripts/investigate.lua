@@ -1,4 +1,5 @@
 -- patch to sim/btree/situations/investigate
+local simdefs = include("sim/simdefs")
 local InvestigateSituation = include("sim/btree/situations/investigate")
 
 local function markCloudsSearched(sim, unit, cell)
