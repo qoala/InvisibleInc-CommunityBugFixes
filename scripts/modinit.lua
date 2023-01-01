@@ -105,9 +105,12 @@ local function init(modApi)
     include(scriptPath .. "/simquery")
     include(scriptPath .. "/simunit")
     include(scriptPath .. "/senses")
+    include(scriptPath .. "/smokerig")
     include(scriptPath .. "/missions/mission_detention_centre")
     include(scriptPath .. "/missions/mission_vault")
+    include(scriptPath .. "/units/cbf_smoke_edge")
     include(scriptPath .. "/units/simdisguiseitem")
+    include(scriptPath .. "/units/smoke_cloud")
 end
 
 local function lateInit(modApi)
@@ -218,6 +221,7 @@ local function load(modApi, options, params, mod_options)
         -- Misc Bugs
         params.cbf_params.cbf_laserdragsymmetry = true
         params.cbf_params.cbf_laserdaemons = true
+        params.cbf_params.cbf_smoke_dynamicedges = true
 
         -- Escorts Fixed
         local externalEscortsFixed = false
@@ -318,6 +322,10 @@ local function lateLoad(modApi, options, params)
     if options.cbf_params and options.cbf_params.cbf_agent_speed5 then
         local patch_skilldefs = include(scriptPath .. "/patch_skilldefs")
         patch_skilldefs.updateSkills()
+    end
+
+    for name, def in pairs(include(scriptPath .. "/propdefs").createLateDefs()) do
+        modApi:addPropDef(name, def, false)
     end
 end
 

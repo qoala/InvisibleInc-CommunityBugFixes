@@ -236,6 +236,26 @@ settings (enabled by default).
     (old Felix) and level-inappropriate daemons (Authority in OMNI, where there are no safes).
   * **Fix** Daemon-spawning lasers use the same spawn list as Fractal and the initial device spawns.
   * **Credit**: Qoalabear
+* Smoke grenades: Dynamic edges
+  * Smoke clouds spawn fake "smoke edge" units at their edges, that can be seen by guards outside
+    the cloud as an investigation prompt. (Because guards outside the cloud can't see into the
+    cloud, and the vision block isn't something the game engine directly supports as being "seen".)
+  * Overlapping smoke clouds don't create duplicate "smoke edge" units. If those clouds have
+    different expiry times (only possible with mods), then after the first cloud expires, it may
+    have cleaned up smoke edges that were needed for guards to recognize the still-remaining clouds.
+  * However if the smoke cloud ends at a doorway, closing the door after throwing the smoke grenade
+    doesn't remove the smoke edge on the far side of the door. Guards will come investigate, even
+    though there's no smoke (or indication of it) on that side of the door.
+  * Conversely, if a door is opened (or with mods, a wall is broken) at the edge of the cloud, then
+    no new smoke edge is created. Guards won't be able to see through the door, but won't have any
+    reaction to the cloud.
+  * **Fix** Smoke edge fake units keep track of the clouds that they're part of. Smoke edges only
+    despawn when they have no associated clouds remaining.
+  * **Fix** Smoke edge units are spawned at all tiles that are just beyond the cloud's boundary,
+    but are only visible to guards if there's an open adjacency into the actual cloud. This is kept
+    updated whenever doors/walls are modified. (Technical note: smoke edge units manage their
+    visibility by moving off the map when disconnected from their cloud.)
+  * **Credit**: Qoalabear
 
 ## Always-Enabled Fixes
 
