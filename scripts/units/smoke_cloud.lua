@@ -46,6 +46,12 @@ local function occludeSight(self, sim, targetCell, smokeRadius)
             table.insert(segments, cell)
             table.insert(segments, dir)
         end
+        -- CBF: register cloud on this cell for 'smoke investigated' checks.
+        if cell.cbfSmokeCloudIDs then
+            table.insert(cell.cbfSmokeCloudIDs, self:getID())
+        else
+            cell.cbfSmokeCloudIDs = {self:getID()}
+        end
     end
 
     sim:getLOS():insertSegments(unpack(segments))
@@ -68,9 +74,18 @@ function smoke_cloud:onWarp(sim, oldcell, cell)
         return oldOnWarp(self, sim, oldcell, cell)
     end
 
+    if self._cells then
+        -- CBF: Clear cell registrations.
+        for _, cell in ipairs(self._cells) do
+            if cell.cbfSmokeCloudIDs then
+                array.removeElement(cell.cbfSmokeCloudIDs, self:getID())
+            end
+        end
+        self._cells = nil
+    end
     if self._segments then
         sim:getLOS():removeSegments(unpack(self._segments))
-        self._segments, self._cells = nil, nil
+        self._segments = nil
         for i, unit in pairs(sim:getAllUnits()) do
             sim:refreshUnitLOS(unit)
         end
@@ -98,5 +113,23 @@ function smoke_cloud:onWarp(sim, oldcell, cell)
             end
         end
         sim:dispatchEvent(simdefs.EV_UNIT_REFRESH, {unit = self})
+    end
+end
+
+-- Like simunit:setInvestigated/:getInvestigated, but always keep track of investigator units.
+-- The vanilla flag's behavior of "after investigated once, new guards ignore it" would be a drastic
+-- change for smoke clouds.
+function smoke_cloud:setSmokeInvestigated(unit)
+    assert(unit)
+    if not self:getTraits().smokeInvestigated then
+        self:getTraits().smokeInvestigated = {[unit:getID()] = true}
+    else
+        self:getTraits().smokeInvestigated[unit:getID()] = true
+    end
+end
+
+function smoke_cloud:hasBeenSmokeInvestigated(unit)
+    if unit and self:getTraits().smokeInvestigated then
+        return self:getTraits().smokeInvestigated[unit:getID()]
     end
 end

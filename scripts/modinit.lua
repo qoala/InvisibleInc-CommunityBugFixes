@@ -96,8 +96,10 @@ local function init(modApi)
     include(scriptPath .. "/pcplayer")
 
     include(scriptPath .. "/hud")
+    include(scriptPath .. "/hunt")
     include(scriptPath .. "/idle")
     include(scriptPath .. "/inventory")
+    include(scriptPath .. "/investigate")
     include(scriptPath .. "/items_panel")
     include(scriptPath .. "/laser")
     include(scriptPath .. "/mission_scoring")
@@ -199,6 +201,8 @@ local function load(modApi, options, params, mod_options)
         params.cbf_params.cbf_fixmagicsight = true
         params.cbf_params.cbf_pulsereact = true
         params.cbf_params.cbf_disguisefix_pathing = true
+        params.cbf_params.cbf_smoke_dynamicedges = true
+        params.cbf_params.cbf_smoke_rememberedges = true
 
         -- Pathing Bugs
         params.cbf_params.cbf_pathing = {}
@@ -221,7 +225,6 @@ local function load(modApi, options, params, mod_options)
         -- Misc Bugs
         params.cbf_params.cbf_laserdragsymmetry = true
         params.cbf_params.cbf_laserdaemons = true
-        params.cbf_params.cbf_smoke_dynamicedges = true
 
         -- Escorts Fixed
         local externalEscortsFixed = false

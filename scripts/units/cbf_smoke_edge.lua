@@ -88,6 +88,15 @@ function smoke_edge:onTrigger(sim, evType, evData)
     end
 end
 
+function smoke_edge:setInvestigated(unit, ...)
+    simunit.setInvestigated(self, unit, ...)
+
+    -- Also mark our clouds as investigated
+    for _, cloud in ipairs(self:getActiveSmokeClouds(self._sim)) do
+        cloud:setSmokeInvestigated(unit)
+    end
+end
+
 -- ===
 -- Public methods
 
@@ -139,6 +148,16 @@ function smoke_edge:unregisterSmokeCloud(sim, cloudUnit)
     end
 end
 
+function smoke_edge:getActiveSmokeClouds(sim)
+    local clouds = {}
+    for cloudID, _ in pairs(self._activeClouds) do
+        local cloudUnit = sim:getUnit(cloudID)
+        if cloudUnit then
+            table.insert(clouds, cloudUnit)
+        end
+    end
+    return clouds
+end
 function smoke_edge:isActiveForSmokeCloud(cloudID)
     return self._activeClouds and self._activeClouds[cloudID]
 end

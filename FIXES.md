@@ -256,6 +256,15 @@ settings (enabled by default).
     updated whenever doors/walls are modified. (Technical note: smoke edge units manage their
     visibility by moving off the map when disconnected from their cloud.)
   * **Credit**: Qoalabear
+* Smoke grenades: Guards remember edges
+  * Because guards react to the cloud via these smoke edge units as proxies, guards don't know
+    whether or not they've already investigated a smoke cloud. They'll become redistracted when they
+    see another cell of the cloud's edge. Also, unlike bodies, they make no attempt to track this on
+    smoke clouds/edges. This re-distraction appeared inconsistently because it was only available on
+    the edge tiles just past the cloud's boundary, not within the cloud.
+  * **Fix** Guards make note of clouds that they've investigated and ignore any further edges of
+    those clouds.
+  * **Credit**: Qoalabear
 
 ## Always-Enabled Fixes
 
