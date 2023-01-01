@@ -183,6 +183,22 @@ settings (enabled by default).
     * Guards don't get stuck when blocked by disguised agents.
     * Small units (camera drones, etc) don't incorrectly behave as if an agent could block them.
   * **Credit**: wodzu\_93
+* Inadvertently shared investigation points
+  * Each guard maintains the individual "interest"s that they want to investigate, and only he
+    should be updating them. Due to a bug in the code for non-alerted guards, guards with related
+    interest points will also update the matching interest owned by the first guard that joined this
+    investigation group. If the active guard's interest is then identical to that first guard's,
+    then the active guard will inadvertently clear the first guard's interest point as well. The
+    first guard will finish any in-progress walking path before re-checking his priorities
+    and using any remaining movement to pursue his next goal. Given that he first walked close
+    to the interest point, this will frequently be a surprise about-face into what should've been
+    good hiding places.
+  * Occurs relatively rarely, because the interest points need to be identical on unseen properties,
+    and guards will usually try to perform their investigation in the same order as joining the
+    investigation group. Seems to occur most commonly with camera interest points that involve
+    longer paths to reach.
+  * **Fix**: Guards only update their own interest when completing an investigation.
+  * **Credit**: Qoalabear
 
 #### Agent-Related Fixes
 

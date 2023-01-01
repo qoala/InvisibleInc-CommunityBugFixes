@@ -203,6 +203,7 @@ local function load(modApi, options, params, mod_options)
         params.cbf_params.cbf_disguisefix_pathing = true
         params.cbf_params.cbf_smoke_dynamicedges = true
         params.cbf_params.cbf_smoke_rememberedges = true
+        params.cbf_params.cbf_fixsharedinterest = true
 
         -- Pathing Bugs
         params.cbf_params.cbf_pathing = {}

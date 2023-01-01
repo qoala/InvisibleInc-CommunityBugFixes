@@ -2,6 +2,8 @@
 local simdefs = include("sim/simdefs")
 local InvestigateSituation = include("sim/btree/situations/investigate")
 
+local cbf_util = include(SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util")
+
 local function markCloudsSearched(sim, unit, cell)
     if cell and cell.cbfSmokeCloudIDs then
         for _, cloudID in ipairs(cell.cbfSmokeCloudIDs) do
@@ -33,6 +35,20 @@ function InvestigateSituation:markInterestInvestigated(unit, ...)
         markCloudsSearched(sim, unit, targetCell)
     end
 
-    return oldMarkInvestigated(self, unit, ...)
+    -- Overwrite markInterestInvestigated
+    -- Changes at CBF
+    if cbf_util.simCheckFlag(sim, "cbf_fixsharedinterest") then
+        -- CBF: Update the active unit's current interest, instead of this situation's stored one.
+        -- This situation's defining interest may be a reference to another guard's brain.
+        if interest then
+            interest.investigated = true
+            unit:getBrain():getSenses():markInterestsInvestigated(interest.x, interest.y)
+            if interest.sourceUnit then
+                interest.sourceUnit:setInvestigated(unit)
+            end
+        end
+    else
+        return oldMarkInvestigated(self, unit, ...)
+    end
 end
 
