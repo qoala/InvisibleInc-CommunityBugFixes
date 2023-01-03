@@ -225,6 +225,13 @@ settings (enabled by default).
     By dropping the Flurry Gun between turns, it can be kept Active indefinitely.
   * **Fix**: Check for Flurry Gun deactivation directly, instead of relying on checking agent inventories.
   * **Credit**: Qoalabear
+* Recharge Ventricular Lances
+  * Ventricular Lances lack the ability to reduce their cooldown via charge pack.
+  * The only other cooldown items that lack recharge:
+    * Short-cooldown, duration-effect, deployable items (laptops, holo cover, etc)
+    * Lock decoder. (Also has a short cooldown)
+  * **Fix**: Add the recharge ability
+  * **Credit**: Hekateras, Qoalabear
 
 #### Program-Related Fixes
 

@@ -1,4 +1,5 @@
 -- patches for existing itemdefs
+local array = include("modules/array")
 local util = include("modules/util")
 local commondefs = include("sim/unitdefs/commondefs")
 local simdefs = include("sim/simdefs")
@@ -13,4 +14,25 @@ local resetEndingFinalDoor = function()
     mainitems.augment_final_level.traits.keybits = simdefs.DOOR_KEYS.FINAL_LEVEL
 end
 
-return {updateEndingFinalDoor = updateEndingFinalDoor, resetEndingFinalDoor = resetEndingFinalDoor}
+local patchVentricularLanceRecharge = function(modApi)
+    if not array.find(mainitems.item_defiblance.abilities, "recharge") then
+        local defiblance = util.tcopy(mainitems.item_defiblance)
+        table.insert(defiblance.abilities, 2, "recharge")
+        modApi:addItemDef("item_defiblance", defiblance)
+    end
+end
+local latePatchVentricularLanceRecharge = function(modApi)
+    if mainitems.item_defiblance_shalem_drm and
+            not array.find(mainitems.item_defiblance_shalem_drm.abilities, "recharge") then
+        local defiblance = util.tcopy(mainitems.item_defiblance_shalem_drm)
+        table.insert(defiblance.abilities, 2, "recharge")
+        modApi:addItemDef("item_defiblance_shalem_drm", defiblance)
+    end
+end
+
+return {
+    updateEndingFinalDoor = updateEndingFinalDoor,
+    resetEndingFinalDoor = resetEndingFinalDoor,
+    patchVentricularLanceRecharge = patchVentricularLanceRecharge,
+    latePatchVentricularLanceRecharge = latePatchVentricularLanceRecharge,
+}

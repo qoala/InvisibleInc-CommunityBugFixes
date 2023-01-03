@@ -300,14 +300,15 @@ local function load(modApi, options, params, mod_options)
     end
 
     -- Check for legacy option, in case of a save predating cbf_params
+    local patch_itemdefs = include(scriptPath .. "/patch_itemdefs")
     if (options.cbf_params and options.cbf_params.cbf_ending_finaldoor) or
             (legacyMode and options["ending_finaldoor"] and options["ending_finaldoor"].enabled) then
-        local patch_itemdefs = include(scriptPath .. "/patch_itemdefs")
         patch_itemdefs.updateEndingFinalDoor()
     else
-        local patch_itemdefs = include(scriptPath .. "/patch_itemdefs")
         patch_itemdefs.resetEndingFinalDoor()
     end
+
+    patch_itemdefs.patchVentricularLanceRecharge(modApi)
 end
 
 local function initStrings(modApi)
@@ -327,6 +328,9 @@ local function lateLoad(modApi, options, params)
         local patch_skilldefs = include(scriptPath .. "/patch_skilldefs")
         patch_skilldefs.updateSkills()
     end
+
+    local patch_itemdefs = include(scriptPath .. "/patch_itemdefs")
+    patch_itemdefs.latePatchVentricularLanceRecharge(modApi)
 
     for name, def in pairs(include(scriptPath .. "/propdefs").createLateDefs()) do
         modApi:addPropDef(name, def, false)
