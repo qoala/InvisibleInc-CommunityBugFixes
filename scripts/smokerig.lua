@@ -70,7 +70,7 @@ function smokerig:refresh()
 
     -- Remove any smoke that no longer exists.
     for k, fx in pairs(self.smokeFx) do
-        if array.find(cells, k) == nil and array.find(activeEdgeUnits, k) == nil then
+        if array.find(cells, k) == nil and activeEdgeUnits[k] == nil then
             fx:postLoop("pst")
         end
     end
