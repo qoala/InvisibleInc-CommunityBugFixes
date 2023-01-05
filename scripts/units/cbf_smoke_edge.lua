@@ -1,4 +1,5 @@
 -- New unit type for CBF
+local binops = include("modules/binary_ops")
 local util = include("modules/util")
 local array = include("modules/array")
 local unitdefs = include("sim/unitdefs")
@@ -19,15 +20,15 @@ function smoke_edge:_updateCloudState(sim)
     -- Check for connectivity between edge and its cloud(s).
     local hasActiveCloud = false
     for _, cloud in ipairs(self._clouds) do
-        self._activeClouds[cloud.id] = false
+        local dirMask = 0
         for _, dir in ipairs(cloud.dirs) do
             local exit = cell.exits[dir]
             if simquery.isOpenExit(exit) then
                 hasActiveCloud = true
-                self._activeClouds[cloud.id] = true
-                break
+                dirMask = binops.b_or(dirMask, simdefs:maskFromDir(dir))
             end
         end
+        self._activeClouds[cloud.id] = dirMask > 0 and dirMask or nil
     end
 
     local onMap = self:getLocation() ~= nil
@@ -159,6 +160,9 @@ function smoke_edge:getActiveSmokeClouds(sim)
     return clouds
 end
 function smoke_edge:isActiveForSmokeCloud(cloudID)
+    return self._activeClouds and not not self._activeClouds[cloudID]
+end
+function smoke_edge:dirMaskForSmokeCloud(cloudID)
     return self._activeClouds and self._activeClouds[cloudID]
 end
 

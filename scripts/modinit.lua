@@ -87,6 +87,7 @@ local function init(modApi)
 
     include(scriptPath .. "/include")
     include(scriptPath .. "/cbf_util")
+    include(scriptPath .. "/simdefs")
     include(scriptPath .. "/engine")
 
     -- Extract upvalue after Function Library potentially replaces the target function entirely.
