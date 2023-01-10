@@ -83,14 +83,8 @@ function smoke_cloud:onWarp(sim, oldcell, cell)
         end
         self._cells = nil
     end
-    if self._segments then
-        sim:getLOS():removeSegments(unpack(self._segments))
-        self._segments = nil
-        for i, unit in pairs(sim:getAllUnits()) do
-            sim:refreshUnitLOS(unit)
-        end
-        sim:dispatchEvent(simdefs.EV_EXIT_MODIFIED) -- Update shadow map.
-    end
+    -- CBF: Clean up interest units before cleaning up LoS segments.
+    -- Otherwise, guards briefly see the edges of the cloud and can be distracted by that.
     if self._interestUnits then
         -- CBF: reference-counted removal.
         for i, unitID in ipairs(self._interestUnits) do
@@ -100,6 +94,14 @@ function smoke_cloud:onWarp(sim, oldcell, cell)
             end
         end
         self._interestUnits = nil
+    end
+    if self._segments then
+        sim:getLOS():removeSegments(unpack(self._segments))
+        self._segments = nil
+        for i, unit in pairs(sim:getAllUnits()) do
+            sim:refreshUnitLOS(unit)
+        end
+        sim:dispatchEvent(simdefs.EV_EXIT_MODIFIED) -- Update shadow map.
     end
     if cell then
         self._cells, self._segments, self._interestUnits = occludeSight(
