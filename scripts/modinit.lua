@@ -40,6 +40,12 @@ local function init(modApi)
             "generalfixes", STRINGS.COMMBUGFIX.OPTIONS.GENERALFIXES,
             STRINGS.COMMBUGFIX.OPTIONS.GENERALFIXES_TIP,
             {noUpdate = true, masks = {{mask = "mask_cbf_generalfixes", requirement = true}}})
+    modApi:addGenerationOption(
+            "autoupdate", STRINGS.COMMBUGFIX.OPTIONS.AUTOUPDATE,
+            STRINGS.COMMBUGFIX.OPTIONS.AUTOUPDATE_TIP, {
+                noUpdate = true,
+                requirements = {{mask = "mask_cbf_generalfixes", requirement = true}},
+            })
     -- Configurable Fixes
     modApi:addGenerationOption(
             "escorts_remove_owned_items", STRINGS.COMMBUGFIX.OPTIONS.ESCORTS_ITEMS,
@@ -109,6 +115,7 @@ local function init(modApi)
     include(scriptPath .. "/simunit")
     include(scriptPath .. "/senses")
     include(scriptPath .. "/smokerig")
+    include(scriptPath .. "/state-map-screen")
     include(scriptPath .. "/missions/mission_detention_centre")
     include(scriptPath .. "/missions/mission_vault")
     include(scriptPath .. "/units/cbf_smoke_edge")
@@ -252,6 +259,9 @@ local function load(modApi, options, params, mod_options)
         end
     end
 
+    if options["autoupdate"] and params then
+        params.cbf_params.cbf_autoupdate = options["autoupdate"].enabled
+    end
     if options["missiondetcenter_spawnagent"] and params then
         params.cbf_params.cbf_detention_spawnagent = options["missiondetcenter_spawnagent"].value
     end

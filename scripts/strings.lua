@@ -2,6 +2,8 @@ local MOD_STRINGS = {
     OPTIONS = {
         GENERALFIXES = "GENERAL BUG FIXES",
         GENERALFIXES_TIP = "<c:FF8411>GENERAL BUG FIXES</c>\nFixes for bugs that players don't usually need to tweak. See the mod description for a full list.\nIf this and other options are all disabled, only crash/softlock and UI fixes are applied.",
+        AUTOUPDATE = "AUTOUPDATE BETWEEN MISSIONS",
+        AUTOUPDATE_TIP = "<c:FF8411>AUTOMATICALLY ACTIVATE NEWLY-INSTALLED MOD UPDATES</c>\n(Still requires new versions of the mod to be installed via Steam or manually.)\nTo avoid breaking in-mission save/load, new fixes aren't immediately active in existing saves. With autoupdate enabled, new fixes will be enabled between missions where possible.",
 
         ESCORTS_ITEMS = "ESCORTS FIXED - RETURN ESCORT-OWNED ITEMS",
         ESCORTS_ITEMS_TIP = "<c:FF8411>RETURN ESCORT-OWNED ITEMS</c>\nRemoves the option to permanently take items from temporary agents.",
