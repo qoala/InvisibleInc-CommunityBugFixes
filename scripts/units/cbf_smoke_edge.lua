@@ -19,6 +19,7 @@ function smoke_edge:_updateCloudState(sim)
 
     -- Check for connectivity between edge and its cloud(s).
     local hasActiveCloud = false
+    local updatedClouds = {}
     for _, cloud in ipairs(self._clouds) do
         local dirMask = 0
         for _, dir in ipairs(cloud.dirs) do
@@ -28,7 +29,11 @@ function smoke_edge:_updateCloudState(sim)
                 dirMask = binops.b_or(dirMask, simdefs:maskFromDir(dir))
             end
         end
-        self._activeClouds[cloud.id] = dirMask > 0 and dirMask or nil
+        dirMask = dirMask > 0 and dirMask or nil
+        if dirMask ~= self._activeClouds[cloud.id] then
+            table.insert(updatedClouds, cloud.id)
+        end
+        self._activeClouds[cloud.id] = dirMask
     end
 
     local onMap = self:getLocation() ~= nil
@@ -36,6 +41,13 @@ function smoke_edge:_updateCloudState(sim)
         sim:warpUnit(self, cell)
     elseif onMap and not hasActiveCloud then
         sim:warpUnit(self, nil)
+    end
+    for _, cloudID in ipairs(updatedClouds) do
+        -- UITR: Trigger FX updates for the updated cloud state.
+        local cloud = sim:getUnit(cloudID)
+        if cloud then
+            sim:dispatchEvent(simdefs.EV_UNIT_REFRESH, {unit=cloud, smokeEdgeID=self:getID()})
+        end
     end
 end
 
@@ -101,6 +113,10 @@ end
 -- ===
 -- Public methods
 
+function smoke_edge:getSmokeLocation()
+    return self._smokeX, self._smokeY
+end
+
 function smoke_edge:setSmokeLocation(cell)
     assert(cell.cbfSmokeEdgeID == nil, tostring(cell.x) .. "," .. tostring(cell.y))
     cell.cbfSmokeEdgeID = self:getID()
@@ -140,6 +156,7 @@ function smoke_edge:unregisterSmokeCloud(sim, cloudUnit)
         if #self._clouds == 0 then
             if self:getLocation() then
                 sim:warpUnit(self, nil)
+                -- Clouds only unregister on destruction. No need to separately trigger a refresh.
             end
             sim:despawnUnit(self)
         else
