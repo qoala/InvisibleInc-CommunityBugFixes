@@ -8,6 +8,10 @@ gui.kwad
 sound.kwad
 scripts.zip
 
+# II make
+out/
+makeconfig.mk
+
 # Mobb
 testmod.py
 pull.bat
