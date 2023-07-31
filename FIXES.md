@@ -132,7 +132,7 @@ settings (enabled by default).
   * **Fix**: Generate a new patrol path, ignoring the restriction on patrolling into a different
     room.
   * **Credit**: Qoalabear, Cyberboy2000
-* Magic diagonal guard vision
+* Magic guard vision
   * Guards facing diagonally always see the orthogonally adjacent tiles on the side of their main
     vision cone, to prevent some easy exploits. However, this vision is still granted if the guard
     couldn't normally see the tile.
@@ -140,8 +140,13 @@ settings (enabled by default).
     moved diagonally, they can be alerted by agents passing through the magic vision tiles.
   * Smoke blocks all normal vision, but not the magic vision tiles. If an agent moves through magic
     vision tiles, the guard turns to face the agent and can no longer see them.
+  * Conversely, with mods that can reduce guard vision arcs, it's possible for a guard to be unable
+    to see the tile directly in front of their face, because their main vision arc covers too low
+    a percentage of the tile.
   * **Fix**: Suppress the extra magic vision if a guard could not see those tiles regardless of
     facing.
+  * **Fix**: Add magic vision to the tile directly in front of a guard if the guard could see that
+    tile based on range & occlusion but ignoring facing/arc.
   * **Credit**: Qoalabear, Cyberboy2000
 * Magic 360 vision
   * Units with 360-degree vision (in vanilla, only agents) always see all 4 orthogonally adjacent

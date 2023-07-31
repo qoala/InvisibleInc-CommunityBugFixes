@@ -42,6 +42,11 @@ function line_of_sight:calculateUnitLOS(start_cell, unit, ...)
                     cells[exit1.cell.id] = nil
                 end
             end
+        elseif unit:getTraits().LOSrads == nil and facing % 2 == 0 and not unit:isPC() then
+            local exit = start_cell.exits[facing]
+            if simquery.isOpenExit(exit) and simquery.couldUnitSeeCell(self.sim, unit, exit.cell) then
+                cells[simquery.toCellID(exit.cell.x, exit.cell.y)] = exit.cell
+            end
         elseif unit:getTraits().LOSarc and unit:getTraits().LOSarc >= 2 * math.pi and unit:isPC() and
                 facing % 2 == 1 then
             -- Diagonal magic sight takes precedence over 360-vision magic sight.
