@@ -342,6 +342,7 @@ local function lateLoad(modApi, options, params)
 
     local patch_itemdefs = include(scriptPath .. "/patch_itemdefs")
     patch_itemdefs.latePatchVentricularLanceRecharge(modApi)
+    patch_itemdefs.latePatchShirshScanGrenades(modApi)
 
     for name, def in pairs(include(scriptPath .. "/propdefs").createLateDefs()) do
         modApi:addPropDef(name, def, false)

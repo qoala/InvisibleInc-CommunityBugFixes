@@ -373,3 +373,10 @@ player to do things they couldn't otherwise.
     dismissed.
   * **Fix**: Pause the offending event queue while a dialog is open.
   * **Credit**: Qoalabear
+* Modded: Shirsh's Mod Combo Scanning Beacons are not agentic
+  * The Scanning Beacons item, found in Shirsh's Mod Combo or originally in the Dr. Pedler mod,
+    incorrectly declares itself as `isAgent`. This causes bugs in other mods (such as Advanced
+    Cyber Warfare, but may also apply in vanilla) that attempt to loop over all player-controlled
+    agents.
+  * **Fix**: Patch the scanning beacons with the `isAgent` trait cleared.
+  * **Credit**: Qoalabear
