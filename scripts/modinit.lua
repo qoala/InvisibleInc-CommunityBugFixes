@@ -292,6 +292,7 @@ local function load(modApi, options, params, mod_options)
         modApi:addAbilityDef(
                 "open_detention_cells", scriptPath .. "/abilities/open_detention_cells")
         modApi:addAbilityDef("open_security_boxes", scriptPath .. "/abilities/open_security_boxes")
+        modApi:addAbilityDef("peek", scriptPath .. "/abilities/peek")
         modApi:addAbilityDef("prime_emp", scriptPath .. "/abilities/prime_emp")
 
         local patch_animdefs = include(scriptPath .. "/patch_animdefs")

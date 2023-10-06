@@ -237,6 +237,17 @@ settings (enabled by default).
     * Lock decoder. (Also has a short cooldown)
   * **Fix**: Add the recharge ability
   * **Credit**: Hekateras, Qoalabear
+* Partially Blocked Peeking
+  * Ignoring the special handling for doors, peeking gives you vision from each of the four diagonal
+    corners, but only if there's a clear path to that tile. When one of those corners is blocked,
+    no vision is granted for that direction, despite the fact that sometimes giving vision from the
+    orthogonally adjacent tile would be useful.
+  * **Fix**: If a diagonal corner is blocked, try peeking in the two orthogonal adjacencies for that
+    diagonal, if either are open.
+  * This may occasionally still miss some relevant vision, but preserving vanilla behavior when
+    there's no obstructions within range 1 keeps the number of LoS calculations from growing too
+    quickly.
+  * **Credit**: Qoalabear
 
 #### Program-Related Fixes
 
