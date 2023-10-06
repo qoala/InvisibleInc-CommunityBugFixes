@@ -135,9 +135,6 @@ local function lateInit(modApi)
 
     -- Conditionally pauses the event queue. Needs to wrap after Talkative Agents adds additional event handlers.
     include(scriptPath .. "/mission_panel")
-
-    -- More Archived Agents has a copy of the same "Rescued agent status" fix, but doesn't guard against being applied a second time.
-    include(scriptPath .. "/mission_scoring_lateinit")
 end
 
 local function earlyUnload(modApi)

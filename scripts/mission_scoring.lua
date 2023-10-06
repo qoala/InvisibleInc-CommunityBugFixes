@@ -88,12 +88,12 @@ mission_scoring.DoFinishMission = function(sim, campaign, ...)
     local mia_agents = {}
     -- Find rescued agents first
     for i, agent in ipairs(sim._resultTable.agents) do
-        if agent.status == "RESCUED" and not agent._cbf_name and type(agent.name) == "table" and
-                type(agent.name.template) == "string" then
+        if agent.status == "RESCUED" and type(agent.name) == "table" and type(agent.name.template) ==
+                "string" then
             agent.name = agent.name.template
-            agent._cbf_name = agent.name -- Fix for MAA applying this transform a second time
             rescued_agents[agent.name] = true
-        elseif agent.status ~= "ACTIVE" and type(agent.name) == "string" then
+        elseif agent.status ~= "ACTIVE" and agent.status ~= "RESCUED" and type(agent.name) ==
+                "string" then
             -- Something *else* happened to the agent after they were rescued. That status should take precedence.
             mia_agents[agent.name] = true
         end
