@@ -46,7 +46,7 @@ function smoke_edge:_updateCloudState(sim)
         -- UITR: Trigger FX updates for the updated cloud state.
         local cloud = sim:getUnit(cloudID)
         if cloud then
-            sim:dispatchEvent(simdefs.EV_UNIT_REFRESH, {unit=cloud, smokeEdgeID=self:getID()})
+            sim:dispatchEvent(simdefs.EV_UNIT_REFRESH, {unit = cloud, smokeEdgeID = self:getID()})
         end
     end
 end

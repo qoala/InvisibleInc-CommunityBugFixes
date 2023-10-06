@@ -31,12 +31,14 @@ local latePatchVentricularLanceRecharge = function(modApi)
 end
 
 local latePatchShirshScanGrenades = function(modApi)
-    if mainitems.item_kpctech_scangrenade and mainitems.item_kpctech_scangrenade.traits.isAgent ~= nil then
+    if mainitems.item_kpctech_scangrenade and mainitems.item_kpctech_scangrenade.traits.isAgent ~=
+            nil then
         local scangrenade = util.tcopy(mainitems.item_kpctech_scangrenade)
         scangrenade.traits.isAgent = nil
         modApi:addItemDef("item_kpctech_scangrenade", scangrenade)
     end
-    if mainitems.item_kpctech_scangrenade_true and mainitems.item_kpctech_scangrenade_true.traits.isAgent ~= nil then
+    if mainitems.item_kpctech_scangrenade_true and
+            mainitems.item_kpctech_scangrenade_true.traits.isAgent ~= nil then
         local scangrenade = util.tcopy(mainitems.item_kpctech_scangrenade_true)
         scangrenade.traits.isAgent = nil
         modApi:addItemDef("item_kpctech_scangrenade_true", scangrenade)
