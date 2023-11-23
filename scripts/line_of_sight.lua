@@ -38,7 +38,6 @@ function line_of_sight:calculateUnitLOS(start_cell, unit, ...)
                 local exit1 = start_cell.exits[dir]
                 if exit1 and cells[exit1.cell.id] and
                         not simquery.couldUnitSeeCell(self.sim, unit, exit1.cell) then
-                    simlog("DBGCBF Removing magic sight from %s", unit:getID())
                     cells[exit1.cell.id] = nil
                 end
             end

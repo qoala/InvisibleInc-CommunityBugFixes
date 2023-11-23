@@ -12,7 +12,6 @@ function hasSecurityChip(sim, abilityOwner, unit)
     if cbf_util.simCheckFlag(sim, "cbf_ending_finaldoor") then
         for i, item in ipairs(unit:getChildren()) do
             if item:getTraits().finalAugmentKey then
-                simlog("DEBUG-CBF: found final key keybits=%s", tostring(item:getTraits().keybits))
                 return true
             end
         end
