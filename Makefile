@@ -32,6 +32,7 @@ clean:
 	-rm out/*
 
 distclean:
+	-rm -f $(installfiles)
 	-rm -f $(INSTALL_PATH)/*.kwad $(INSTALL_PATH)/*.zip
 ifneq ($(INSTALL_PATH2),)
 	-rm -f $(INSTALL_PATH2)/*.kwad $(INSTALL_PATH2)/*.zip
