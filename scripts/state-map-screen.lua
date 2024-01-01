@@ -35,6 +35,7 @@ function mapScreen:closePreview(previewScreen, situation, goToThere, ...)
             p.cbf_smoke_dynamicedges = true
             p.cbf_smoke_rememberedges = true
             p.cbf_fixsharedinterest = true
+            p.cbf_minLOS = true
 
             p.cbf_pathing = {}
             p.cbf_pathing.reset_on_interest_moved = true
@@ -60,6 +61,7 @@ function mapScreen:closePreview(previewScreen, situation, goToThere, ...)
         autoSet(p, "cbf_smoke_dynamicedges", true)
         autoSet(p, "cbf_smoke_rememberedges", true)
         autoSet(p, "cbf_rand", true) -- 0.14.0
+        autoSet(p, "cbf_minLOS", true) -- 0.14.0
     end
 
     return oldClosePreview(self, previewScreen, situation, goToThere, ...)

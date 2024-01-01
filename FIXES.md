@@ -158,6 +158,12 @@ settings (enabled by default).
   * **Fix**: Suppress the extra magic vision for non-player units if LOS reports blocked vision.
   * **Fix**: Enable full magic vision for agents that are facing diagonally.
   * **Credit**: Qoalabear
+* Vision underflow
+  * Shade (-2 range to guard vision) and similar effects could reduce vision below zero if a guard
+    already had minimal vision (pulse drones), resulting in hilarious results.
+  * **Fix**: Use Sim Constructor's addition of "clamp" rules to the modifier stack. Apply minimum
+    values to LOS traits for any units with those traits.
+  * **Credit**: Cyberboy2000, Qoalabear
 * Sleeping guards notice TAG
   * When a KOed guard wakes up, they investigate the location of their most recent attack (including
     attacks received while KOed). This includes an attack with a TAG pistol, even though TAG pistol

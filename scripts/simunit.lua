@@ -1,6 +1,8 @@
 -- patch to sim/simunit
 local mathutil = include("modules/mathutil")
+local modifiers = include("sim/modifiers")
 local simdefs = include("sim/simdefs")
+local simfactory = include('sim/simfactory')
 local simquery = include("sim/simquery")
 local simunit = include('sim/simunit')
 
@@ -163,3 +165,23 @@ function simunit:returnItemsToStash(sim)
         oldReturnItemsToStash(self, sim)
     end
 end
+
+-- ===
+
+local oldCreateUnit = simunit.createUnit
+function simunit.createUnit(unitData, sim, ...)
+    local t = oldCreateUnit(unitData, sim, ...)
+
+    -- Clamp Line of Sight to avoid underflow graphical errors.
+    if sim and cbf_util.simCheckFlag(sim, "cbf_minLOS") then
+        if t:getTraits().LOSarc then
+            t:getModifiers():add("LOSarc", "cbf-minLOS", modifiers.CLA, nil, 0, nil) -- min 0
+        end
+        if t:getTraits().LOSrange then
+            t:getModifiers():add("LOSrange", "cbf-minLOS", modifiers.CLA, nil, 0.5, nil) -- min r=0.5 (own tile)
+        end
+    end
+
+    return t
+end
+simfactory.register(simunit.createUnit)
