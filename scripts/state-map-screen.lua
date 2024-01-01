@@ -27,8 +27,7 @@ function mapScreen:closePreview(previewScreen, situation, goToThere, ...)
             p.cbf_missionvault_hackresponse = true
 
             p.cbf_nopatrol_fixfacing = true
-            p.cbf_idle_fixfailedpatrolpath =
-                    constants.IDLE_FIXFAILEDPATROLPATH.REGENERATE
+            p.cbf_idle_fixfailedpatrolpath = constants.IDLE_FIXFAILEDPATROLPATH.REGENERATE
             p.cbf_ignoresleepingtag = true
             p.cbf_fixmagicsight = true
             p.cbf_pulsereact = true
@@ -60,7 +59,7 @@ function mapScreen:closePreview(previewScreen, situation, goToThere, ...)
         autoSet(p, "cbf_flurry_reset", true)
         autoSet(p, "cbf_smoke_dynamicedges", true)
         autoSet(p, "cbf_smoke_rememberedges", true)
-        autoSet(p, "cbf_rand", true)  -- 0.14.0
+        autoSet(p, "cbf_rand", true) -- 0.14.0
     end
 
     return oldClosePreview(self, previewScreen, situation, goToThere, ...)

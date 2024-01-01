@@ -294,14 +294,17 @@ local function load(modApi, options, params, mod_options)
         modApi:addAbilityDef("peek", scriptPath .. "/abilities/peek")
         modApi:addAbilityDef("prime_emp", scriptPath .. "/abilities/prime_emp")
 
-
         local dlc = findModByName("Contingency Plan")
         if dlc and mod_options[dlc.id] and mod_options[dlc.id].enabled then
-            modApi:addAbilityDef("activate_refit_drone", scriptPath .. "/abilities/activate_refit_drone")
+            modApi:addAbilityDef(
+                    "activate_refit_drone", scriptPath .. "/abilities/activate_refit_drone")
             modApi:addAbilityDef("databank_hack", scriptPath .. "/abilities/databank_hack")
             modApi:addAbilityDef("multiUnlock", scriptPath .. "/abilities/multiUnlock")
-            modApi:addAbilityDef("transformer_terminal", scriptPath .. "/abilities/transformer_terminal")
-            modApi:addAbilityDef("transformer_terminal_buy_PWR", scriptPath .. "/abilities/transformer_terminal_buy_PWR")
+            modApi:addAbilityDef(
+                    "transformer_terminal", scriptPath .. "/abilities/transformer_terminal")
+            modApi:addAbilityDef(
+                    "transformer_terminal_buy_PWR",
+                    scriptPath .. "/abilities/transformer_terminal_buy_PWR")
         end
 
         local patch_animdefs = include(scriptPath .. "/patch_animdefs")

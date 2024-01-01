@@ -11,16 +11,16 @@ local cbf_util = include(SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util")
 -- PRNG fix
 -- -----
 
-function simengine:nextRand( a, b )
-    assert( simguard.isGuarded() )
+function simengine:nextRand(a, b)
+    assert(simguard.isGuarded())
 
     -- CBF: force legacy behavior if flag is not enabled, for save compatibility.
     local gen = rand.createGenerator(self._seed, not cbf_util.simCheckFlag(self, "cbf_rand"))
     local n
     if a and b then
-        n = gen:nextInt( a, b )
+        n = gen:nextInt(a, b)
     elseif a then
-        n = gen:nextInt( 1, a )
+        n = gen:nextInt(1, a)
     else
         n = gen:next()
     end
@@ -28,7 +28,6 @@ function simengine:nextRand( a, b )
     self._seed = gen._seed
     return n
 end
-
 
 -- -----
 -- Prefab stationary guard facing fix
