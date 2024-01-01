@@ -368,7 +368,7 @@ player to do things they couldn't otherwise.
   * **Fix**: Disguise no longer breaks on re-captured cameras/turrets.
   * **Fix**: More consistent behavior when multiple guards are in detection range.
   * **Credit**: wodzu\_93
-* Rubiks on Mission Devicces
+* Rubiks on Mission Devices
   * If data banks or mission-consoles in the final mission have Rubiks, they gain a firewall from the Daemon while still
     being agency controlled. This prevents them from being used.
   * **Fix**: Affected abilities check for device ownership instead of 0 firewalls.
