@@ -262,6 +262,14 @@ settings (enabled by default).
 
 #### Miscellaneous Fixes
 
+* PRNG cycles
+  * Vanilla random number generator ports a C PRNG to LUA, except that the algorithm expects 32bit
+    integer precision and LUA only has 32bit floating point numbers. "Inputting 2898587136 as the
+    initial seed causes it to loop back on itself in only 5647 calls, rather than the ~2^32 it is
+    supposed to take."
+  * **Fix** Overwrite PRNG algorithm with a version that splits up some operations to preserve
+    precision.
+  * **Credit**: Cyberboy2000
 * Laser beam ally checks
   * Corp-controlled lasers turn off when guards walk through, and likewise for agency-controlled
     lasers and agents. Corp-controlled lasers also turn off when an agent drags a guard through.

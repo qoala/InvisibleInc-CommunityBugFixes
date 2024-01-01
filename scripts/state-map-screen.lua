@@ -16,36 +16,39 @@ function mapScreen:closePreview(previewScreen, situation, goToThere, ...)
             cbf_util.optionsCheckFlag(self._campaign.difficultyOptions, "cbf_autoupdate", true) then
         -- Auto update newly-added fixes before the next mission.
         if not self._campaign.difficultyOptions.cbf_params then
+            simlog("[CBF] Auto-initializing cbf_params between missions.")
             local p = {}
 
+            p.cbf_rand = true
+
             -- cbf_ending_finaldoor requires a paired options-level flag.
-            p.cbf_params.cbf_ending_incognitadrop = true
-            p.cbf_params.cbf_ending_remotehacking = true
-            p.cbf_params.cbf_missionvault_hackresponse = true
+            p.cbf_ending_incognitadrop = true
+            p.cbf_ending_remotehacking = true
+            p.cbf_missionvault_hackresponse = true
 
-            p.cbf_params.cbf_nopatrol_fixfacing = true
-            p.cbf_params.cbf_idle_fixfailedpatrolpath =
+            p.cbf_nopatrol_fixfacing = true
+            p.cbf_idle_fixfailedpatrolpath =
                     constants.IDLE_FIXFAILEDPATROLPATH.REGENERATE
-            p.cbf_params.cbf_ignoresleepingtag = true
-            p.cbf_params.cbf_fixmagicsight = true
-            p.cbf_params.cbf_pulsereact = true
-            p.cbf_params.cbf_disguisefix_pathing = true
-            p.cbf_params.cbf_smoke_dynamicedges = true
-            p.cbf_params.cbf_smoke_rememberedges = true
-            p.cbf_params.cbf_fixsharedinterest = true
+            p.cbf_ignoresleepingtag = true
+            p.cbf_fixmagicsight = true
+            p.cbf_pulsereact = true
+            p.cbf_disguisefix_pathing = true
+            p.cbf_smoke_dynamicedges = true
+            p.cbf_smoke_rememberedges = true
+            p.cbf_fixsharedinterest = true
 
-            p.cbf_params.cbf_pathing = {}
-            p.cbf_params.cbf_pathing.reset_on_interest_moved = true
-            p.cbf_params.cbf_pathing.use_pathing_queue = false
+            p.cbf_pathing = {}
+            p.cbf_pathing.reset_on_interest_moved = true
+            p.cbf_pathing.use_pathing_queue = false
 
-            p.cbf_params.cbf_agent_drillmodtrait = true
+            p.cbf_agent_drillmodtrait = true
             -- cbf_agent_speed5 is an options-level flag.
-            p.cbf_params.cbf_flurry_reset = true
+            p.cbf_flurry_reset = true
 
-            p.cbf_params.cbf_cycletiming = true
+            p.cbf_cycletiming = true
 
-            p.cbf_params.cbf_laserdragsymmetry = true
-            p.cbf_params.cbf_laserdaemons = true
+            p.cbf_laserdragsymmetry = true
+            p.cbf_laserdaemons = true
 
             -- Escorts Fixed requires paired options-level flags, and also requires checking for
             -- the standalone Escorts Fixed mod.
@@ -57,6 +60,7 @@ function mapScreen:closePreview(previewScreen, situation, goToThere, ...)
         autoSet(p, "cbf_flurry_reset", true)
         autoSet(p, "cbf_smoke_dynamicedges", true)
         autoSet(p, "cbf_smoke_rememberedges", true)
+        autoSet(p, "cbf_rand", true)  -- 0.14.0
     end
 
     return oldClosePreview(self, previewScreen, situation, goToThere, ...)

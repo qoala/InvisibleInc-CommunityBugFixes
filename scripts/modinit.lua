@@ -93,6 +93,7 @@ local function init(modApi)
 
     include(scriptPath .. "/include")
     include(scriptPath .. "/cbf_util")
+    include(scriptPath .. "/rand")
     include(scriptPath .. "/simdefs")
     include(scriptPath .. "/engine")
 
@@ -191,6 +192,8 @@ local function load(modApi, options, params, mod_options)
     end
 
     if generalFixesEnabled and params then
+        params.cbf_params.cbf_rand = true
+
         -- Mission Bugs
         params.cbf_params.cbf_ending_finaldoor = true
         options.cbf_params.cbf_ending_finaldoor = true
