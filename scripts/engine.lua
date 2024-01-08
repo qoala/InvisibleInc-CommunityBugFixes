@@ -15,7 +15,10 @@ function simengine:nextRand(a, b)
     assert(simguard.isGuarded())
 
     -- CBF: force legacy behavior if flag is not enabled, for save compatibility.
-    local gen = rand.createGenerator(self._seed, not cbf_util.simCheckFlag(self, "cbf_rand"))
+    -- nextRand() may be called by mods (Omni Foundry +) before init() has set up params.
+    -- In that case, fall back to legacy.
+    local cbfRand = self:getParams() and cbf_util.simCheckFlag(self, "cbf_rand")
+    local gen = rand.createGenerator(self._seed, not cbfRand)
     local n
     if a and b then
         n = gen:nextInt(a, b)
