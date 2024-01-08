@@ -65,11 +65,11 @@ function CreatePackage()
 	-- package:Save( build_options.outputpath, "sound.kwad" )
 
 	-- ANIMS
-	local package = Package:new( "anims", MaxPackageSize, options )
-	PackageFolder( package, "./anims", true, function(srcpath)
-		return string.find(srcpath, ".anim", -5) ~= nil
-	end )
-	package:Save( build_options.outputpath, "anims.kwad" )
+	-- local package = Package:new( "anims", MaxPackageSize, options )
+	-- PackageFolder( package, "./anims", true, function(srcpath)
+	-- 	return string.find(srcpath, ".anim", -5) ~= nil
+	-- end )
+	-- package:Save( build_options.outputpath, "anims.kwad" )
 end
 
 
