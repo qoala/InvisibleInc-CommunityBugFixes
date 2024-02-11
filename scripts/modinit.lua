@@ -122,6 +122,9 @@ local function init(modApi)
     include(scriptPath .. "/units/cbf_smoke_edge")
     include(scriptPath .. "/units/simdisguiseitem")
     include(scriptPath .. "/units/smoke_cloud")
+
+    -- Ability patches. (Abilities are NOT reloaded on load)
+    include(scriptPath .. "/abilities/peek").patchPeek()
 end
 
 local function lateInit(modApi)
@@ -291,7 +294,6 @@ local function load(modApi, options, params, mod_options)
         modApi:addAbilityDef(
                 "open_detention_cells", scriptPath .. "/abilities/open_detention_cells")
         modApi:addAbilityDef("open_security_boxes", scriptPath .. "/abilities/open_security_boxes")
-        modApi:addAbilityDef("peek", scriptPath .. "/abilities/peek")
         modApi:addAbilityDef("prime_emp", scriptPath .. "/abilities/prime_emp")
 
         local dlc = findModByName("Contingency Plan")

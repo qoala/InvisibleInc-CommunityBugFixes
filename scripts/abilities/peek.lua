@@ -1,18 +1,15 @@
--- patch to sim/abilities/carryable.lua
-local util = include("modules/util")
+-- patch to sim/abilities/peek.lua
 local abilitydefs = include("sim/abilitydefs")
-local simdefs = include("sim/simdefs")
 local simquery = include("sim/simquery")
-local speechdefs = include("sim/speechdefs")
 
-local oldPeek = abilitydefs.lookupAbility("peek")
+local function patchPeek()
+    local peek = abilitydefs.lookupAbility("peek")
 
-local peek = util.extend(oldPeek) {
-    -- Overwrite peek.executeAbility. Changes at "CBF:"
-    executeAbility = function(self, sim, unit, userUnit, exitX, exitY, exitDir, ...)
+    local oldExecute = peek.executeAbility
+    function peek:executeAbility(sim, unit, userUnit, exitX, exitY, exitDir, ...)
         local x0, y0 = unit:getLocation()
 
-        oldPeek.executeAbility(self, sim, unit, userUnit, exitX, exitY, exitDir, ...)
+        oldExecute(self, sim, unit, userUnit, exitX, exitY, exitDir, ...)
 
         -- If became down or moved by processReactions, then the peek eyeballs would've despawned.
         if not unit or not unit:isValid() or unit:isDown() then
@@ -57,10 +54,10 @@ local peek = util.extend(oldPeek) {
         if tryPeekS and self:canPeekOrthogonal(sim, fromCell, 0, -1) then
             self:doPeek(unit, true, sim, x0, y0, peekInfo, 0, -1)
         end
-    end,
+    end
 
     -- Copy of peek.canPeek, but modified to handle orthogonal directions.
-    canPeekOrthogonal = function(self, sim, fromCell, dx, dy)
+    function peek:canPeekOrthogonal(sim, fromCell, dx, dy)
         if sim:getCell(fromCell.x + dx, fromCell.y + dy) == nil then
             return false
         end
@@ -74,6 +71,9 @@ local peek = util.extend(oldPeek) {
         local exit = testCell.exits[facing]
 
         return exit and not (exit.door and exit.closed)
-    end,
+    end
+end
+
+return { --
+    patchPeek = patchPeek,
 }
-return peek
