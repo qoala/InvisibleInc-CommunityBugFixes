@@ -1,5 +1,5 @@
 name = Community Bug Fixes
 author = qoalabear,Cyberboy2000,Hekateras,Mobbstar,pesnitor,RaXaH
 icon = gui/icons/modicon_cbf.png
-version = 1.14.1
+version = 1.14.2
 workshop = 2151835746
