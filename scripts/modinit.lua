@@ -126,10 +126,14 @@ local function init(modApi)
     -- Ability patches. (Abilities are NOT reloaded on load)
     include(scriptPath .. "/abilities/activate_final_console")
     include(scriptPath .. "/abilities/activate_locked_console")
+    include(scriptPath .. "/abilities/carryable")
+    include(scriptPath .. "/abilities/disarmtrap")
+    include(scriptPath .. "/abilities/escape")
     include(scriptPath .. "/abilities/jackin_root_console")
     include(scriptPath .. "/abilities/open_detention_cells")
     include(scriptPath .. "/abilities/open_security_boxes")
     include(scriptPath .. "/abilities/peek")
+    include(scriptPath .. "/abilities/prime_emp")
 
 end
 
@@ -302,11 +306,8 @@ local function load(modApi, options, params, mod_options)
         local escape_mission = include(scriptPath .. "/missions/escape_mission")
         modApi:addEscapeScripts(escape_mission)
 
-        modApi:addAbilityDef("carryable", scriptPath .. "/abilities/carryable")
-        modApi:addAbilityDef("disarmtrap", scriptPath .. "/abilities/disarmtrap")
+        -- Patch must go after Function Library overwrites doorMechanism.executeAbility.
         modApi:addAbilityDef("doorMechanism", scriptPath .. "/abilities/doorMechanism")
-        modApi:addAbilityDef("escape", scriptPath .. "/abilities/escape")
-        modApi:addAbilityDef("prime_emp", scriptPath .. "/abilities/prime_emp")
 
         local patch_animdefs = include(scriptPath .. "/patch_animdefs")
         patch_animdefs.updateAnimdefs()
