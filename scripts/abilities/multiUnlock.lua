@@ -1,37 +1,29 @@
 -- patch to dlc/multiUnlock.lua
-local util = include("modules/util")
 local abilitydefs = include("sim/abilitydefs")
-local abilityutil = include("sim/abilities/abilityutil")
-local simquery = include("sim/simquery")
 
-local oldAbility = abilitydefs.lookupAbility("multiUnlock")
+local function patchAbility()
+    local abil = abilitydefs.lookupAbility("multiUnlock")
+    if not abil then
+        return
+    end
 
-local multiUnlock = util.extend(oldAbility or {}) {
-    -- Overwrite canUseAbility. Changes at "CBF:"
-    canUseAbility = function(self, sim, abilityOwner, unit, targetUnitID)
-        if unit:getTraits().isDrone then
-            return false
+    local oldCanUse = abil.canUseAbility
+    function abil:canUseAbility(sim, unit, userUnit, targetUnitID)
+        local oldIce
+        if unit:getPlayerOwner() == sim:getPC() and unit:getTraits().mainframe_ice > 0 then
+            -- Hide bugged firewalls if they've gotten out of sync with player ownership.
+            oldIce = unit:getTraits().mainframe_ice
+            unit:getTraits().mainframe_ice = 0
         end
 
-        if abilityOwner:getTraits().mainframe_status ~= "active" then
-            return false
+        local ret, reason = oldCanUse(self, sim, unit, userUnit, targetUnitID)
+
+        if oldIce then
+            unit:getTraits().mainframe_ice = oldIce
         end
 
-        if abilityOwner:getTraits().cooldown and abilityOwner:getTraits().cooldown > 0 then
-            return false,
-                   util.sformat(STRINGS.UI.REASON.COOLDOWN, abilityOwner:getTraits().cooldown)
-        end
+        return ret, reason
+    end
+end
 
-        -- CBF: Check player owner instead of firewalls. Don't lock out if Rubiks boosted firewalls after hacking.
-        if abilityOwner:getPlayerOwner() ~= sim:getPC() then
-            return false, STRINGS.ABILITIES.TOOLTIPS.UNLOCK_WITH_INCOGNITA
-        end
-
-        if not simquery.canUnitReach(sim, unit, abilityOwner:getLocation()) then
-            return false
-        end
-
-        return true
-    end,
-}
-return multiUnlock
+return {patchAbility = patchAbility}

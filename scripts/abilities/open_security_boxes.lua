@@ -1,27 +1,26 @@
--- patch to sim/abilities/activate_locked_console.lua
-local util = include("modules/util")
+-- patch to sim/abilities/open_security_boxes.lua
 local abilitydefs = include("sim/abilitydefs")
-local abilityutil = include("sim/abilities/abilityutil")
-local simquery = include("sim/simquery")
 
-local oldOpenSecurityBoxes = abilitydefs.lookupAbility("open_security_boxes")
+local function patchAbility()
+    local abil = abilitydefs.lookupAbility("open_security_boxes")
 
-local open_security_boxes = util.extend(oldOpenSecurityBoxes or {}) {
-    -- Overwrite canUseAbility. Changes at "CBF:"
-    canUseAbility = function(self, sim, abilityOwner, unit, targetUnitID)
-        local targetUnit = sim:getUnit(targetUnitID)
-        local userUnit = abilityOwner:getUnitOwner()
-
-        if abilityOwner:getTraits().cooldown and abilityOwner:getTraits().cooldown > 0 then
-            return false, util.sformat(STRINGS.UI.REASON.COOLDOWN, unit:getTraits().cooldown)
+    local oldCanUse = abil.canUseAbility
+    function abil:canUseAbility(sim, unit, userUnit, targetUnitID)
+        local oldIce
+        if unit:getPlayerOwner() == sim:getPC() and unit:getTraits().mainframe_ice > 0 then
+            -- Hide bugged firewalls if they've gotten out of sync with player ownership.
+            oldIce = unit:getTraits().mainframe_ice
+            unit:getTraits().mainframe_ice = 0
         end
 
-        -- CBF: Check player owner instead of firewalls. Don't lock out if Rubiks boosted firewalls after hacking.
-        if abilityOwner:getPlayerOwner() ~= sim:getPC() then
-            return false, STRINGS.ABILITIES.TOOLTIPS.UNLOCK_WITH_INCOGNITA
+        local ret, reason = oldCanUse(self, sim, unit, userUnit, targetUnitID)
+
+        if oldIce then
+            unit:getTraits().mainframe_ice = oldIce
         end
 
-        return abilityutil.checkRequirements(abilityOwner, userUnit)
-    end,
-}
-return open_security_boxes
+        return ret, reason
+    end
+end
+
+return {patchAbility = patchAbility}

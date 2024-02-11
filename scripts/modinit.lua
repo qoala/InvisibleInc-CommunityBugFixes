@@ -124,7 +124,10 @@ local function init(modApi)
     include(scriptPath .. "/units/smoke_cloud")
 
     -- Ability patches. (Abilities are NOT reloaded on load)
+    include(scriptPath .. "/abilities/open_detention_cells").patchAbility()
+    include(scriptPath .. "/abilities/open_security_boxes").patchAbility()
     include(scriptPath .. "/abilities/peek").patchPeek()
+
 end
 
 local function lateInit(modApi)
@@ -158,9 +161,23 @@ local function earlyLoad(modApi, options, params)
     earlyUnload(modApi)
 end
 
+local firstTimeLoad = true
 local function load(modApi, options, params, mod_options)
     local scriptPath = modApi:getScriptPath()
     local constants = include(scriptPath .. "/constants")
+
+    if firstTimeLoad then
+        firstTimeLoad = false
+        local dlc = findModByName("Contingency Plan")
+        if dlc then
+            -- Abilities are not reset by load, but DLC adds them at load time.
+            include(scriptPath .. "/abilities/activate_refit_drone").patchAbility()
+            include(scriptPath .. "/abilities/databank_hack").patchAbility()
+            include(scriptPath .. "/abilities/multiUnlock").patchAbility()
+            include(scriptPath .. "/abilities/transformer_terminal").patchAbility()
+            include(scriptPath .. "/abilities/transformer_terminal_buy_PWR").patchAbility()
+        end
+    end
 
     -- -----
     -- Options Handling
@@ -291,23 +308,7 @@ local function load(modApi, options, params, mod_options)
         modApi:addAbilityDef("doorMechanism", scriptPath .. "/abilities/doorMechanism")
         modApi:addAbilityDef("escape", scriptPath .. "/abilities/escape")
         modApi:addAbilityDef("jackin_root_console", scriptPath .. "/abilities/jackin_root_console")
-        modApi:addAbilityDef(
-                "open_detention_cells", scriptPath .. "/abilities/open_detention_cells")
-        modApi:addAbilityDef("open_security_boxes", scriptPath .. "/abilities/open_security_boxes")
         modApi:addAbilityDef("prime_emp", scriptPath .. "/abilities/prime_emp")
-
-        local dlc = findModByName("Contingency Plan")
-        if dlc and mod_options[dlc.id] and mod_options[dlc.id].enabled then
-            modApi:addAbilityDef(
-                    "activate_refit_drone", scriptPath .. "/abilities/activate_refit_drone")
-            modApi:addAbilityDef("databank_hack", scriptPath .. "/abilities/databank_hack")
-            modApi:addAbilityDef("multiUnlock", scriptPath .. "/abilities/multiUnlock")
-            modApi:addAbilityDef(
-                    "transformer_terminal", scriptPath .. "/abilities/transformer_terminal")
-            modApi:addAbilityDef(
-                    "transformer_terminal_buy_PWR",
-                    scriptPath .. "/abilities/transformer_terminal_buy_PWR")
-        end
 
         local patch_animdefs = include(scriptPath .. "/patch_animdefs")
         patch_animdefs.updateAnimdefs()
