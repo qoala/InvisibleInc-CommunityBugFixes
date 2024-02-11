@@ -26,4 +26,4 @@ local function patchAbility()
     end
 end
 
-return {patchAbility = patchAbility}
+patchAbility()

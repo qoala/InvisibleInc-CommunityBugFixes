@@ -124,9 +124,9 @@ local function init(modApi)
     include(scriptPath .. "/units/smoke_cloud")
 
     -- Ability patches. (Abilities are NOT reloaded on load)
-    include(scriptPath .. "/abilities/open_detention_cells").patchAbility()
-    include(scriptPath .. "/abilities/open_security_boxes").patchAbility()
-    include(scriptPath .. "/abilities/peek").patchPeek()
+    include(scriptPath .. "/abilities/open_detention_cells")
+    include(scriptPath .. "/abilities/open_security_boxes")
+    include(scriptPath .. "/abilities/peek")
 
 end
 
@@ -171,11 +171,11 @@ local function load(modApi, options, params, mod_options)
         local dlc = findModByName("Contingency Plan")
         if dlc then
             -- Abilities are not reset by load, but DLC adds them at load time.
-            include(scriptPath .. "/abilities/activate_refit_drone").patchAbility()
-            include(scriptPath .. "/abilities/databank_hack").patchAbility()
-            include(scriptPath .. "/abilities/multiUnlock").patchAbility()
-            include(scriptPath .. "/abilities/transformer_terminal").patchAbility()
-            include(scriptPath .. "/abilities/transformer_terminal_buy_PWR").patchAbility()
+            include(scriptPath .. "/abilities/activate_refit_drone")
+            include(scriptPath .. "/abilities/databank_hack")
+            include(scriptPath .. "/abilities/multiUnlock")
+            include(scriptPath .. "/abilities/transformer_terminal")
+            include(scriptPath .. "/abilities/transformer_terminal_buy_PWR")
         end
     end
 

@@ -2,7 +2,7 @@
 local abilitydefs = include("sim/abilitydefs")
 local simquery = include("sim/simquery")
 
-local function patchPeek()
+local function patchAbility()
     local peek = abilitydefs.lookupAbility("peek")
 
     local oldExecute = peek.executeAbility
@@ -74,6 +74,4 @@ local function patchPeek()
     end
 end
 
-return { --
-    patchPeek = patchPeek,
-}
+patchAbility()
