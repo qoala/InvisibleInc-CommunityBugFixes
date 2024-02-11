@@ -124,6 +124,9 @@ local function init(modApi)
     include(scriptPath .. "/units/smoke_cloud")
 
     -- Ability patches. (Abilities are NOT reloaded on load)
+    include(scriptPath .. "/abilities/activate_final_console")
+    include(scriptPath .. "/abilities/activate_locked_console")
+    include(scriptPath .. "/abilities/jackin_root_console")
     include(scriptPath .. "/abilities/open_detention_cells")
     include(scriptPath .. "/abilities/open_security_boxes")
     include(scriptPath .. "/abilities/peek")
@@ -299,15 +302,10 @@ local function load(modApi, options, params, mod_options)
         local escape_mission = include(scriptPath .. "/missions/escape_mission")
         modApi:addEscapeScripts(escape_mission)
 
-        modApi:addAbilityDef(
-                "activate_final_console", scriptPath .. "/abilities/activate_final_console")
-        modApi:addAbilityDef(
-                "activate_locked_console", scriptPath .. "/abilities/activate_locked_console")
         modApi:addAbilityDef("carryable", scriptPath .. "/abilities/carryable")
         modApi:addAbilityDef("disarmtrap", scriptPath .. "/abilities/disarmtrap")
         modApi:addAbilityDef("doorMechanism", scriptPath .. "/abilities/doorMechanism")
         modApi:addAbilityDef("escape", scriptPath .. "/abilities/escape")
-        modApi:addAbilityDef("jackin_root_console", scriptPath .. "/abilities/jackin_root_console")
         modApi:addAbilityDef("prime_emp", scriptPath .. "/abilities/prime_emp")
 
         local patch_animdefs = include(scriptPath .. "/patch_animdefs")
