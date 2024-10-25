@@ -2,6 +2,7 @@
 local mapScreen = include("states/state-map-screen")
 
 local cbf_util = include(SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util")
+local constants = include(SCRIPT_PATHS.qoala_commbugfix .. "/constants")
 
 local function autoSet(p, flag, default)
     if p[flag] == nil then
