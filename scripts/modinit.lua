@@ -160,6 +160,9 @@ local function earlyUnload(modApi)
     local patch_itemdefs = include(scriptPath .. "/patch_itemdefs")
     patch_itemdefs.resetEndingFinalDoor()
 
+	local patch_prefabt = include(scriptPath .. "/patch_prefabt")
+	patch_prefabt.resetPrefabs()
+
     local patch_skilldefs = include(scriptPath .. "/patch_skilldefs")
     patch_skilldefs.resetSkills()
 end
@@ -335,6 +338,9 @@ local function load(modApi, options, params, mod_options)
     end
 
     patch_itemdefs.patchVentricularLanceRecharge(modApi)
+
+	local patch_prefabt = include(scriptPath .. "/patch_prefabt")
+	patch_prefabt.patchEntryGuard()
 end
 
 local function initStrings(modApi)
