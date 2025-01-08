@@ -387,6 +387,12 @@ player to do things they couldn't otherwise.
     being agency controlled. This prevents them from being used.
   * **Fix**: Affected abilities check for device ownership instead of 0 firewalls.
   * **Credit**: wodzu\_93
+* Level Connectivity
+  * Guard elevators and laser grids can be placed by the level generator in ways that overwrite doors. This may break
+    map connectivity.
+  * **Fix**: Overwrite the "prefabt" match data for these elements to include requirements that no doors exist in places
+    where the prefab forces impassable walls.
+  * **Credit**: Qoalabear
 * Modded: CFO Disguise can drag
   * If an agent is disguised as the CFO, or a similar "business man", attempting to drag a body
     fails. The business man animation defs don't include the default dragging animation.
