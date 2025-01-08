@@ -341,6 +341,7 @@ local function load(modApi, options, params, mod_options)
 
 	local patch_prefabt = include(scriptPath .. "/patch_prefabt")
 	patch_prefabt.patchEntryGuard()
+	patch_prefabt.patchBarrierLaser()
 end
 
 local function initStrings(modApi)
