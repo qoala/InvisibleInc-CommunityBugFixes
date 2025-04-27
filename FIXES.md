@@ -411,3 +411,8 @@ player to do things they couldn't otherwise.
     agents.
   * **Fix**: Patch the scanning beacons with the `isAgent` trait cleared.
   * **Credit**: Qoalabear
+* Debug: Map PNG Export
+  * Vanilla game has a `SAVE_MAP_PNGS` boolean flag in `main.lua`, false by default. Intent appears to be saving a PNG
+    of the map on mission load, for debugging of level gen. Enabling the flag does not work in the latest release builds.
+  * **Fix**: Repair the vanilla function, and add additional functionality for modding and challenge benefits.
+  * **Credit**: wodzu\_93
