@@ -338,6 +338,12 @@ player to do things they couldn't otherwise.
     ability is no longer available, then it is cancelled. Other item interactions (priming EMP, etc)
     no longer affect ambush/overwatch.
   * **Credit**: Qoalabear
+* Scan Chip/On-File Decker can scan through closed doors.
+  * When a device with daemon (such as a drone) is on the other side of a closed door from an agent
+    with a Scan Chip or other source of the "Scan Device" ability, that device is listed as an
+	available target.
+  * **Fix**: Only allow targeting devices in adjacent cells with a clear path.
+  * **Credit**: Qoalabear
 * DLC mid-missions: Save corruption if Monst3r is the sole survivor of DLC mid2.
   * Occurs if Monst3r is the only surviving agent, and he is not officially on your team. This
     contradicts in-game tips/dialogue suggesting that "Our agents are expendable, but Monst3r must

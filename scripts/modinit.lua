@@ -135,7 +135,7 @@ local function init(modApi)
     include(scriptPath .. "/abilities/open_security_boxes")
     include(scriptPath .. "/abilities/peek")
     include(scriptPath .. "/abilities/prime_emp")
-
+    include(scriptPath .. "/abilities/scandevice")
 end
 
 local function lateInit(modApi)
