@@ -129,6 +129,7 @@ local function init(modApi)
     include(scriptPath .. "/abilities/activate_locked_console")
     include(scriptPath .. "/abilities/carryable")
     include(scriptPath .. "/abilities/disarmtrap")
+    include(scriptPath .. "/abilities/doorMechanism")
     include(scriptPath .. "/abilities/escape")
     include(scriptPath .. "/abilities/jackin_root_console")
     include(scriptPath .. "/abilities/open_detention_cells")
@@ -309,9 +310,6 @@ local function load(modApi, options, params, mod_options)
 
         local escape_mission = include(scriptPath .. "/missions/escape_mission")
         modApi:addEscapeScripts(escape_mission)
-
-        -- Patch must go after Function Library overwrites doorMechanism.executeAbility.
-        modApi:addAbilityDef("doorMechanism", scriptPath .. "/abilities/doorMechanism")
 
         local patch_animdefs = include(scriptPath .. "/patch_animdefs")
         patch_animdefs.updateAnimdefs()
