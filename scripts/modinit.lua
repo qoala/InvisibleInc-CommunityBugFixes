@@ -129,7 +129,6 @@ local function init(modApi)
     include(scriptPath .. "/abilities/activate_locked_console")
     include(scriptPath .. "/abilities/carryable")
     include(scriptPath .. "/abilities/disarmtrap")
-    include(scriptPath .. "/abilities/doorMechanism")
     include(scriptPath .. "/abilities/escape")
     include(scriptPath .. "/abilities/jackin_root_console")
     include(scriptPath .. "/abilities/open_detention_cells")
@@ -137,6 +136,12 @@ local function init(modApi)
     include(scriptPath .. "/abilities/peek")
     include(scriptPath .. "/abilities/prime_emp")
     include(scriptPath .. "/abilities/scandevice")
+
+	local fnlib = findModByName("Function Library")
+	if not fnlib then
+		-- Function Library has all relevant fixes. Only keep around for players without that.
+		include(scriptPath .. "/abilities/doorMechanism")
+	end
 end
 
 local function lateInit(modApi)
