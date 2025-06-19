@@ -137,11 +137,11 @@ local function init(modApi)
     include(scriptPath .. "/abilities/prime_emp")
     include(scriptPath .. "/abilities/scandevice")
 
-	local fnlib = findModByName("Function Library")
-	if not fnlib then
-		-- Function Library has all relevant fixes. Only keep around for players without that.
-		include(scriptPath .. "/abilities/doorMechanism")
-	end
+    local fnlib = findModByName("Function Library")
+    if not fnlib then
+        -- Function Library has all relevant fixes. Only keep around for players without that.
+        include(scriptPath .. "/abilities/doorMechanism")
+    end
 end
 
 local function lateInit(modApi)
