@@ -276,6 +276,12 @@ settings (enabled by default).
   * **Fix** Overwrite PRNG algorithm with a version that splits up some operations to preserve
     precision.
   * **Credit**: Cyberboy2000
+* Multiple laser beams
+  * If multiple laser beams are controlled by a single generator (Security Dispatch, huge levels,
+    etc), and the generator is recaptured (Echo, etc), then only every other laser beam actually
+    switches back to corp control. The other half remain under player control.
+  * **Fix** Update ALL laser emitters matching the current generator
+  * **Credit**: Phyrax, Qoalabear
 * Laser beam ally checks
   * Corp-controlled lasers turn off when guards walk through, and likewise for agency-controlled
     lasers and agents. Corp-controlled lasers also turn off when an agent drags a guard through.
