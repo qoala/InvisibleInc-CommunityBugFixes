@@ -3,13 +3,14 @@ local mainframe = include("sim/mainframe")
 local cbf_util = include(SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util")
 
 local oldRevertIce = mainframe.revertIce
-function mainframe.revertIce(sim, unit)
+function mainframe.revertIce(sim, unit, ...)
     oldRevertIce(sim, unit, ...)
 
-    local fixEnabled = cbf_util.simCheckFlag(self:getSim(), "cbf_laserdragsymmetry")
+    local fixEnabled = cbf_util.simCheckFlag(sim, "cbf_laserdragsymmetry")
     if not fixEnabled or not unit:isNPC() then
         return
     end
+    local player = sim:getPC()
     if unit:getTraits().powerGrid and unit:getTraits().laser_gen then
         for i, u in pairs(sim:getAllUnits()) do
             if u ~= unit and u:getTraits().powerGrid then
