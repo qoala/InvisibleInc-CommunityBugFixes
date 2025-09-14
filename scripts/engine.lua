@@ -158,7 +158,11 @@ function simengine:moveUnit(unit, moveTable, ...)
         self:cbfStartPathingQueue()
     end
 
+    self._cbf_movingUnit = unit
+
     local canMoveReason, end_cell = oldMoveUnit(self, unit, moveTable, ...)
+
+    self._cbf_movingUnit = nil
 
     if usePathingQueue then
         self:cbfProcessPathingQueue()
