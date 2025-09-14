@@ -102,6 +102,7 @@ local function init(modApi)
 
     include(scriptPath .. "/simplayer")
     include(scriptPath .. "/pcplayer")
+    include(scriptPath .. "/aiplayer")
 
     include(scriptPath .. "/hud")
     include(scriptPath .. "/hunt")
@@ -138,6 +139,7 @@ local function init(modApi)
     include(scriptPath .. "/abilities/peek")
     include(scriptPath .. "/abilities/prime_emp")
     include(scriptPath .. "/abilities/scandevice")
+    include(scriptPath .. "/abilities/shootOverwatch")
 
     local fnlib = findModByName("Function Library")
     if not fnlib then
