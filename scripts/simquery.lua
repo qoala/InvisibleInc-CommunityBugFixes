@@ -61,3 +61,10 @@ function simquery.canSoftPath(sim, unit, startcell, endcell, ...)
 
     return simquery.canStaticPath(sim, unit, startcell, endcell)
 end
+
+-- Fix for client audio not respecting the unit's dashSoundRange, causing desync between visuals and audio
+-- extremely simple fix thanks to Sim Constructor's agentrig override. Check SC's simquery.lua for reference
+local simquery = include("sim/simquery")
+function simquery.getMoveAudioRange(unit, cell)
+    return simquery.getMoveSoundRange(unit, cell)
+end
