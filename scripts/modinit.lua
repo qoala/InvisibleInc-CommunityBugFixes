@@ -21,7 +21,7 @@ local function earlyInit(modApi)
         -- Escorts Fixed patches upvalues in mission_scoring.
         -- This needs to be done before any normal wrapping of the library.
         "Escorts Fixed", -- Items Evacutation overwrites the "escape" ability.
-        "Items Evacuation", -- AGP overwrites Senses:addInterest, line_of_sight:calculateUnitLOS.
+        "Items Evacuation", -- AGP overwrites Senses:addInterest, line_of_sight:calculateUnitLOS, aiplayer:tickBrain
         "Advanced Guard Protocol",
         -- Talkative Agents adds event handlers to mission_panel:processEvent in lateInit.
         "Talkative Agents",
