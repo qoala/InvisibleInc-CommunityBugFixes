@@ -166,6 +166,17 @@ function simunit:returnItemsToStash(sim)
     end
 end
 
+-- check if player already got a rewind prompt this action
+local oldonDamage = simunit.onDamage
+function simunit:onDamage(...)
+	local couldHaveBeenCritical = self:getTraits().canBeCritical
+	oldonDamage(self, ...)
+	local sim = self:getSim()
+	if couldHaveBeenCritical and sim:getPC():isNeutralized(sim) then
+		sim:getTags().cbf_got_rewind_prompt = sim:getActionCount()
+	end
+end
+
 -- ===
 
 local oldCreateUnit = simunit.createUnit
