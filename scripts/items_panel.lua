@@ -10,7 +10,7 @@ local pickup_panel = items_panel.pickup
 
 local oldLootRefreshItem = loot_panel.refreshItem
 
-function getCarryableItemByIndex(unit, targetUnit, i)
+local function getCarryableItemByIndex(unit, targetUnit, i)
     for _, childUnit in ipairs(targetUnit:getChildren()) do
         if (not childUnit:getTraits().augment or not childUnit:getTraits().installed) and
                 inventory.canCarry(unit, childUnit) then
