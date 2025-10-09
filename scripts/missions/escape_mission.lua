@@ -2,7 +2,7 @@
 local cbf_util = include(SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util")
 local constants = include(SCRIPT_PATHS.qoala_commbugfix .. "/constants")
 
-function initFoundPrisoner(sim)
+local function initFoundPrisoner(sim)
     if sim:getParams().foundPrisoner == nil then
         local spawnAgentOption = cbf_util.simCheckFlag(sim, "cbf_detention_spawnagent")
         if spawnAgentOption == constants.MISSIONDETCENTER_SPAWNAGENT.FIRSTAGENT or spawnAgentOption ==
@@ -15,7 +15,7 @@ function initFoundPrisoner(sim)
     end
 end
 
-function init(scriptMgr, sim)
+local function init(scriptMgr, sim)
     initFoundPrisoner(sim)
 end
 
