@@ -56,6 +56,7 @@ function Senses:processSoundTrigger(sim, evData)
 			sim:canUnitSee(self.unit, evData.x, evData.y)
 			and (self.unit:getTraits().seesHidden or not simquery.checkCover(sim, self.unit, evData.x, evData.y))
 		then
+			return
 		end
 	end
 
@@ -65,6 +66,7 @@ function Senses:processSoundTrigger(sim, evData)
 
 	self:addInterest(evData.x, evData.y, simdefs.SENSE_HEARING, simdefs.REASON_NOISE, evData.sourceUnit)
 end
+
 
 
 
