@@ -46,6 +46,7 @@ function Senses:processSoundTrigger(sim, evData)
 		return
 	end
 
+	-- moved canSee sourceUnit check inside ignoreSight condition
 	if evData.ignoreSight == nil then
 		if evData.sourceUnit and sim:canUnitSeeUnit(self.unit, evData.sourceUnit) then
 			return
@@ -64,5 +65,6 @@ function Senses:processSoundTrigger(sim, evData)
 
 	self:addInterest(evData.x, evData.y, simdefs.SENSE_HEARING, simdefs.REASON_NOISE, evData.sourceUnit)
 end
+
 
 
