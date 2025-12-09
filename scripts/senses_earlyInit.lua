@@ -21,7 +21,8 @@ function Senses:processInterestShared(sim, evData)
 			simquery.couldUnitSee(sim, self.unit, evData.target)
 			-- new: instead of only raycast, also check if interest cell is in vision range.
 			-- (simquery.couldUnitSeeCell does both)
-			and simquery.couldUnitSeeCell(sim, self.unit, sim:getCell(evData.interest.x, evData.interest.y))
+			and evData.target:getLocation()
+			and simquery.couldUnitSeeCell(sim, self.unit, sim:getCell(evData.target:getLocation()))
 		then
 			self:addTarget(evData.target)
 			return
@@ -67,3 +68,4 @@ function Senses:processSoundTrigger(sim, evData)
 
 	self:addInterest(evData.x, evData.y, simdefs.SENSE_HEARING, simdefs.REASON_NOISE, evData.sourceUnit)
 end
+
