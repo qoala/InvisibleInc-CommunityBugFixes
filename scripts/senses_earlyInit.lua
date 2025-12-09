@@ -46,19 +46,15 @@ function Senses:processSoundTrigger(sim, evData)
 		return
 	end
 
-	if
-		evData.sourceUnit
-		and sim:canUnitSeeUnit(self.unit, evData.sourceUnit)
-		-- check if we can actually react to the target (crybaby passes the checks before this)
-		-- optimally would just check for evData.ignoreSight but nobody uses this
-		and simquery.isEnemyTarget(self.unit:getPlayerOwner(), evData.sourceUnit)
-	then
-		return
-	end
-
-	if sim:canUnitSee(self.unit, evData.x, evData.y) and evData.ignoreSight == nil then
-		if self.unit:getTraits().seesHidden or not simquery.checkCover(sim, self.unit, evData.x, evData.y) then
+	if evData.ignoreSight == nil then
+		if evData.sourceUnit and sim:canUnitSeeUnit(self.unit, evData.sourceUnit) then
 			return
+		end
+
+		if
+			sim:canUnitSee(self.unit, evData.x, evData.y)
+			and (self.unit:getTraits().seesHidden or not simquery.checkCover(sim, self.unit, evData.x, evData.y))
+		then
 		end
 	end
 
@@ -68,4 +64,5 @@ function Senses:processSoundTrigger(sim, evData)
 
 	self:addInterest(evData.x, evData.y, simdefs.SENSE_HEARING, simdefs.REASON_NOISE, evData.sourceUnit)
 end
+
 
