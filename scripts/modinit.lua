@@ -26,6 +26,8 @@ local function earlyInit(modApi)
         -- Talkative Agents adds event handlers to mission_panel:processEvent in lateInit.
         "Talkative Agents",
     }
+
+    include(modApi:getScriptPath() .. "/senses_earlyInit")
 end
 
 local function init(modApi)
