@@ -171,11 +171,3 @@ end
 -- END Pathing: moving interest fix
 -- -----
 
-local oldemitSound = simengine.emitSound
-function simengine:emitSound(sound, x0, y0, unit, ...)
-	if unit and unit:getTraits().cryBaby then
-		sound.ignoreSight = true
-	end
-	oldemitSound(self, sound, x0, y0, unit, ...)
-end
-
