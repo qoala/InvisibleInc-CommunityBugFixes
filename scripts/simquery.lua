@@ -67,3 +67,25 @@ end
 function simquery.getMoveAudioRange(unit, cell)
     return simquery.getMoveSoundRange(unit, cell)
 end
+
+-- this mistakenly returned true on a target if it leaves overwatch but the guard had multiple targets before
+-- (there is no cleanup in the combat situation until the guard leaves combat)
+function simquery.isUnitUnderOverwatch(target)
+	local aiPlayer = target:getSim() and target:getSim():getNPC()
+	local situation = aiPlayer and aiPlayer:findExistingCombatSituation(target)
+	if situation and situation:isValid() then
+		for k, unit in pairs(situation.units) do
+			if
+				not unit:isDown()
+				and not unit:getTraits().pacifist
+                -- check if the unit actually still has this target
+				and unit:getBrain()
+				and unit:getBrain():getSenses()
+				and unit:getBrain():getSenses():hasTarget(target)
+			then
+				return true
+			end
+		end
+	end
+	return false
+end
