@@ -170,8 +170,8 @@ end
 local oldonDamage = simunit.onDamage
 function simunit:onDamage(...)
 	local couldHaveBeenCritical = self:getTraits().canBeCritical
-	oldonDamage(self, ...)
 	local sim = self:getSim()
+	oldonDamage(self, ...)
 	if couldHaveBeenCritical and sim:getPC():isNeutralized(sim) then
 		sim:getTags().cbf_got_rewind_prompt = sim:getActionCount()
 	end
