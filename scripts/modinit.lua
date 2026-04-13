@@ -143,6 +143,7 @@ local function init(modApi)
     include(scriptPath .. "/abilities/peek")
     include(scriptPath .. "/abilities/prime_emp")
     include(scriptPath .. "/abilities/scandevice")
+    include(scriptPath .. "/abilities/observePath")
 
     local fnlib = findModByName("Function Library")
     if not fnlib then
