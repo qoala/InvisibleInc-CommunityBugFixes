@@ -2,6 +2,8 @@
 local simquery = include("sim/simquery")
 local mathutil = include("modules/mathutil")
 local IdleSituation = include("sim/btree/situations/idle")
+local astar = include("modules/astar")
+local astar_handlers = include("sim/astar_handlers")
 
 local cbf_util = include(SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util")
 local constants = include(SCRIPT_PATHS.qoala_commbugfix .. "/constants")
@@ -82,4 +84,26 @@ function IdleSituation:generatePatrolPath(unit, x0, y0, noPatrolCheck)
             fixBrokenPatrolPath(self, unit, newPatrolPath[1].x, newPatrolPath[1].y)
         end
     end
+
+    -- fix all guards facing the same direction on the first turn
+    local patrol = unit:getTraits().patrolPath
+	if not sim or sim:getActionCount() > 0 or not patrol or #patrol < 2 or patrol[1].facing then
+		return
+	end
+	local currentCell = sim:getCell(patrol[1].x, patrol[1].y)
+	if currentCell ~= sim:getCell(unit:getLocation()) then
+		return
+	end
+
+	local patrolCell = sim:getCell(patrol[#patrol].x, patrol[#patrol].y)
+	local path = astar.AStar:new(astar_handlers.aihandler:new(unit)):findPath(patrolCell, currentCell)
+	local nodes = path and path:getNodes()
+	if not nodes or #nodes < 2 or currentCell ~= nodes[#nodes].location then
+		return
+	end
+
+    local previousCell = nodes[#nodes - 1].location
+	unit:updateFacing(
+		simquery.getDirectionFromDelta(currentCell.x - previousCell.x, currentCell.y - previousCell.y)
+	)
 end
