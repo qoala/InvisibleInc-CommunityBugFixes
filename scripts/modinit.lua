@@ -21,7 +21,7 @@ local function earlyInit(modApi)
         -- Escorts Fixed patches upvalues in mission_scoring.
         -- This needs to be done before any normal wrapping of the library.
         "Escorts Fixed", -- Items Evacutation overwrites the "escape" ability.
-        "Items Evacuation", -- AGP overwrites Senses:addInterest, line_of_sight:calculateUnitLOS.
+        "Items Evacuation", -- AGP overwrites Senses:addInterest, line_of_sight:calculateUnitLOS, aiplayer:tickBrain
         "Advanced Guard Protocol",
         -- Talkative Agents adds event handlers to mission_panel:processEvent in lateInit.
         "Talkative Agents",
@@ -104,6 +104,7 @@ local function init(modApi)
 
     include(scriptPath .. "/simplayer")
     include(scriptPath .. "/pcplayer")
+    include(scriptPath .. "/aiplayer")
 
     include(scriptPath .. "/hud")
     include(scriptPath .. "/hunt")
@@ -138,12 +139,13 @@ local function init(modApi)
     include(scriptPath .. "/abilities/disarmtrap")
     include(scriptPath .. "/abilities/escape")
     include(scriptPath .. "/abilities/jackin_root_console")
+    include(scriptPath .. "/abilities/observePath")
     include(scriptPath .. "/abilities/open_detention_cells")
     include(scriptPath .. "/abilities/open_security_boxes")
     include(scriptPath .. "/abilities/peek")
     include(scriptPath .. "/abilities/prime_emp")
     include(scriptPath .. "/abilities/scandevice")
-    include(scriptPath .. "/abilities/observePath")
+    include(scriptPath .. "/abilities/shootOverwatch")
 
     local fnlib = findModByName("Function Library")
     if not fnlib then
