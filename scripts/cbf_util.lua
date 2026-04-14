@@ -1,4 +1,4 @@
-_M = {}
+local _M = {}
 
 -- Check if a flag is enabled on the sim
 function _M.simCheckFlag(sim, flag, default)

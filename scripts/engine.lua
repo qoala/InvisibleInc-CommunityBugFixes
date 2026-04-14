@@ -174,3 +174,13 @@ end
 -- -----
 -- END Pathing: moving interest fix
 -- -----
+
+-- this prevents a hard crash from client side later with a traceback that's impossible to know where the event came from
+local dispatchEvent = simengine.dispatchEvent
+simengine.dispatchEvent = function(self, evType, evData, ...)
+	if evType == simdefs.EV_UNIT_FLOAT_TXT then
+		assert(evData.txt)
+	end
+	return dispatchEvent(self, evType, evData, ...)
+end
+

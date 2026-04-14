@@ -5,7 +5,7 @@ local abilityutil = include("sim/abilities/abilityutil")
 
 local cbf_util = include(SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util")
 
-function hasSecurityChip(sim, abilityOwner, unit)
+local function hasSecurityChip(sim, abilityOwner, unit)
     if cbf_util.simCheckFlag(sim, "cbf_ending_finaldoor") then
         for i, item in ipairs(unit:getChildren()) do
             if item:getTraits().finalAugmentKey then

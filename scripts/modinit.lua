@@ -26,6 +26,8 @@ local function earlyInit(modApi)
         -- Talkative Agents adds event handlers to mission_panel:processEvent in lateInit.
         "Talkative Agents",
     }
+
+    include(modApi:getScriptPath() .. "/senses_earlyInit")
 end
 
 local function init(modApi)
@@ -119,6 +121,7 @@ local function init(modApi)
     include(scriptPath .. "/simquery")
     include(scriptPath .. "/simunit")
     include(scriptPath .. "/senses")
+    include(scriptPath .. "/actions")
     include(scriptPath .. "/smokerig")
     include(scriptPath .. "/state-map-screen")
     include(scriptPath .. "/missions/mission_detention_centre")
@@ -126,6 +129,8 @@ local function init(modApi)
     include(scriptPath .. "/units/cbf_smoke_edge")
     include(scriptPath .. "/units/simdisguiseitem")
     include(scriptPath .. "/units/smoke_cloud")
+    include(scriptPath .. "/missions/mission_util")
+	include(scriptPath .. "/procgen")
 
     -- Ability patches. (Abilities are NOT reloaded on load)
     include(scriptPath .. "/abilities/activate_final_console")
@@ -134,6 +139,7 @@ local function init(modApi)
     include(scriptPath .. "/abilities/disarmtrap")
     include(scriptPath .. "/abilities/escape")
     include(scriptPath .. "/abilities/jackin_root_console")
+    include(scriptPath .. "/abilities/observePath")
     include(scriptPath .. "/abilities/open_detention_cells")
     include(scriptPath .. "/abilities/open_security_boxes")
     include(scriptPath .. "/abilities/peek")
