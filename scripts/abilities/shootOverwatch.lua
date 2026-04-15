@@ -1,6 +1,5 @@
 -- do not execute shootOverwatch if guard started aiming during the very same PC action.
 -- trait set in aiplayer.tickBrain
-
 local abilitydefs = include("sim/abilitydefs")
 local shootOverwatch = abilitydefs.lookupAbility("shootOverwatch")
 

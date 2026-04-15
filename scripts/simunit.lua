@@ -169,12 +169,12 @@ end
 -- check if player already got a rewind prompt this action
 local oldonDamage = simunit.onDamage
 function simunit:onDamage(...)
-	local couldHaveBeenCritical = self:getTraits().canBeCritical
-	local sim = self:getSim()
-	oldonDamage(self, ...)
-	if couldHaveBeenCritical and sim:getPC():isNeutralized(sim) then
-		sim:getTags().cbf_got_rewind_prompt = sim:getActionCount()
-	end
+    local couldHaveBeenCritical = self:getTraits().canBeCritical
+    local sim = self:getSim()
+    oldonDamage(self, ...)
+    if couldHaveBeenCritical and sim:getPC():isNeutralized(sim) then
+        sim:getTags().cbf_got_rewind_prompt = sim:getActionCount()
+    end
 end
 
 -- ===

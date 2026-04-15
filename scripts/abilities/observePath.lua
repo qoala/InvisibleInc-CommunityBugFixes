@@ -8,10 +8,11 @@ local origAquireTargets = observePath.acquireTargets
 function observePath:acquireTargets(targets, game, sim, unit, userUnit, ...)
     local unitTarget = origAquireTargets(self, targets, game, sim, unit, userUnit, ...)
     for _, targetUnit in pairs(sim:getAllUnits()) do
-        if self:isTarget(unitTarget._abilityUser, targetUnit) and not array.find(unitTarget._units, targetUnit) then
+        if self:isTarget(unitTarget._abilityUser, targetUnit) and
+                not array.find(unitTarget._units, targetUnit) then
             for _, seerUnit in pairs(sim:getPC():getUnits()) do
-                if not (seerUnit:getTraits().isAgent or seerUnit:getTraits().peekID) and seerUnit:getTraits().hasSight and
-                    sim:canUnitSeeUnit(seerUnit, targetUnit) then
+                if not (seerUnit:getTraits().isAgent or seerUnit:getTraits().peekID) and
+                        seerUnit:getTraits().hasSight and sim:canUnitSeeUnit(seerUnit, targetUnit) then
                     table.insert(unitTarget._units, targetUnit)
                     break
                 end

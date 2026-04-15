@@ -130,7 +130,7 @@ local function init(modApi)
     include(scriptPath .. "/units/simdisguiseitem")
     include(scriptPath .. "/units/smoke_cloud")
     include(scriptPath .. "/missions/mission_util")
-	include(scriptPath .. "/procgen")
+    include(scriptPath .. "/procgen")
 
     -- Ability patches. (Abilities are NOT reloaded on load)
     include(scriptPath .. "/abilities/activate_final_console")

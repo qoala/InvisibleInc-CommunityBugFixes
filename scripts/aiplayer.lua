@@ -21,7 +21,7 @@ local origProcessReactions = aiplayer.processReactions
 function aiplayer:processReactions(sourceUnit)
     local movingUnit = self._sim._cbf_movingUnit
     if movingUnit and sourceUnit and movingUnit ~= sourceUnit and movingUnit:canAct() and
-        not movingUnit:getTraits().interrupted then
+            not movingUnit:getTraits().interrupted then
         return
     end
     origProcessReactions(self, sourceUnit)
