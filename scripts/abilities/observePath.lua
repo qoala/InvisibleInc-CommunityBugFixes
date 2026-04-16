@@ -4,9 +4,14 @@ local array = include("modules/array")
 local abilitydefs = include("sim/abilitydefs")
 local observePath = abilitydefs.lookupAbility("observePath")
 
+local cbf_util = include(SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util")
+
 local origAquireTargets = observePath.acquireTargets
 function observePath:acquireTargets(targets, game, sim, unit, userUnit, ...)
     local unitTarget = origAquireTargets(self, targets, game, sim, unit, userUnit, ...)
+    if not cbf_util.simCheckFlag(sim, "cbf_rebalance_observePathFromAll") then
+        return unitTarget
+    end
     for _, targetUnit in pairs(sim:getAllUnits()) do
         if self:isTarget(unitTarget._abilityUser, targetUnit) and
                 not array.find(unitTarget._units, targetUnit) then

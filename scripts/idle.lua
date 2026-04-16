@@ -86,6 +86,9 @@ function IdleSituation:generatePatrolPath(unit, x0, y0, noPatrolCheck)
     end
 
     -- fix all guards facing the same direction on the first turn
+    if not cbf_util.simCheckFlag(sim, "cbf_idle_fixinitfacing") then
+        return
+    end
     local patrol = unit:getTraits().patrolPath
     if not sim or sim:getActionCount() > 0 or not patrol or #patrol < 2 or patrol[1].facing then
         return

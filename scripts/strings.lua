@@ -15,6 +15,13 @@ local MOD_STRINGS = {
         MISSIONDETCENTER_SPAWNAGENT_FIRSTAGENT = "GUARANTEED FIRST AGENT",
         MISSIONDETCENTER_SPAWNAGENT_FIFTYFIFTY = "50-50",
 
+        INIT_FACING = "FIX GUARD INITIAL FACING",
+        INIT_FACING_TIP = "Without this fix, patrolling guards start turn 1 facing down-left. With this fix, their initial facing is as-if they followed their patrol.",
+        OBSERVE_FROM_ALL = "OBSERVE FROM ALL",
+        OBSERVE_FROM_ALL_TIP = "Allows agents to observe guard paths using vision from K&O Turrets, Camera Canisters, etc. Normally only allowed from cameras and drones.",
+        OVERWATCH_DUELING = "OVERWATCH TRIGGERS OVERWATCH",
+        OVERWATCH_DUELING_TIP = "In vanilla, an agent ambushing a guard will get the agent shot if they're under overwatch from another guard, but an agent shooting via overwatch does not. This makes overwatch able to trigger overwatch (in both directions).",
+
         HOLOWALLSOUNDS = "HOLOPROJECTOR SOUND THROUGH WALLS",
         HOLOWALLSOUNDS_TIP = "<c:FF8411>HOLOPROJECTOR SOUND THROUGH WALLS</c>\nLike other sounds, the 1-tile-radius hum produced by an active holoprojector travels through walls. Unlike most other sounds, it immediately alerts guards, presumably because close inspection reveals the hologram's nature. This change affects how guards react to holoprojector sounds when walls entirely block them from the source.\nALERT (VANILLA): Guards are alerted when they hear a holoprojector through walls.\nNOTICED: Guards investigate when they hear a holoprojector through walls.\nIGNORED: Guards ignore holoprojector sounds through walls.",
         HOLOWALLSOUNDS_VANILLA = "ALERT (VANILLA)",

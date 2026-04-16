@@ -74,6 +74,16 @@ local function init(modApi)
                 },
             })
     modApi:addGenerationOption(
+            "initfacing", STRINGS.COMMBUGFIX.OPTIONS.INIT_FACING,
+            STRINGS.COMMBUGFIX.OPTIONS.INIT_FACING_TIP, {
+                noUpdate = true,
+            })
+    modApi:addGenerationOption(
+            "observefromall", STRINGS.COMMBUGFIX.OPTIONS.OBSERVE_FROM_ALL,
+            STRINGS.COMMBUGFIX.OPTIONS.OBSERVE_FROM_ALL_TIP, {
+                noUpdate = true,
+            })
+    modApi:addGenerationOption(
             "holowallsounds", STRINGS.COMMBUGFIX.OPTIONS.HOLOWALLSOUNDS,
             STRINGS.COMMBUGFIX.OPTIONS.HOLOWALLSOUNDS_TIP, {
                 noUpdate = true,
@@ -88,6 +98,12 @@ local function init(modApi)
                     STRINGS.COMMBUGFIX.OPTIONS.HOLOWALLSOUNDS_NOTICE,
                     STRINGS.COMMBUGFIX.OPTIONS.HOLOWALLSOUNDS_IGNORE,
                 },
+            })
+    modApi:addGenerationOption(
+            "overwatchdueling", STRINGS.COMMBUGFIX.OPTIONS.OVERWATCH_DUELING,
+            STRINGS.COMMBUGFIX.OPTIONS.OVERWATCH_DUELING_TIP, {
+                noUpdate = true,
+                enabled = false,
             })
 
     local dataPath = modApi:getDataPath()
@@ -312,8 +328,17 @@ local function load(modApi, options, params, mod_options)
     if options["missiondetcenter_spawnagent"] and params then
         params.cbf_params.cbf_detention_spawnagent = options["missiondetcenter_spawnagent"].value
     end
+    if options["initfacing"] and params then
+        params.cbf_params.cbf_idle_fixinitfacing = options["initfacing"].enabled
+    end
+    if options["observefromall"] and params then
+        params.cbf_params.cbf_rebalance_observePathFromAll = options["observefromall"].enabled
+    end
     if options["holowallsounds"] and params then
         params.cbf_params.cbf_holowallsounds = options["holowallsounds"].value
+    end
+    if options["overwatchdueling"] and params then
+        params.cbf_params.cbf_rebalance_overwatchDueling = options["overwatchdueling"].enabled
     end
 
     -- -----
