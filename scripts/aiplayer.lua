@@ -1,4 +1,6 @@
 local aiplayer = include("sim/aiplayer")
+local simdefs = include("sim/simdefs")
+local array = include("modules/array")
 
 local init = aiplayer.init
 aiplayer.init = function(self, sim, ...)
