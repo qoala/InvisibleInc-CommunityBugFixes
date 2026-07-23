@@ -15,6 +15,17 @@ aiplayer.init = function(self, sim, ...)
 	end
 end
 
+-- invalidate all paths so they get recalculated without any leftover enemy impass
+local onTrigger = aiplayer.onTrigger
+aiplayer.onTrigger = function(self, sim, evType, evData, ...)
+	if evType == simdefs.TRG_START_TURN and evData ~= self then
+		for _, unit in ipairs(self:getUnits()) do
+			self.pather:invalidatePath(unit)
+		end
+	end
+	return onTrigger(self, sim, evType, evData, ...)
+end
+
 -- part of overwatch fixes
 -- sim_cbf_movingUnit is set in simengine.moveUnit
 -- unit:getTraits()._cbf_aim_id is checked in shootOverwatch.executeAbility
