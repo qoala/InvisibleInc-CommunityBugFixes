@@ -34,7 +34,7 @@ local function earlyInit(modApi)
     SCRIPT_PATHS.qoala_commbugfix = scriptPath
 
     include(scriptPath .. "/actions_earlyInit")
-    include(modApi:getScriptPath() .. "/senses_earlyInit")
+    include(scriptPath .. "/senses_earlyInit")
 end
 
 local function init(modApi)
