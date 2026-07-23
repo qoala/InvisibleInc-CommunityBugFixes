@@ -11,55 +11,51 @@ function simquery.cbfAgentHasStickyFacing(unit)
                    unit:getTraits().mod_data_hacking)
 end
 
--- Disguise Fix/Function Library:
--- Allow pathing through enemies unless we START next to them and are looking towards their tile
--- This way the original intention is preserved (making guards go around the obstacle between them and the agent if the agent is blocking them from making a diagonal move)
--- While also fixing them refusing to path through non-hostile agents as well as "magically" knowing where the agents are
--- Unfortunately this is complicated by some guards not stopping when they see the agent (like System Admins) so we end up having to store impass we've previously encountered for later
--- Also don't block non-dynamicImpass units except from laser grids.
 local oldCanSoftPath = simquery.canSoftPath
 function simquery.canSoftPath(sim, unit, startcell, endcell, ...)
-    if not cbf_util.simCheckFlag(sim, "cbf_disguisefix_pathing") then
-        return oldCanSoftPath(sim, unit, startcell, endcell, ...)
-    end
-    -- Transistor: hijacked guards still try to call this, but are not NPC-owned.
-    if unit:getTraits().psiTakenGuard then
-        return
-    end
+	local impassMemory = unit:getBrain()
+		and unit:getBrain():getSenses()
+		and unit:getBrain():getSenses().CBF_impassMemory
+	if not cbf_util.simCheckFlag(sim, "cbf_disguisefix_pathing") or not impassMemory then
+		return oldCanSoftPath(sim, unit, startcell, endcell, ...)
+	end
+	-- Transistor: hijacked guards still try to call this, but are not NPC-owned.
+	if unit:getTraits().psiTakenGuard then
+		return
+	end
 
-    assert(not endcell.ghostID)
-    assert(not startcell.ghostID)
-    assert(unit:isNPC())
+	assert(not endcell.ghostID)
+	assert(not startcell.ghostID)
+	assert(unit:isNPC())
 
-    if not unit:getTraits().rememberedImpass then
-        unit:getTraits().rememberedImpass = {}
-    end
+	for i, cellUnit in ipairs(endcell.units) do
+		if
+			unit
+			and (unit:getTraits().dynamicImpass or cellUnit:getTraits().emitterID)
+			and cellUnit:getTraits().dynamicImpass
+		then
+			if cellUnit:getTraits().emitterID and cellUnit:canControl(unit) then
+				-- Owned emitters will turn themselves off, so they are not considered impassable.
+			elseif cellUnit:getPlayerOwner() == unit:getPlayerOwner() then
+				-- Allow pathing through same owners.
+			elseif not cellUnit:getTraits().isAgent then
+				return false, simdefs.CANMOVE_DYNAMIC_IMPASS
+			elseif cellUnit:isValid() then
+				local impass = impassMemory.impass[cellUnit:getID()]
+				if impass and impass.x == endcell.x and impass.y == endcell.y then
+					if impass.hard then
+						-- we directly saw this tile or unit
+						return false, simdefs.CANMOVE_DYNAMIC_IMPASS
+					elseif simquery.checkCellCover(sim, startcell.x, startcell.y, endcell.x, endcell.y) then
+						-- we did not directly see this tile or unit, but we got blocked here and still can't see it directly
+						return false, simdefs.CANMOVE_DYNAMIC_IMPASS
+					end
+				end
+			end
+		end
+	end
 
-    for i, cellUnit in ipairs(endcell.units) do
-        if unit and (unit:getTraits().dynamicImpass or cellUnit:getTraits().emitterID) and
-                cellUnit:getTraits().dynamicImpass then
-            local x0, y0 = unit:getLocation()
-            if cellUnit:getTraits().emitterID and cellUnit:canControl(unit) then
-                -- Owned emitters will turn themselves off, so they are not considered impassable.
-            elseif cellUnit:getPlayerOwner() == unit:getPlayerOwner() then
-                -- Allow pathing through same owners.
-            elseif not cellUnit:getTraits().isAgent then
-                return false, simdefs.CANMOVE_DYNAMIC_IMPASS
-            elseif (startcell.x == x0 and startcell.y == y0 and
-                    sim:canUnitSee(unit, endcell.x, endcell.y)) or
-                    (math.abs(x0 - endcell.x) + math.abs(y0 - endcell.y) == 1 and
-                            unit:getTraits().rememberedImpass[endcell.id]) then
-                unit:getTraits().rememberedImpass[endcell.id] = true
-                return false, simdefs.CANMOVE_DYNAMIC_IMPASS
-            else
-
-            end
-        end
-    end
-
-    unit:getTraits().rememberedImpass[endcell.id] = nil
-
-    return simquery.canStaticPath(sim, unit, startcell, endcell)
+	return simquery.canStaticPath(sim, unit, startcell, endcell)
 end
 
 -- this mistakenly returned true on a target if it leaves overwatch but the guard had multiple targets before
