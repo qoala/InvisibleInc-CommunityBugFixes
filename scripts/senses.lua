@@ -32,6 +32,7 @@ function impassMemory:destroy()
 end
 
 function impassMemory:reset()
+	local hadImpass = next(self.impass) ~= nil
 	self.impass = {}
 	if self.sim:getCurrentPlayer() == self.unit:getPlayerOwner() then
 		if not self.senses:checkDisabled() and self.unit:getSeenUnits() then
@@ -39,7 +40,7 @@ function impassMemory:reset()
 				self:updateUnit(unit, true)
 			end
 		end
-	elseif self.unit:getPather() then
+	elseif hadImpass and self.unit:getPather() then
 		self.unit:getPather():invalidatePath(self.unit)
 		self.sim:getNPC():processReactions(self.unit)
 	end
