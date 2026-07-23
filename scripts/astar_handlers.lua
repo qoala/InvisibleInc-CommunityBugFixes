@@ -14,5 +14,17 @@ astar_handlers.coop_handler.new = function(self, unit, ...)
 
     coop_handler.lostTargetInterest = nil
 
+	-- ughh, AGP's astar override makes guards not even try to move onto an overwatched agent's tile diagonally...
+	local _handleNode = coop_handler._handleNode
+	coop_handler._handleNode = function(self, ...)
+		local isUnitUnderOverwatch = simquery.isUnitUnderOverwatch
+		simquery.isUnitUnderOverwatch = function()
+			return false
+		end
+		local node = _handleNode(self, ...)
+		simquery.isUnitUnderOverwatch = isUnitUnderOverwatch
+		return node
+	end
+
     return coop_handler
 end
