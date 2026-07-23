@@ -1,6 +1,7 @@
 -- patch to sim/simquery
 local simdefs = include("sim/simdefs")
 local simquery = include('sim/simquery')
+local array = include("modules/array")
 
 local cbf_util = include(SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util")
 
@@ -11,12 +12,10 @@ function simquery.cbfAgentHasStickyFacing(unit)
                    unit:getTraits().mod_data_hacking)
 end
 
+-- idea: only check for enemy impass when the unit is currently acting and recalculating because of something that happened
 local oldCanSoftPath = simquery.canSoftPath
 function simquery.canSoftPath(sim, unit, startcell, endcell, ...)
-	local impassMemory = unit:getBrain()
-		and unit:getBrain():getSenses()
-		and unit:getBrain():getSenses().CBF_impassMemory
-	if not cbf_util.simCheckFlag(sim, "cbf_disguisefix_pathing") or not impassMemory then
+	if not cbf_util.simCheckFlag(sim, "cbf_disguisefix_pathing") then
 		return oldCanSoftPath(sim, unit, startcell, endcell, ...)
 	end
 	-- Transistor: hijacked guards still try to call this, but are not NPC-owned.
@@ -40,17 +39,34 @@ function simquery.canSoftPath(sim, unit, startcell, endcell, ...)
 				-- Allow pathing through same owners.
 			elseif not cellUnit:getTraits().isAgent then
 				return false, simdefs.CANMOVE_DYNAMIC_IMPASS
-			elseif cellUnit:isValid() then
-				local impass = impassMemory.impass[cellUnit:getID()]
-				if impass and impass.x == endcell.x and impass.y == endcell.y then
-					if impass.hard then
-						-- we directly saw this tile or unit
-						return false, simdefs.CANMOVE_DYNAMIC_IMPASS
-					elseif simquery.checkCellCover(sim, startcell.x, startcell.y, endcell.x, endcell.y) then
-						-- we did not directly see this tile or unit, but we got blocked here and still can't see it directly
-						return false, simdefs.CANMOVE_DYNAMIC_IMPASS
-					end
-				end
+			elseif
+				-- vip units are allowed to update their paths on seen units during pc turn because their paths
+				-- get invalidated from Senses:processWarpTrigger
+				(unit:canReact() or unit:getTraits().vip)
+				and unit:getSeenUnits()
+				and array.find(unit:getSeenUnits(), cellUnit)
+			then
+				-- we can see this dynImpass unit
+				return false, simdefs.CANMOVE_DYNAMIC_IMPASS
+			elseif
+				unit:canReact()
+				and simquery.couldUnitSee(sim, unit, cellUnit, true)
+				and (
+					simquery.checkCellCover(sim, startcell.x, startcell.y, endcell.x, endcell.y)
+						and not unit:getTraits().seesHidden
+					or not sim:getLOS():raycastToCell(
+						startcell.x,
+						startcell.y,
+						endcell.x,
+						endcell.y,
+						0,
+						math.pi,
+						unit:getTraits().LOSrange
+					)
+				)
+			then
+				-- we could see this unit, but not from this position
+				return false, simdefs.CANMOVE_DYNAMIC_IMPASS
 			end
 		end
 	end
