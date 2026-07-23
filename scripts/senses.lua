@@ -3,6 +3,7 @@ local Senses = include("sim/btree/senses")
 local simdefs = include("sim/simdefs")
 local simquery = include("sim/simquery")
 local cbf_util = include(SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util")
+local array = include("modules/array")
 
 local impassMemory = class()
 
@@ -93,7 +94,7 @@ function impassMemory:onTrigger(sim, evType, evData)
 			self.impass[evData.unit:getID()] = nil
 		end
 	elseif evType == simdefs.TRG_UNIT_WARP or evType == simdefs.TRG_UNIT_KO then
-		if sim:canUnitSeeUnit(self.unit, evData.unit) then
+		if self.unit:getSeenUnits() and array.find(self.unit:getSeenUnits(), evData.unit) then
 			self:updateUnit(evData.unit, true)
 		end
 	end
