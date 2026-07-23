@@ -27,15 +27,19 @@ local function earlyInit(modApi)
         "Talkative Agents",
     }
 
+    local scriptPath = modApi:getScriptPath()
+    
+    -- Store script path for cross-file includes
+    rawset(_G, "SCRIPT_PATHS", rawget(_G, "SCRIPT_PATHS") or {})
+    SCRIPT_PATHS.qoala_commbugfix = scriptPath
+
+    include(scriptPath .. "/actions_earlyInit")
     include(modApi:getScriptPath() .. "/senses_earlyInit")
 end
 
 local function init(modApi)
     local scriptPath = modApi:getScriptPath()
     local constants = include(scriptPath .. "/constants")
-    -- Store script path for cross-file includes
-    rawset(_G, "SCRIPT_PATHS", rawget(_G, "SCRIPT_PATHS") or {})
-    SCRIPT_PATHS.qoala_commbugfix = scriptPath
 
     -- General Fixes
     modApi:addGenerationOption(
@@ -136,6 +140,7 @@ local function init(modApi)
     include(scriptPath .. "/simactions")
     include(scriptPath .. "/simquery")
     include(scriptPath .. "/simunit")
+    include(scriptPath .. "/astar_handlers")
     include(scriptPath .. "/senses")
     include(scriptPath .. "/actions")
     include(scriptPath .. "/smokerig")
