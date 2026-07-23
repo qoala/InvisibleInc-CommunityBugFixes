@@ -1,5 +1,18 @@
 local aiplayer = include("sim/aiplayer")
 
+local init = aiplayer.init
+aiplayer.init = function(self, sim, ...)
+	init(self, sim, ...)
+	-- fix aiplayer cleanup coming too late, causing guards to
+	-- shoot lost targets on start-turn-triggers that tick brains
+	local trigger = array.findIf(sim._triggers[simdefs.TRG_START_TURN], function(trg)
+		return trg._obj == self
+	end)
+	if trigger and not trigger.priority then
+		trigger.priority = 9999
+	end
+end
+
 -- part of overwatch fixes
 -- sim_cbf_movingUnit is set in simengine.moveUnit
 -- unit:getTraits()._cbf_aim_id is checked in shootOverwatch.executeAbility
