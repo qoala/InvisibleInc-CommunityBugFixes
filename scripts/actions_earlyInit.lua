@@ -18,10 +18,11 @@ actions.MoveTo.onPathBlocked = function(self, blocker, ...)
 			-- we handle these cases in simquery.canSoftPath
 			return simdefs.BSTATE_RUNNING
 		else
-			-- be confused
+			-- be confused (only return RUNNING if the interest has been added to not loop infinitely)
 			local x, y = self.unit:getLocation()
-			self.unit:getBrain():getSenses():addInterest(x, y, simdefs.SENSE_PERIPHERAL, simdefs.REASON_NOTICED)
-			return simdefs.BSTATE_RUNNING
+			if self.unit:getBrain():getSenses():addInterest(x, y, simdefs.SENSE_PERIPHERAL, simdefs.REASON_NOTICED) then
+				return simdefs.BSTATE_RUNNING
+			end
 		end
 	end
 	return simdefs.BSTATE_FAILED
