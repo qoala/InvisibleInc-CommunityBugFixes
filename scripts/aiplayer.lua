@@ -1,4 +1,31 @@
 local aiplayer = include("sim/aiplayer")
+local simdefs = include("sim/simdefs")
+local array = include("modules/array")
+
+local init = aiplayer.init
+aiplayer.init = function(self, sim, ...)
+	init(self, sim, ...)
+	-- fix aiplayer cleanup coming too late, causing guards to
+	-- shoot lost targets on start-turn-triggers that tick brains
+	local trigger = array.findIf(sim._triggers[simdefs.TRG_START_TURN], function(trg)
+		return trg._obj == self
+	end)
+	if trigger and not trigger.priority then
+		trigger.priority = 9999
+	end
+end
+
+-- part of the canSoftPath/onPathBlocked fixes - invalidate all paths at pc turn start before aiplayer ticks brains
+-- to recalculate any stale paths that are still aware of enemy agents
+local onTrigger = aiplayer.onTrigger
+aiplayer.onTrigger = function(self, sim, evType, evData, ...)
+	if evType == simdefs.TRG_START_TURN and evData ~= self then
+		for _, unit in ipairs(self:getUnits()) do
+			self.pather:invalidatePath(unit)
+		end
+	end
+	return onTrigger(self, sim, evType, evData, ...)
+end
 
 -- part of overwatch fixes
 -- sim_cbf_movingUnit is set in simengine.moveUnit
