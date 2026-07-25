@@ -11,12 +11,7 @@ function simquery.cbfAgentHasStickyFacing(unit)
                    unit:getTraits().mod_data_hacking)
 end
 
--- Disguise Fix/Function Library:
--- Allow pathing through enemies unless we START next to them and are looking towards their tile
--- This way the original intention is preserved (making guards go around the obstacle between them and the agent if the agent is blocking them from making a diagonal move)
--- While also fixing them refusing to path through non-hostile agents as well as "magically" knowing where the agents are
--- Unfortunately this is complicated by some guards not stopping when they see the agent (like System Admins) so we end up having to store impass we've previously encountered for later
--- Also don't block non-dynamicImpass units except from laser grids.
+-- idea: only check for enemy impass during the npc turn and when the unit is already standing adjacent to it
 local oldCanSoftPath = simquery.canSoftPath
 function simquery.canSoftPath(sim, unit, startcell, endcell, ...)
     if not cbf_util.simCheckFlag(sim, "cbf_disguisefix_pathing") then
@@ -31,33 +26,61 @@ function simquery.canSoftPath(sim, unit, startcell, endcell, ...)
     assert(not startcell.ghostID)
     assert(unit:isNPC())
 
-    if not unit:getTraits().rememberedImpass then
-        unit:getTraits().rememberedImpass = {}
-    end
+	local unitCell = sim:getCell(unit:getLocation())
 
     for i, cellUnit in ipairs(endcell.units) do
         if unit and (unit:getTraits().dynamicImpass or cellUnit:getTraits().emitterID) and
                 cellUnit:getTraits().dynamicImpass then
-            local x0, y0 = unit:getLocation()
             if cellUnit:getTraits().emitterID and cellUnit:canControl(unit) then
                 -- Owned emitters will turn themselves off, so they are not considered impassable.
             elseif cellUnit:getPlayerOwner() == unit:getPlayerOwner() then
                 -- Allow pathing through same owners.
             elseif not cellUnit:getTraits().isAgent then
                 return false, simdefs.CANMOVE_DYNAMIC_IMPASS
-            elseif (startcell.x == x0 and startcell.y == y0 and
-                    sim:canUnitSee(unit, endcell.x, endcell.y)) or
-                    (math.abs(x0 - endcell.x) + math.abs(y0 - endcell.y) == 1 and
-                            unit:getTraits().rememberedImpass[endcell.id]) then
-                unit:getTraits().rememberedImpass[endcell.id] = true
-                return false, simdefs.CANMOVE_DYNAMIC_IMPASS
-            else
-
-            end
+			elseif
+				-- vip units are allowed to react to impass on enemies during pc turn because their paths
+				-- automatically get updated from the invalidation from Senses:processWarpTrigger
+				(
+					sim:getCurrentPlayer() == unit:getPlayerOwner()
+					or unit:getTraits().vip and unit:getBrain() and unit:getBrain():getTarget() == cellUnit
+				)
+				-- at least move closer first if the unit is not an enemy
+				and simquery.isEnemyTarget(unit:getPlayerOwner(), cellUnit)
+				and unit:getSeenUnits()
+				and array.find(unit:getSeenUnits(), cellUnit)
+			then
+				-- we can see this hostile unit
+				return false, simdefs.CANMOVE_DYNAMIC_IMPASS
+			elseif
+				sim:getCurrentPlayer() == unit:getPlayerOwner()
+				-- first, check if the unit is currently adjacent at all, no matter the startcell
+				and unitCell
+				and simquery.canPathBetween(sim, unit, unitCell, endcell)
+			then
+				if math.abs(endcell.x - startcell.x) == 1 and math.abs(endcell.y - startcell.y) == 1 then
+					-- reject all diagonals, no matter in which direction we are currently standing
+					-- (necessary because of the AGP coop handler punishing movement to overwatched agents which
+					-- could cause the guard to not move at all even though we could see the unit orthogonally)
+					return false, simdefs.CANMOVE_DYNAMIC_IMPASS
+				else
+					-- now do startcell-independent checking of the unit cell
+					local dx, dy = endcell.x - unitCell.x, endcell.y - unitCell.y
+					if
+						-- only if we're looking at this cell
+						unit:getFacing() == simquery.getDirectionFromDelta(dx, dy)
+						and (
+							-- either we are already standing orthogonal to the endcell
+							math.abs(dx) + math.abs(dy) == 1
+							-- or it's a non-hostile (hacked drones, disguises)
+							or not simquery.isEnemyTarget(unit:getPlayerOwner(), cellUnit)
+						)
+					then
+						return false, simdefs.CANMOVE_DYNAMIC_IMPASS
+					end
+				end
+			end
         end
     end
-
-    unit:getTraits().rememberedImpass[endcell.id] = nil
 
     return simquery.canStaticPath(sim, unit, startcell, endcell)
 end
