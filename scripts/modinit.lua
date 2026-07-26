@@ -28,6 +28,7 @@ local function earlyInit(modApi)
     }
 
     include(modApi:getScriptPath() .. "/senses_earlyInit")
+    include(modApi:getScriptPath() .. "/actions_earlyInit")
 end
 
 local function init(modApi)
