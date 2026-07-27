@@ -19,7 +19,11 @@ if idx then
 			-- that way we get to ignore cover on the diagonal tile
 			local dx, dy = simquery.getDeltaFromDirection(simquery.addFacing(dir, delta))
 			local facing = simquery.addFacing(dir, delta * 2)
-			if simquery.isOpenExit(cell.exits[dir]) and simquery.isOpenExit(cell.exits[dir].cell.exits[facing]) then
+			if
+				simquery.isOpenExit(cell.exits[dir]) and simquery.isOpenExit(cell.exits[dir].cell.exits[facing])
+				or simquery.isOpenExit(cell.exits[facing])
+					and simquery.isOpenExit(cell.exits[facing].cell.exits[dir])
+			then
 				probeCells = sim:getLOS():probeLOS(x0 + dx, y0 + dy, facing, unit:getTraits().LOSrange)
 				-- I don't think there is a need to ever peek forward, it's weird
 				-- the guard is mostly looking left and right while leaning forward,
