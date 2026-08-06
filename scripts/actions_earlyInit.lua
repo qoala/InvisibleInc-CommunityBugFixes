@@ -24,8 +24,12 @@ actions.MoveTo.onPathBlocked = function(self, blocker, ...)
 			-- calculate new path when diagonal with no vision on the cell
 			return simdefs.BSTATE_RUNNING
 		elseif not simquery.isEnemyTarget(self.unit:getPlayerOwner(), blocker) then
-			-- calculate new path around non-hostile unit
-			return simdefs.BSTATE_RUNNING
+			-- TODO: add gen option here
+			if true then
+				-- NEW: immediately calculate new path and go around non-hostile unit from a different owner
+				-- this affects hacked drones, disguised agents (that don't break on proximity), lethal lasers
+				return simdefs.BSTATE_RUNNING
+			end
 		elseif
 			-- hostile unit blocked us on a cell that is visible, react to it
 			-- (still return RUNNING so the unit will process the interest immediately,
