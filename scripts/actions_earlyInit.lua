@@ -53,6 +53,8 @@ if idx then
 					simquery.isEnemyAgent(unit:getPlayerOwner(), targetUnit)
 					and simquery.couldUnitSee(sim, unit, targetUnit, true)
 					and not sim:canUnitSeeUnit(unit, targetUnit)
+					-- added check if we should get an interest for a downed agent
+					and not (targetUnit:isDown() and targetUnit:hasBeenInvestigated(unit))
 				then
 					unit:getBrain()
 						:getSenses()
