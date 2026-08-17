@@ -38,18 +38,20 @@ function simquery.canSoftPath(sim, unit, startcell, endcell, ...)
             elseif not cellUnit:getTraits().isAgent then
                 return false, simdefs.CANMOVE_DYNAMIC_IMPASS
 			elseif
+				unit:getTraits().vip
+				and unit:getBrain()
+				and (
+					unit:getBrain():getTarget() == cellUnit
+					or sim:getCurrentPlayer() == unit:getPlayerOwner()
+						and array.findIf(unit:getBrain():getSenses().interests, function(interest)
+							return interest.reason == simdefs.REASON_LOSTTARGET
+								and interest.x == endcell.x
+								and interest.y == endcell.y
+						end)
+				)
+			then
 				-- vip units are allowed to react to impass on enemies during pc turn because their paths
 				-- automatically get updated from the invalidation from Senses:processWarpTrigger
-				(
-					sim:getCurrentPlayer() == unit:getPlayerOwner()
-					or unit:getTraits().vip and unit:getBrain() and unit:getBrain():getTarget() == cellUnit
-				)
-				-- at least move closer first if the unit is not an enemy
-				and simquery.isEnemyTarget(unit:getPlayerOwner(), cellUnit)
-				and unit:getSeenUnits()
-				and array.find(unit:getSeenUnits(), cellUnit)
-			then
-				-- we can see this hostile unit
 				return false, simdefs.CANMOVE_DYNAMIC_IMPASS
 			elseif
 				sim:getCurrentPlayer() == unit:getPlayerOwner()
@@ -58,9 +60,9 @@ function simquery.canSoftPath(sim, unit, startcell, endcell, ...)
 				and simquery.canPathBetween(sim, unit, unitCell, endcell)
 			then
 				if math.abs(endcell.x - startcell.x) == 1 and math.abs(endcell.y - startcell.y) == 1 then
-					-- reject all diagonals, no matter in which direction we are currently standing
+					-- reject all diagonals, no matter which direction we are facing
 					-- (necessary because of the AGP coop handler punishing movement to overwatched agents which
-					-- could cause the guard to not move at all even though we could see the unit orthogonally)
+					-- could cause the guard to not even try to move on its tile)
 					return false, simdefs.CANMOVE_DYNAMIC_IMPASS
 				else
 					-- now do startcell-independent checking of the unit cell
