@@ -42,11 +42,11 @@ function simquery.canSoftPath(sim, unit, startcell, endcell, ...)
 				and unit:getBrain()
 				and (
 					unit:getBrain():getTarget() == cellUnit
-					or sim:getCurrentPlayer() == unit:getPlayerOwner()
-						and array.findIf(unit:getBrain():getSenses().interests, function(interest)
+					or array.findIf(unit:getBrain():getSenses().interests, function(interest)
 							return interest.reason == simdefs.REASON_LOSTTARGET
 								and interest.x == endcell.x
 								and interest.y == endcell.y
+								and interest.sourceUnit == cellUnit
 						end)
 				)
 			then
