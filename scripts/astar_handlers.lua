@@ -8,11 +8,10 @@ astar_handlers.coop_handler.new = function(self, unit, ...)
 		return coop_handler
 	end
 
-	-- the main buggy part about this AGP feature is that it can stop vip units from moving indefinitely if it has an
-	-- interest at a door, but it's fine during NPC turn (we recalculate paths at pc turn start)
-	if unit:getSim():getCurrentPlayer() ~= unit:getPlayerOwner() then
-		coop_handler.lostTargetInterest = nil
-	end
+	-- this AGP fix doesn't check if the unit is still actually there so this could stop vip units from moving indefinitely
+	-- if the interest was in the way of both exits
+	-- (this is now completely handled in simquery.canSoftPath)
+	coop_handler.lostTargetInterest = nil
 
 	return coop_handler
 end
