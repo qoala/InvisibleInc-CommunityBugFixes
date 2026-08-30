@@ -29,7 +29,9 @@ actions.MoveTo.onPathBlocked = function(self, blocker, ...)
 			)
 		then
 			-- TODO: add gen option here
-			if true then
+			-- edit: nevermind this for now, this will trigger the infinite DoLookAround loop (that AGP currently has a bad fix for)
+			-- need to fix this first in a different PR
+			if false then
 				-- give the guard an interest to investigate the block
 				self.unit
 					:getBrain()
