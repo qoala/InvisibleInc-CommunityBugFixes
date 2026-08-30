@@ -28,16 +28,6 @@ actions.MoveTo.onPathBlocked = function(self, blocker, ...)
 				or not self.sim:getLOS():raycastToCell(x0, y0, x1, y1, 0, math.pi)
 			)
 		then
-			-- TODO: add gen option here
-			-- edit: nevermind this for now, this will trigger the infinite DoLookAround loop (that AGP currently has a bad fix for)
-			-- need to fix this first in a different PR
-			if false then
-				-- give the guard an interest to investigate the block
-				self.unit
-					:getBrain()
-					:getSenses()
-					:addInterest(x1, y1, simdefs.SENSE_PERIPHERAL, simdefs.REASON_NOTICED, blocker)
-			end
 			-- calculate new path when diagonal with no vision on the cell
 			return simdefs.BSTATE_RUNNING
 		elseif
