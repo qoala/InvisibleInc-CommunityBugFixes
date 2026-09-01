@@ -78,3 +78,10 @@ function simquery.isUnitUnderOverwatch(target)
     end
     return false
 end
+
+function simquery.couldUnitSeeCell(sim, unit, cell)
+	local ux, uy = unit:getLocation()
+	-- should work with infinite vision range at LOSrange == nil
+	return sim:getLOS():raycastToCell(ux, uy, cell.x, cell.y, 0, math.pi, unit:getTraits().LOSrange)
+end
+
