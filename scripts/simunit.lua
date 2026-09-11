@@ -5,6 +5,7 @@ local simdefs = include("sim/simdefs")
 local simfactory = include('sim/simfactory')
 local simquery = include("sim/simquery")
 local simunit = include('sim/simunit')
+local util = include("modules/util")
 
 local cbf_util = include(SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util")
 local constants = include(SCRIPT_PATHS.qoala_commbugfix .. "/constants")
@@ -120,10 +121,17 @@ local oldSetPlayerOwner = simunit.setPlayerOwner
 simunit.setPlayerOwner = function(self, player, ...)
 	local oldOwner = self._parent
 	oldSetPlayerOwner(self, player, ...)
-	if self:isValid() and oldOwner and self._parent and self._parent ~= oldOwner and self._parent == player then
+	if self:isValid() and self._parent ~= oldOwner and simquery.couldUnitSee(self:getSim(), self) then
 		local cells = {}
 		self:getSim():getLOS():getVizCells(self:getID(), cells)
 		self:getSim():triggerEvent(simdefs.TRG_LOS_REFRESH, { seer = self, cells = cells })
+		if self:getSeenUnits() then
+			for _, unit in ipairs(util.tdupe(self:getSeenUnits())) do
+				if self:isValid() then
+					self:getSim():triggerEvent(simdefs.TRG_UNIT_APPEARED, { seerID = self:getID(), unit = unit })
+				end
+			end
+		end
 	end
 end
 

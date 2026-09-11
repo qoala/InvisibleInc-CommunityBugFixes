@@ -114,6 +114,7 @@ local function init(modApi)
     include(scriptPath .. "/simplayer")
     include(scriptPath .. "/pcplayer")
     include(scriptPath .. "/aiplayer")
+    include(scriptPath .. "/level")
 
     include(scriptPath .. "/hud")
     include(scriptPath .. "/hunt")
