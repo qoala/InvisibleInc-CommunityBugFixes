@@ -142,6 +142,7 @@ local function init(modApi)
     include(scriptPath .. "/units/store")
     include(scriptPath .. "/missions/mission_util")
     include(scriptPath .. "/procgen")
+    include(scriptPath .. "/worldgen")
 
     -- Ability patches. (Abilities are NOT reloaded on load)
     include(scriptPath .. "/abilities/activate_final_console")
