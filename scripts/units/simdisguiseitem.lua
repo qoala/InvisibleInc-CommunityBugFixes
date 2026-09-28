@@ -31,16 +31,20 @@ local function checkDisguiseReveal(sim, unitOwner, npcUnit)
 		and math.abs(y1 - y0) <= 1
 		and unitOwner:getTraits().disguiseOn
 		and npcUnit:getTraits().isGuard
-		and npcUnit:getBrain()
 		and sim:canUnitSeeUnit(npcUnit, unitOwner)
 	then
 		unitOwner:setDisguise(false, nil, true)
 		-- if the disguised agent disappears from vision behind cover, spawn an interest
-		if not sim:canUnitSeeUnit(npcUnit, unitOwner) then
+		if not sim:canUnitSeeUnit(npcUnit, unitOwner) and npcUnit:getBrain() then
 			npcUnit:getBrain():getSenses():addInterest(x0, y0, simdefs.SENSE_SIGHT, simdefs.REASON_NOTICED, unitOwner)
 		end
-		sim:processReactions(unitOwner)
-		unitOwner:interruptMove(sim)
+		if unitOwner:canBeInterrupted() then
+			unitOwner:interruptMove(sim)
+			if unitOwner:getTraits().movePath and isWarp then
+				-- process reactions here because moveUnit will bail out before reaching it when interrupted
+				sim:processReactions(unitOwner)
+			end
+		end
 	end
 end
 
@@ -55,10 +59,10 @@ function item_disguise:onTrigger(sim, evType, evData)
 		if unitOwner and unitOwner:getTraits().disguiseOn then
 			if evData.unit == unitOwner then
 				for _, npcUnit in ipairs(util.tdupe(sim:getNPC():getUnits())) do
-					checkDisguiseReveal(sim, unitOwner, npcUnit)
+					checkDisguiseReveal(sim, unitOwner, npcUnit, true)
 				end
 			elseif evData.unit:isNPC() then
-				checkDisguiseReveal(sim, unitOwner, evData.unit)
+				checkDisguiseReveal(sim, unitOwner, evData.unit, true)
 			end
 		end
 	elseif evType == simdefs.TRG_UNIT_APPEARED then
@@ -77,8 +81,7 @@ function item_disguise:onTrigger(sim, evType, evData)
         end
         local player = owner:getPlayerOwner()
         if player and sim:getCurrentPlayer() == player and owner and owner:getTraits().disguiseOn then
-            local x, y
-            owner:getLocation()
+            local x, y = owner:getLocation()
             if self:getTraits().CPUperTurn and (player:getCpus() >= self:getTraits().CPUperTurn) then
                 player:addCPUs(-self:getTraits().CPUperTurn, sim, x, y)
                 if self:getTraits().warning then
