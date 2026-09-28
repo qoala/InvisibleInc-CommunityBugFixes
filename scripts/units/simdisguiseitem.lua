@@ -21,7 +21,7 @@ function item_disguise:onDespawn(sim)
 	sim:removeTrigger(simdefs.TRG_UNIT_APPEARED, self)
 end
 
-local function checkDisguiseReveal(sim, unitOwner, npcUnit)
+local function checkDisguiseReveal(sim, unitOwner, npcUnit, isWarp)
 	local x0, y0 = unitOwner:getLocation()
 	local x1, y1 = npcUnit:getLocation()
 	if
