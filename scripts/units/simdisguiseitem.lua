@@ -3,52 +3,77 @@ local util = include("modules/util")
 local simunit = include("sim/simunit")
 local simdefs = include("sim/simdefs")
 local simfactory = include("sim/simfactory")
-local mathutil = include("modules/mathutil")
 local cdefs = include("client_defs")
-
-local cbf_util = include(SCRIPT_PATHS.qoala_commbugfix .. "/cbf_util")
 
 local item_disguise = {ClassType = "item_disguise"}
 
--- CBF: unchanged
 function item_disguise:onSpawn(sim)
-    sim:addTrigger(simdefs.TRG_UNIT_WARP, self)
-    if sim:isVersion("0.17.7") then
-        sim:addTrigger(simdefs.TRG_UNIT_USEDOOR, self)
-    end
-    sim:addTrigger(simdefs.TRG_START_TURN, self)
+	sim:addTrigger(simdefs.TRG_UNIT_WARP, self)
+	sim:addTrigger(simdefs.TRG_START_TURN, self)
+	-- needs to go after Senses.processAppearedTrigger else the agent "appears" undisguised
+	-- to the guard even when the guard can't see them anymore because of cover!
+	sim:addTrigger(simdefs.TRG_UNIT_APPEARED, self).priority = -10
 end
 
--- CBF: unchanged
 function item_disguise:onDespawn(sim)
-    sim:removeTrigger(simdefs.TRG_UNIT_WARP, self)
-    if sim:isVersion("0.17.7") then
-        sim:removeTrigger(simdefs.TRG_START_TURN, self)
-    end
-    sim:removeTrigger(simdefs.TRG_UNIT_USEDOOR, self)
+	sim:removeTrigger(simdefs.TRG_UNIT_WARP, self)
+	sim:removeTrigger(simdefs.TRG_START_TURN, self)
+	sim:removeTrigger(simdefs.TRG_UNIT_APPEARED, self)
+end
+
+local function checkDisguiseReveal(sim, unitOwner, npcUnit, isWarp)
+	local x0, y0 = unitOwner:getLocation()
+	local x1, y1 = npcUnit:getLocation()
+	if
+		x0
+		and x1
+		and math.abs(x1 - x0) <= 1
+		and math.abs(y1 - y0) <= 1
+		and unitOwner:getTraits().disguiseOn
+		and npcUnit:getTraits().isGuard
+		and sim:canUnitSeeUnit(npcUnit, unitOwner)
+	then
+		unitOwner:setDisguise(false, nil, true)
+		-- if the disguised agent disappears from vision behind cover, spawn an interest
+		if not sim:canUnitSeeUnit(npcUnit, unitOwner) and npcUnit:getBrain() then
+			npcUnit:getBrain():getSenses():addInterest(x0, y0, simdefs.SENSE_SIGHT, simdefs.REASON_NOTICED, unitOwner)
+		end
+		if unitOwner:canBeInterrupted() then
+			unitOwner:interruptMove(sim)
+			if unitOwner:getTraits().movePath and isWarp then
+				-- process reactions here because moveUnit will bail out before reaching it when interrupted
+				sim:processReactions(unitOwner)
+			end
+		end
+	end
 end
 
 -- CBF/Disguise Fix: 
 -- * Disguise no longer breaks on re-captured cameras. Now requires an NPC-owned guard/drone.
 -- * More consistent behavior when multiple guards are in deactivation range.
 -- * Don't crash if the disguise is on the ground.
+-- * Also reveal disguise when the guard turns to the agent in front of them
 function item_disguise:onTrigger(sim, evType, evData)
-    if evType == simdefs.TRG_UNIT_WARP or evType == simdefs.TRG_UNIT_USEDOOR then
-        local unitOwner = self:getUnitOwner()
-        if unitOwner and unitOwner:getTraits().disguiseOn then
-            for _, npcUnit in pairs(sim:getNPC():getUnits()) do
-                local x0, y0 = unitOwner:getLocation()
-                local x1, y1 = npcUnit:getLocation()
-                if x0 and x1 then
-                    local range = mathutil.dist2d(x0, y0, x1, y1)
-                    if range <= 1.5 and npcUnit:getTraits().isGuard and
-                            sim:canUnitSeeUnit(npcUnit, unitOwner) then
-                        unitOwner:setDisguise(false)
-                        unitOwner:interruptMove(sim)
-                    end
-                end
-            end
-        end
+	if evType == simdefs.TRG_UNIT_WARP then
+		local unitOwner = self:getUnitOwner()
+		if unitOwner and unitOwner:getTraits().disguiseOn then
+			if evData.unit == unitOwner then
+				for _, npcUnit in ipairs(util.tdupe(sim:getNPC():getUnits())) do
+					checkDisguiseReveal(sim, unitOwner, npcUnit, true)
+				end
+			elseif evData.unit:isNPC() then
+				checkDisguiseReveal(sim, unitOwner, evData.unit, true)
+			end
+		end
+	elseif evType == simdefs.TRG_UNIT_APPEARED then
+		local unitOwner = self:getUnitOwner()
+		-- defer to warp trigger during warps, else it will look like prism got revealed before the move even happened
+		if evData.unit == unitOwner and unitOwner:getTraits().disguiseOn and not unitOwner:getTraits().isWarping then
+			local npcUnit = sim:getUnit(evData.seerID)
+			if npcUnit and npcUnit:isNPC() and not npcUnit:getTraits().isWarping then
+				checkDisguiseReveal(sim, unitOwner, npcUnit)
+			end
+		end
     elseif evType == simdefs.TRG_START_TURN then
         local owner = self:getUnitOwner()
         if not owner then
@@ -56,8 +81,7 @@ function item_disguise:onTrigger(sim, evType, evData)
         end
         local player = owner:getPlayerOwner()
         if player and sim:getCurrentPlayer() == player and owner and owner:getTraits().disguiseOn then
-            local x, y
-            owner:getLocation()
+            local x, y = owner:getLocation()
             if self:getTraits().CPUperTurn and (player:getCpus() >= self:getTraits().CPUperTurn) then
                 player:addCPUs(-self:getTraits().CPUperTurn, sim, x, y)
                 if self:getTraits().warning then
